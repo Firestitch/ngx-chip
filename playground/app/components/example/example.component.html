@@ -42,6 +42,7 @@
   [selectable]="selectable"
   [removable]="removable"
   [outlined]="outlined"
-  (selectionChanged)="selectionChanged($event)">
+  (selectedToggled)="chipSelectedToggled($event)"
+  (removed)="chipRemoved($event)">
     Tag A
 </fs-chip>

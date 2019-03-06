@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FsMessage } from '@firestitch/message';
 
 @Component({
   selector: 'example',
@@ -17,12 +18,15 @@ export class ExampleComponent {
   public color;
   public config: any = {};
 
+  constructor(private fsMessage: FsMessage) {}
+
   imageChanged() {
     this.image = this.showImage ? '/assets/headshot2.jpg' : '';
   }
 
-  selectionChanged(e) {
+  chipSelectedToggled(e) {
     this.selected = e.selected;
+    this.fsMessage.success('Chip ' + ( e.selected ? 'Selected' : 'Unselected'));
   }
 
   removedChanged() {
@@ -38,4 +42,7 @@ export class ExampleComponent {
     }
   }
 
+  chipRemoved() {
+    this.fsMessage.success('Removed Clicked');
+  }
 }

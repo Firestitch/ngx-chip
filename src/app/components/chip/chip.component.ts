@@ -21,7 +21,8 @@ export class FsChipComponent implements OnInit, OnChanges, OnDestroy {
   @Input() image: string;
 
   @Output() clicked = new EventEmitter();
-  @Output() selectionChanged = new EventEmitter();
+  @Output() selectedToggled = new EventEmitter();
+  @Output() removed = new EventEmitter();
 
   public $destroy = new Subject();
   public styles = {
@@ -74,7 +75,7 @@ export class FsChipComponent implements OnInit, OnChanges, OnDestroy {
     .subscribe(attribute => {
       if (this.selectable) {
         this.selected = !this.selected;
-        this.selectionChanged.emit({ attribute: attribute, selected: this.selected });
+        this.selectedToggled.emit({ attribute: attribute, selected: this.selected });
       }
     });
   }
