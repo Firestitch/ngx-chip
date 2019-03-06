@@ -9,7 +9,9 @@ import { FsMessageModule } from '@firestitch/message';
 
 import { ToastrModule } from 'ngx-toastr';
 
-import { FsComponentModule } from '@firestitch/package';
+import { FsChipModule } from '@firestitch/package';
+import { FsColorPickerModule } from '@firestitch/colorpicker';
+import { FsLabelModule } from '@firestitch/label';
 
 import { AppMaterialModule } from './material.module';
 import {
@@ -26,10 +28,12 @@ const routes: Routes = [
   bootstrap: [ AppComponent ],
   imports: [
     BrowserModule,
-    FsComponentModule,
+    FsChipModule,
     BrowserAnimationsModule,
     AppMaterialModule,
     FormsModule,
+    FsLabelModule,
+    FsColorPickerModule,
     FsExampleModule.forRoot(),
     FsMessageModule.forRoot(),
     ToastrModule.forRoot({ preventDuplicates: true }),
