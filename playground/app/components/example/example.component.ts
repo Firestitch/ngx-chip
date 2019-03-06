@@ -29,7 +29,7 @@ export class ExampleComponent {
     this.fsMessage.success('Chip ' + ( e.selected ? 'Selected' : 'Unselected'));
   }
 
-  removedChanged(e) {
+  removedChanged() {
     if (this.removable) {
       this.selectable = false;
       this.selected = false;
@@ -42,7 +42,7 @@ export class ExampleComponent {
     }
   }
 
-  chipRemoved() {
+  chipRemoved(e) {
     this.fsMessage.success('Removed Clicked');
   }
 }
