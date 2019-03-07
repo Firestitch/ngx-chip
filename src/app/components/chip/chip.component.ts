@@ -1,36 +1,92 @@
-import {  Component, Input, OnInit, OnChanges,
-          SimpleChanges, Output, EventEmitter, OnDestroy } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'fs-chip',
   templateUrl: 'chip.component.html',
-  styleUrls: [ 'chip.component.scss' ]
+  styleUrls: ['chip.component.scss']
 })
-export class FsChipComponent implements OnInit, OnChanges, OnDestroy {
+export class FsChipComponent implements OnInit, OnDestroy {
 
-  @Input() attribute: any;
-  @Input() selectable = false;
-  @Input() selected = false;
-  @Input() outlined = false;
-  @Input() removable = false;
-  @Input() backgroundColor: string;
-  @Input() borderColor: string;
-  @Input() color = '';
-  @Input() image: string;
-  @Input() value: any;
+  @Input() public attribute: any;
+  @Input() public selectable = false;
+  @Input() public selected = false;
+  @Input() public removable = false;
+  @Input() public image: string;
 
-  @Output() clicked = new EventEmitter();
-  @Output() selectedToggled = new EventEmitter();
-  @Output() removed = new EventEmitter();
+  @Input() set backgroundColor(value) {
+    debugger;
+    this._backgroundColor = value;
+    this.updateStyles();
+  };
 
-  public $destroy = new Subject();
+  @Input() set borderColor(value) {
+    this.styles.borderColor = value;
+    this.updateStyles();
+  }
+  @Input() set color(value) {
+    this._color = value;
+    this.updateStyles();
+  }
+
+  get color() {
+    return this._color;
+  }
+
+  @Input() set outlined(value) {
+    this._outlined = value;
+    this.updateStyles();
+  };
+
+  get outlined() {
+    return this._outlined;
+  }
+
+  @Output() public clicked = new EventEmitter();
+  @Output() public selectedToggled = new EventEmitter();
+  @Output() public removed = new EventEmitter();
+
   public styles = {
     backgroundColor: '',
     borderColor: '',
     color: ''
   };
+
+  public $destroy = new Subject();
+
+  private _backgroundColor = '';
+  private _color = '';
+  private _outlined = false;
+
+  constructor() {}
+
+  public ngOnInit() {}
+
+  public ngOnDestroy() {
+    this.$destroy.next();
+    this.$destroy.complete();
+  }
+
+  public click() {
+    this.clicked.emit(this.attribute);
+
+    if (this.selectable) {
+      this.selected = !this.selected;
+      this.selectedToggled.emit({ attribute: this.attribute, selected: this.selected });
+    }
+  }
+
+  public remove(event) {
+    this.removed.next(event);
+  }
 
   private isContrastYIQBlack(hexcolor) {
     if (!hexcolor) {
@@ -42,42 +98,26 @@ export class FsChipComponent implements OnInit, OnChanges, OnDestroy {
     const g = parseInt(hexcolor.substr(2, 2), 16);
     const b = parseInt(hexcolor.substr(4, 2), 16);
     const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+
     return yiq >= 200;
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  private updateStyles() {
+    this.styles.backgroundColor = this._backgroundColor;
 
-    this.styles.backgroundColor = this. backgroundColor;
-    this.styles.borderColor = this. borderColor;
-    this.styles.color = this. color;
-
-    if (!this.color && !this.outlined) {
-      this.styles.color = this.isContrastYIQBlack(this.backgroundColor) ? '#474747' : '#fff';
+    if (this._color) {
+      this.styles.color = this._color;
+    } else if (!this._outlined) {
+      this.styles.color = this.isContrastYIQBlack(this.styles.backgroundColor) ? '#474747' : '#fff';
     }
 
-    if (this.outlined) {
+    if (this._outlined) {
       this.styles.backgroundColor = '';
 
-      if (this.color) {
-        this.styles.borderColor = this.color;
+      if (this._color) {
+        this.styles.borderColor = this._color;
       }
     }
   }
 
-  ngOnDestroy() {
-    this.$destroy.next();
-    this.$destroy.complete();
-  }
-
-  ngOnInit() {
-
-    this.clicked
-    .pipe(takeUntil(this.$destroy))
-    .subscribe(() => {
-      if (this.selectable) {
-        this.selected = !this.selected;
-        this.selectedToggled.emit({ selected: this.selected, value: this.value });
-      }
-    });
-  }
 }
