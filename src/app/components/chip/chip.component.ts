@@ -11,14 +11,15 @@ import { takeUntil } from 'rxjs/operators';
 export class FsChipComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() attribute: any;
-  @Input() selectable: Boolean = false;
-  @Input() selected: Boolean = false;
-  @Input() outlined: Boolean = false;
-  @Input() removable: Boolean = false;
+  @Input() selectable = false;
+  @Input() selected = false;
+  @Input() outlined = false;
+  @Input() removable = false;
   @Input() backgroundColor: string;
   @Input() borderColor: string;
   @Input() color = '';
   @Input() image: string;
+  @Input() value: any;
 
   @Output() clicked = new EventEmitter();
   @Output() selectedToggled = new EventEmitter();
@@ -72,10 +73,10 @@ export class FsChipComponent implements OnInit, OnChanges, OnDestroy {
 
     this.clicked
     .pipe(takeUntil(this.$destroy))
-    .subscribe(attribute => {
+    .subscribe(() => {
       if (this.selectable) {
         this.selected = !this.selected;
-        this.selectedToggled.emit({ attribute: attribute, selected: this.selected });
+        this.selectedToggled.emit({ selected: this.selected, value: this.value });
       }
     });
   }
