@@ -19,6 +19,7 @@ import {
   ExamplesComponent,
   ExampleSingleSelectionComponent,
   ExampleWithArrayComponent,
+  ExampleWithCustomCompareComponent,
 } from './components';
 import { AppComponent } from './app.component';
 
@@ -49,6 +50,7 @@ const routes: Routes = [
     ExampleComponent,
     ExampleWithArrayComponent,
     ExampleSingleSelectionComponent,
+    ExampleWithCustomCompareComponent,
   ],
   providers: [
   ],

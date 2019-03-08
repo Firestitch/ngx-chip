@@ -3,7 +3,7 @@
   <fs-chips [(ngModel)]="selectedIds" [multiple]="false">
     <fs-chip
       *ngFor="let chip of listOfChips"
-      [value]="chip.value"
+      [value]="chip"
       [selectable]="true"
     >
       {{ chip.name }}

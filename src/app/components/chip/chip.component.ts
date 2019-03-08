@@ -83,8 +83,8 @@ export class FsChipComponent implements OnInit, OnDestroy {
         takeUntil(this.$destroy),
       )
       .subscribe(() => {
-        if (this._chipsService.modelValue) {
-          const hasValueSelected = this._chipsService.modelValue.indexOf(this.value) !== -1;
+        if (this._chipsService.selectedValues) {
+          const hasValueSelected = this._chipsService.selectedValues.indexOf(this.value) !== -1;
 
           if (hasValueSelected) {
             if (!this.selected) {
@@ -110,13 +110,13 @@ export class FsChipComponent implements OnInit, OnDestroy {
     this.clicked.emit(this.attribute);
 
     if (this.selectable) {
-      this.selected = !this.selected;
-      this.selectedToggled.emit({ attribute: this.attribute, selected: this.selected });
+      // this.selected = !this.selected;
+      // this.selectedToggled.emit({ attribute: this.attribute, selected: this.selected });
 
       if (this.selected) {
-        this._chipsService.addModelValue(this.value);
-      } else {
         this._chipsService.removeModelValue(this.value);
+      } else {
+        this._chipsService.addModelValue(this.value);
       }
     }
   }

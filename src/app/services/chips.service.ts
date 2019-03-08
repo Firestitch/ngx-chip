@@ -1,12 +1,21 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, QueryList } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { FsChipComponent } from '../components/chip/chip.component';
 
 
 @Injectable()
 export class ChipsService implements OnDestroy {
+
+  // ngModel value
   public modelValue = [];
+  // array of selected values
+  public selectedValues = [];
+  public compareFn = this._compareFn;
+
   public multiple = true;
+  public chips: QueryList<FsChipComponent> = undefined;
+
   private _valuesChange$ = new Subject<any>();
   private _destroy$ = new Subject();
 
@@ -16,18 +25,34 @@ export class ChipsService implements OnDestroy {
     );
   }
 
+  /**
+   * Send event for all chips to refresh their selected status
+   */
   public updateSelected() {
-    this._valuesChange$.next(this.modelValue);
+    this.selectedValues = [];
+
+    if (Array.isArray(this.modelValue) && this.chips) {
+      this.modelValue.forEach((modelItem) => {
+        const selectedChip = this.chips.find((chip) => {
+          return this.compareFn(modelItem, chip.value);
+        });
+
+        if (selectedChip) {
+          this.selectedValues.push(selectedChip.value);
+        }
+      })
+    }
+
+    this._valuesChange$.next(this.selectedValues);
   }
 
   public addModelValue(value) {
     if (Array.isArray(this.modelValue)) {
-      if (this.multiple) {
-        this.modelValue.push(value)
-      } else {
+      if (!this.multiple) {
         this.modelValue.length = 0;
-        this.modelValue.push(value);
       }
+      this.modelValue.push(value);
+      this.selectedValues.push(value.value || value);
     }
   }
 
@@ -44,5 +69,9 @@ export class ChipsService implements OnDestroy {
   public ngOnDestroy() {
     this._destroy$.next();
     this._destroy$.complete();
+  }
+
+  private _compareFn(modelValue, chipValue) {
+    return modelValue.value === chipValue.value;
   }
 }

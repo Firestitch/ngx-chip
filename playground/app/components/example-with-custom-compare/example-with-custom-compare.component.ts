@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'example-with-array',
-  templateUrl: 'example-with-array.component.html',
-  styleUrls: ['example-with-array.component.scss']
+  selector: 'example-with-custom-compare',
+  templateUrl: 'example-with-custom-compare.component.html',
+  styleUrls: ['example-with-custom-compare.component.scss']
 })
-export class ExampleWithArrayComponent {
+export class ExampleWithCustomCompareComponent {
 
   public listOfChips = [
     { name: 'Tag A', value: 1 },
@@ -23,5 +23,9 @@ export class ExampleWithArrayComponent {
     } else {
       this.selected.splice(valIndex, 1);
     }
+  }
+
+  compare(modelValue, optionValue) {
+    return modelValue === optionValue;
   }
 }

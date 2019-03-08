@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ContentChildren,
   DoCheck,
   forwardRef,
   Input,
@@ -13,6 +14,7 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { ChipsService } from '../../services/chips.service';
+import { FsChipComponent } from '../chip/chip.component';
 
 
 export const CHIP_VALUE_ACCESSOR: Provider = {
@@ -34,6 +36,15 @@ export class FsChipsComponent implements ControlValueAccessor, OnInit, DoCheck {
   @Input() set multiple(value) {
     this._chipsService.multiple = value;
   }
+
+  @Input() set compare(value) {
+    this._chipsService.compareFn = value;
+  }
+
+  @ContentChildren(FsChipComponent, { descendants: true })
+  set chips(value) {
+    this._chipsService.chips = value;
+  };
 
   public onChange: any = () => {};
   public onTouched: any = () => {};
@@ -61,6 +72,7 @@ export class FsChipsComponent implements ControlValueAccessor, OnInit, DoCheck {
 
   public writeValue(value: any) {
     this._chipsService.modelValue = value;
+    this.onChange(value);
   }
 
   public registerOnChange(fn: any) {
