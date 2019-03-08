@@ -48,7 +48,7 @@
     "@firestitch/colorpicker": "^7.0.4",
     "@firestitch/common": "^7.0.0",
     "@firestitch/example": "^7.0.0",
-    "@firestitch/label": "^0.2.0",
+    "@firestitch/label": "^7.0.0",
     "@firestitch/message": "^0.2.1",
     "codelyzer": "^4.5.0",
     "cpx": "^1.5.0",
