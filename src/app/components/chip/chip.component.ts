@@ -110,13 +110,13 @@ export class FsChipComponent implements OnInit, OnDestroy {
     this.clicked.emit(this.attribute);
 
     if (this.selectable) {
-      // this.selected = !this.selected;
-      // this.selectedToggled.emit({ attribute: this.attribute, selected: this.selected });
+      this.selected = !this.selected;
+      this.selectedToggled.emit({ attribute: this.attribute, selected: this.selected });
 
       if (this.selected) {
-        this._chipsService.removeModelValue(this.value);
-      } else {
         this._chipsService.addModelValue(this.value);
+      } else {
+        this._chipsService.removeModelValue(this.value);
       }
     }
   }

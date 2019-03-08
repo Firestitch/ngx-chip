@@ -32,15 +32,7 @@ export class ChipsService implements OnDestroy {
     this.selectedValues = [];
 
     if (Array.isArray(this.modelValue) && this.chips) {
-      this.modelValue.forEach((modelItem) => {
-        const selectedChip = this.chips.find((chip) => {
-          return this.compareFn(modelItem, chip.value);
-        });
-
-        if (selectedChip) {
-          this.selectedValues.push(selectedChip.value);
-        }
-      })
+      this._updateSelectedValues();
     }
 
     this._valuesChange$.next(this.selectedValues);
@@ -52,16 +44,19 @@ export class ChipsService implements OnDestroy {
         this.modelValue.length = 0;
       }
       this.modelValue.push(value);
-      this.selectedValues.push(value.value || value);
+      this._updateSelectedValues();
     }
   }
 
   public removeModelValue(value) {
     if (Array.isArray(this.modelValue)) {
-      const valueIndex = this.modelValue.indexOf(value);
+      const valueIndex = this.modelValue.findIndex((modelItem) => {
+        return this.compareFn(modelItem, value);
+      });
 
       if (valueIndex > -1) {
         this.modelValue.splice(valueIndex, 1);
+        this._updateSelectedValues();
       }
     }
   }
@@ -73,5 +68,17 @@ export class ChipsService implements OnDestroy {
 
   private _compareFn(modelValue, chipValue) {
     return modelValue.value === chipValue.value;
+  }
+
+  private _updateSelectedValues() {
+    this.modelValue.forEach((modelItem) => {
+      const selectedChip = this.chips.find((chip) => {
+        return this.compareFn(modelItem, chip.value);
+      });
+
+      if (selectedChip) {
+        this.selectedValues.push(selectedChip.value);
+      }
+    })
   }
 }
