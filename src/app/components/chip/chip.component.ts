@@ -1,36 +1,130 @@
-import {  Component, Input, OnInit, OnChanges,
-          SimpleChanges, Output, EventEmitter, OnDestroy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  EventEmitter,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ChipsService } from '../../services/chips.service';
+
 
 @Component({
   selector: 'fs-chip',
   templateUrl: 'chip.component.html',
-  styleUrls: [ 'chip.component.scss' ]
+  styleUrls: ['chip.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FsChipComponent implements OnInit, OnChanges, OnDestroy {
+export class FsChipComponent implements OnInit, OnDestroy {
 
-  @Input() attribute: any;
-  @Input() selectable = false;
-  @Input() selected = false;
-  @Input() outlined = false;
-  @Input() removable = false;
-  @Input() backgroundColor: string;
-  @Input() borderColor: string;
-  @Input() color = '';
-  @Input() image: string;
-  @Input() value: any;
+  @Input() public attribute: any;
+  @Input() public selected = false;
+  @Input() public selectable = false;
+  @Input() public value = null;
+  @Input() public removable = false;
+  @Input() public image: string;
 
-  @Output() clicked = new EventEmitter();
-  @Output() selectedToggled = new EventEmitter();
-  @Output() removed = new EventEmitter();
+  @Input() set backgroundColor(value) {
+    this._backgroundColor = value;
+    this.updateStyles();
+  };
 
-  public $destroy = new Subject();
+  @Input() set borderColor(value) {
+    this.styles.borderColor = value;
+    this.updateStyles();
+  }
+  @Input() set color(value) {
+    this._color = value;
+    this.updateStyles();
+  }
+
+  get color() {
+    return this._color;
+  }
+
+  @Input() set outlined(value) {
+    this._outlined = value;
+    this.updateStyles();
+  };
+
+  get outlined() {
+    return this._outlined;
+  }
+
+  @Output() public clicked = new EventEmitter();
+  @Output() public selectedToggled = new EventEmitter();
+  @Output() public removed = new EventEmitter();
+
   public styles = {
     backgroundColor: '',
     borderColor: '',
     color: ''
   };
+
+  public $destroy = new Subject();
+
+  private _backgroundColor = '';
+  private _color = '';
+  private _outlined = false;
+
+  constructor(
+    private _chipsService: ChipsService,
+    private _cd: ChangeDetectorRef
+  ) {}
+
+  public ngOnInit() {
+    this._chipsService.valuesChange$
+      .pipe(
+        takeUntil(this.$destroy),
+      )
+      .subscribe(() => {
+        if (this._chipsService.modelValue) {
+          const hasValueSelected = this._chipsService.modelValue.indexOf(this.value) !== -1;
+
+          if (hasValueSelected) {
+            if (!this.selected) {
+              this.selected = true;
+            }
+          } else {
+            if (this.selected) {
+              this.selected = false;
+            }
+          }
+        }
+
+        this._cd.markForCheck();
+      })
+  }
+
+  public ngOnDestroy() {
+    this.$destroy.next();
+    this.$destroy.complete();
+  }
+
+  public click() {
+    this.clicked.emit(this.attribute);
+
+    if (this.selectable) {
+      this.selected = !this.selected;
+      this.selectedToggled.emit({ attribute: this.attribute, selected: this.selected });
+
+      if (this.selected) {
+        this._chipsService.addModelValue(this.value);
+      } else {
+        this._chipsService.removeModelValue(this.value);
+      }
+    }
+  }
+
+  public remove(event) {
+    this._chipsService.removeModelValue(this.value);
+    this.removed.next(event);
+  }
 
   private isContrastYIQBlack(hexcolor) {
     if (!hexcolor) {
@@ -42,42 +136,26 @@ export class FsChipComponent implements OnInit, OnChanges, OnDestroy {
     const g = parseInt(hexcolor.substr(2, 2), 16);
     const b = parseInt(hexcolor.substr(4, 2), 16);
     const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+
     return yiq >= 200;
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  private updateStyles() {
+    this.styles.backgroundColor = this._backgroundColor;
 
-    this.styles.backgroundColor = this. backgroundColor;
-    this.styles.borderColor = this. borderColor;
-    this.styles.color = this. color;
-
-    if (!this.color && !this.outlined) {
-      this.styles.color = this.isContrastYIQBlack(this.backgroundColor) ? '#474747' : '#fff';
+    if (this._color) {
+      this.styles.color = this._color;
+    } else if (!this._outlined) {
+      this.styles.color = this.isContrastYIQBlack(this.styles.backgroundColor) ? '#474747' : '#fff';
     }
 
-    if (this.outlined) {
+    if (this._outlined) {
       this.styles.backgroundColor = '';
 
-      if (this.color) {
-        this.styles.borderColor = this.color;
+      if (this._color) {
+        this.styles.borderColor = this._color;
       }
     }
   }
 
-  ngOnDestroy() {
-    this.$destroy.next();
-    this.$destroy.complete();
-  }
-
-  ngOnInit() {
-
-    this.clicked
-    .pipe(takeUntil(this.$destroy))
-    .subscribe(() => {
-      if (this.selectable) {
-        this.selected = !this.selected;
-        this.selectedToggled.emit({ selected: this.selected, value: this.value });
-      }
-    });
-  }
 }

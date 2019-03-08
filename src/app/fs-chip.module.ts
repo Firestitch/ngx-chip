@@ -1,11 +1,12 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { FsChipComponent } from './components/chip/chip.component';
-
 import { MatChipsModule, MatIconModule } from '@angular/material';
 
 import { FsLabelModule } from '@firestitch/label';
+
+import { FsChipsComponent } from './components/chips/chips.component';
+
+import { FsChipComponent } from './components/chip/chip.component';
 
 @NgModule({
   imports: [
@@ -15,9 +16,11 @@ import { FsLabelModule } from '@firestitch/label';
     FsLabelModule
   ],
   exports: [
+    FsChipsComponent,
     FsChipComponent,
   ],
   declarations: [
+    FsChipsComponent,
     FsChipComponent,
   ]
 })

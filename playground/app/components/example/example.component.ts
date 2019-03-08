@@ -17,6 +17,7 @@ export class ExampleComponent {
   public backgroundColor = '';
   public color;
   public config: any = {};
+  public mm = [1, 2, 3];
 
   constructor(private fsMessage: FsMessage) {}
 
