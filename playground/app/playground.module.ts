@@ -16,7 +16,9 @@ import { FsLabelModule } from '@firestitch/label';
 import { AppMaterialModule } from './material.module';
 import {
   ExampleComponent,
-  ExamplesComponent
+  ExamplesComponent,
+  ExampleSingleSelectionComponent,
+  ExampleWithArrayComponent,
 } from './components';
 import { AppComponent } from './app.component';
 
@@ -44,7 +46,9 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     ExamplesComponent,
-    ExampleComponent
+    ExampleComponent,
+    ExampleWithArrayComponent,
+    ExampleSingleSelectionComponent,
   ],
   providers: [
   ],

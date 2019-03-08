@@ -1,0 +1,21 @@
+<div fxLayout="row wrap" fxLayoutGap="15px">
+  <fs-label>Select by checkbox</fs-label>
+  <mat-checkbox *ngFor="let chip of listOfChips"
+                [value]="chip.value"
+                (change)="selectionChange(chip.value)"
+  >{{ chip.name }}
+  </mat-checkbox>
+</div>
+
+{{selectedIds | json}}
+<div fxLayout="row wrap" fxLayoutGap="15px">
+  <fs-label>Tags</fs-label>
+  <fs-chips [(ngModel)]="selectedIds">
+    <fs-chip
+      *ngFor="let chip of listOfChips"
+      [value]="chip.value"
+    >
+      {{ chip.name }}
+    </fs-chip>
+  </fs-chips>
+</div>

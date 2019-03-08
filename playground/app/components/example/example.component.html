@@ -34,15 +34,16 @@
   </mat-form-field>
 </div>
 
-<fs-chip
-  [backgroundColor]="backgroundColor"
-  [image]="image"
-  [color]="color"
-  [selected]="selected"
-  [selectable]="selectable"
-  [removable]="removable"
-  [outlined]="outlined"
-  (selectedToggled)="chipSelectedToggled($event)"
-  (removed)="chipRemoved($event)">
+<fs-chips>
+  <fs-chip
+    [backgroundColor]="backgroundColor"
+    [image]="image"
+    [color]="color"
+    [selected]="selected"
+    [selectable]="selectable"
+    [removable]="removable"
+    [outlined]="outlined"
+    (removed)="chipRemoved($event)">
     Tag A
-</fs-chip>
+  </fs-chip>
+</fs-chips>

@@ -1,6 +1,8 @@
 import {
-  Component,
+  ChangeDetectionStrategy,
   EventEmitter,
+  ChangeDetectorRef,
+  Component,
   Input,
   OnDestroy,
   OnInit,
@@ -8,22 +10,26 @@ import {
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ChipsService } from '../../services/chips.service';
+
 
 @Component({
   selector: 'fs-chip',
   templateUrl: 'chip.component.html',
-  styleUrls: ['chip.component.scss']
+  styleUrls: ['chip.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsChipComponent implements OnInit, OnDestroy {
 
   @Input() public attribute: any;
-  @Input() public selectable = false;
   @Input() public selected = false;
+  @Input() public selectable = false;
+  @Input() public value = null;
   @Input() public removable = false;
   @Input() public image: string;
 
   @Input() set backgroundColor(value) {
-    debugger;
     this._backgroundColor = value;
     this.updateStyles();
   };
@@ -66,9 +72,34 @@ export class FsChipComponent implements OnInit, OnDestroy {
   private _color = '';
   private _outlined = false;
 
-  constructor() {}
+  constructor(
+    private _chipsService: ChipsService,
+    private _cd: ChangeDetectorRef
+  ) {}
 
-  public ngOnInit() {}
+  public ngOnInit() {
+    this._chipsService.valuesChange$
+      .pipe(
+        takeUntil(this.$destroy),
+      )
+      .subscribe(() => {
+        if (this._chipsService.modelValue) {
+          const hasValueSelected = this._chipsService.modelValue.indexOf(this.value) !== -1;
+
+          if (hasValueSelected) {
+            if (!this.selected) {
+              this.selected = true;
+            }
+          } else {
+            if (this.selected) {
+              this.selected = false;
+            }
+          }
+        }
+
+        this._cd.markForCheck();
+      })
+  }
 
   public ngOnDestroy() {
     this.$destroy.next();
@@ -81,10 +112,17 @@ export class FsChipComponent implements OnInit, OnDestroy {
     if (this.selectable) {
       this.selected = !this.selected;
       this.selectedToggled.emit({ attribute: this.attribute, selected: this.selected });
+
+      if (this.selected) {
+        this._chipsService.addModelValue(this.value);
+      } else {
+        this._chipsService.removeModelValue(this.value);
+      }
     }
   }
 
   public remove(event) {
+    this._chipsService.removeModelValue(this.value);
     this.removed.next(event);
   }
 
