@@ -2,7 +2,7 @@
   "name": "@firestitch/chip",
   "title": "Chip",
   "description": "@firestitch/chip",
-  "version": "7.0.3",
+  "version": "7.0.5",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-chip"
@@ -46,7 +46,6 @@
     "@angular/router": "^7.2.6",
     "@compodoc/compodoc": "^1.1.8",
     "@firestitch/example": "^7.0.0",
-    "@firestitch/iframe": "^0.2.0",
     "@firestitch/message": "^0.2.1",
     "@firestitch/label": "^0.2.0",
     "@firestitch/colorpicker": "^7.0.4",
