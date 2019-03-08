@@ -2,7 +2,7 @@
   "name": "@firestitch/chip",
   "title": "Chip",
   "description": "@firestitch/chip",
-  "version": "7.0.2",
+  "version": "7.0.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-chip"
@@ -67,7 +67,7 @@
     "node": ">=6.0.0"
   },
   "peerDependencies": {
-    "@firestitch/label": "^0.2.0",
-    "@angular/material": "^7.0.0"
+    "@firestitch/label": ">=7.0.0",
+    "@angular/material": ">=7.0.0"
   }
 }
