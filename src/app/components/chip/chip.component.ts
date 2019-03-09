@@ -1,11 +1,9 @@
 import {
-  ChangeDetectionStrategy,
   EventEmitter,
   ChangeDetectorRef,
   Component,
   Input,
   OnDestroy,
-  OnInit,
   Output,
 } from '@angular/core';
 
@@ -17,10 +15,9 @@ import { ChipsService } from '../../services/chips.service';
 @Component({
   selector: 'fs-chip',
   templateUrl: 'chip.component.html',
-  styleUrls: ['chip.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['chip.component.scss']
 })
-export class FsChipComponent implements OnInit, OnDestroy {
+export class FsChipComponent implements OnDestroy {
 
   @Input() public attribute: any;
   @Input() public selected = false;
@@ -68,16 +65,22 @@ export class FsChipComponent implements OnInit, OnDestroy {
 
   public $destroy = new Subject();
 
+  private _chipsService: ChipsService;
   private _backgroundColor = '';
   private _color = '';
   private _outlined = false;
 
   constructor(
-    private _chipsService: ChipsService,
     private _cd: ChangeDetectorRef
   ) {}
 
-  public ngOnInit() {
+  public detatchChips() {
+    this._chipsService = null;
+  }
+
+  public attatchChips(chipsService) {
+    this._chipsService = chipsService;
+
     this._chipsService.valuesChange$
       .pipe(
         takeUntil(this.$destroy),
@@ -98,7 +101,7 @@ export class FsChipComponent implements OnInit, OnDestroy {
         }
 
         this._cd.markForCheck();
-      })
+      });
   }
 
   public ngOnDestroy() {
@@ -113,16 +116,21 @@ export class FsChipComponent implements OnInit, OnDestroy {
       this.selected = !this.selected;
       this.selectedToggled.emit({ attribute: this.attribute, selected: this.selected });
 
-      if (this.selected) {
-        this._chipsService.addModelValue(this.value);
-      } else {
-        this._chipsService.removeModelValue(this.value);
+      if (this._chipsService) {
+        if (this.selected) {
+          this._chipsService.addModelValue(this.value);
+        } else {
+          this._chipsService.removeModelValue(this.value);
+        }
       }
     }
   }
 
   public remove(event) {
-    this._chipsService.removeModelValue(this.value);
+    if (this._chipsService) {
+      this._chipsService.removeModelValue(this.value);
+    }
+
     this.removed.next(event);
   }
 
@@ -157,5 +165,4 @@ export class FsChipComponent implements OnInit, OnDestroy {
       }
     }
   }
-
 }
