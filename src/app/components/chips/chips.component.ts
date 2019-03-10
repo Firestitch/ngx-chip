@@ -36,7 +36,7 @@ export const CHIP_VALUE_ACCESSOR: Provider = {
   providers: [ ChipsService, CHIP_VALUE_ACCESSOR ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FsChipsComponent implements ControlValueAccessor, OnInit, DoCheck, AfterViewInit, OnDestroy{
+export class FsChipsComponent implements ControlValueAccessor, OnInit, DoCheck, AfterViewInit, OnDestroy {
 
   @ContentChildren(FsChipComponent) fsModelObjects: QueryList<FsChipComponent>;
 
@@ -76,22 +76,22 @@ export class FsChipsComponent implements ControlValueAccessor, OnInit, DoCheck, 
     }
 
     this.fsModelObjects.changes
-      .pipe(
-        takeUntil(this.$destroy),
-      )
-      .subscribe(fsModelObjects => {
+    .pipe(
+      takeUntil(this.$destroy),
+    )
+    .subscribe(fsModelObjects => {
 
-        changeDiff = this._differChipComponent.diff(fsModelObjects);
-        if (changeDiff) {
-          changeDiff.forEachAddedItem((change) => {
-            change.item.attatchChips(this._chipsService);
-          });
+      changeDiff = this._differChipComponent.diff(fsModelObjects);
+      if (changeDiff) {
+        changeDiff.forEachAddedItem((change) => {
+          change.item.attatchChips(this._chipsService);
+        });
 
-          changeDiff.forEachRemovedItem((change) => {
-            change.item.detatchChips();
-          });
-        }
-      });
+        changeDiff.forEachRemovedItem((change) => {
+          change.item.detatchChips();
+        });
+      }
+    });
   }
 
   ngOnDestroy() {

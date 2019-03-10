@@ -8,10 +8,10 @@ import { Component } from '@angular/core';
 export class ExampleWithArrayComponent {
 
   public listOfChips = [
-    { name: 'Tag A', value: 1 },
-    { name: 'Tag B', value: 2 },
-    { name: 'Tag C', value: 3 },
-    { name: 'Tag D', value: 4 },
+    { name: 'Tag 1', value: 1 },
+    { name: 'Tag 2', value: 2 },
+    { name: 'Tag 3', value: 3 },
+    { name: 'Tag 4', value: 4 },
   ];
 
   public selected = [];
