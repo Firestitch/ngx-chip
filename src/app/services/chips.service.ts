@@ -79,6 +79,6 @@ export class ChipsService implements OnDestroy {
       if (selectedChip) {
         this.selectedValues.push(selectedChip.value);
       }
-    })
+    });
   }
 }

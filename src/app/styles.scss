@@ -1,0 +1,76 @@
+@mixin fs-chip($theme) {
+
+}
+
+.fs-chip {
+  user-select: none;
+  transition: box-shadow 280ms cubic-bezier(.4,0,.2,1);
+  display: inline-flex;
+  padding: 0px 12px;
+  border-radius: 16px;
+  align-items: center;
+  cursor: default;
+  min-height: 32px;
+  height: 1px;
+  background-color: #e0e0e0;
+  margin-top: 8px;
+
+  &.imaged {
+    overflow: visible;
+    padding-left: 0;
+
+    &.outlined .image {
+      margin-left: -2px;
+    }
+  }
+
+  &.removable,
+  &.selected {
+    padding-right: 3px;
+  }
+
+  &.selectable {
+    cursor: pointer;
+  }
+
+  &.outlined {
+    background-color: transparent;
+    border: 1px solid #e0e0e0;
+    box-sizing: border-box;
+  }
+
+  .image {
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    width: 32px;
+    margin-left: -1px;
+    margin-right: 8px;
+  }
+
+  .fs-chip-content {
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .selected-check {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  .remove {
+    display: flex;
+    margin-left: 5px;
+    cursor: pointer;
+    mat-icon {
+      transform: scale(.9);
+      color: #929292;
+    }
+  }
+}

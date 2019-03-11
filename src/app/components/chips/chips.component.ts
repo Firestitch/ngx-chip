@@ -19,7 +19,6 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ChipsService } from '../../services/chips.service';
 import { FsChipComponent } from '../chip/chip.component';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 
 export const CHIP_VALUE_ACCESSOR: Provider = {
@@ -36,9 +35,7 @@ export const CHIP_VALUE_ACCESSOR: Provider = {
   providers: [ ChipsService, CHIP_VALUE_ACCESSOR ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FsChipsComponent implements ControlValueAccessor, OnInit, DoCheck, AfterViewInit, OnDestroy {
-
-  @ContentChildren(FsChipComponent) fsModelObjects: QueryList<FsChipComponent>;
+export class FsChipsComponent implements ControlValueAccessor, OnInit, DoCheck, OnDestroy {
 
   @Input() public trackBy: TrackByFunction<any>;
   @Input() set multiple(value) {
@@ -50,8 +47,16 @@ export class FsChipsComponent implements ControlValueAccessor, OnInit, DoCheck, 
   }
 
   @ContentChildren(FsChipComponent, { descendants: true })
-  set chips(value) {
+  set chips(value: QueryList<FsChipComponent>) {
+    value.forEach(component => {
+      component.attatchChips(this._chipsService);
+    });
     this._chipsService.chips = value;
+
+    // HACK: To avoid pressionChangedAfterItHasBeenCheckedError
+    setTimeout(() => {
+      this._chipsService.updateSelected();
+    });
   };
 
   public onChange: any = () => {};
@@ -59,48 +64,18 @@ export class FsChipsComponent implements ControlValueAccessor, OnInit, DoCheck, 
 
   private $destroy = new Subject();
   private _differ: IterableDiffer<any>;
-  private _differChipComponent;
 
   constructor(
     private _chipsService: ChipsService,
     private _differs: IterableDiffers
   ) {}
 
-  ngAfterViewInit() {
-
-    let changeDiff = this._differChipComponent.diff(this.fsModelObjects);
-    if (changeDiff) {
-      changeDiff.forEachAddedItem(change => {
-        change.item.attatchChips(this._chipsService);
-      });
-    }
-
-    this.fsModelObjects.changes
-    .pipe(
-      takeUntil(this.$destroy),
-    )
-    .subscribe(fsModelObjects => {
-
-      changeDiff = this._differChipComponent.diff(fsModelObjects);
-      if (changeDiff) {
-        changeDiff.forEachAddedItem((change) => {
-          change.item.attatchChips(this._chipsService);
-        });
-
-        changeDiff.forEachRemovedItem((change) => {
-          change.item.detatchChips();
-        });
-      }
-    });
-  }
-
-  ngOnDestroy() {
+  public ngOnDestroy() {
     this.$destroy.next();
     this.$destroy.complete();
   }
 
   public ngOnInit() {
-    this._differChipComponent = this._differs.find([]).create(null);
     this._differ = this._differs.find([]).create(this.trackBy || null);
   }
 

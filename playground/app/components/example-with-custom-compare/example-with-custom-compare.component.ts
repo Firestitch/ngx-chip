@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+
 @Component({
   selector: 'example-with-custom-compare',
   templateUrl: 'example-with-custom-compare.component.html',
@@ -7,14 +8,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ExampleWithCustomCompareComponent implements OnInit {
 
-  public listOfChips = [
-    { name: 'Tag 1', value: 1 },
-    { name: 'Tag 2', value: 2 },
-    { name: 'Tag 3', value: 3 },
-    { name: 'Tag 4', value: 4 },
-  ];
-
-  public selected = [];
+  public listOfChips = [];
+  public selected = [1, 2];
 
   selectionChange(val) {
     const valIndex = this.selected.indexOf(val);
@@ -30,6 +25,14 @@ export class ExampleWithCustomCompareComponent implements OnInit {
   }
 
   ngOnInit() {
+    setTimeout(() => {
 
+      this.listOfChips = [
+        { name: 'Tag 1', value: 1 },
+        { name: 'Tag 2', value: 2 },
+        { name: 'Tag 3', value: 3 },
+        { name: 'Tag 4', value: 4 }
+      ];
+    },1000);
   }
 }
