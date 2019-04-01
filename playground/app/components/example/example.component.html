@@ -32,6 +32,14 @@
   <mat-form-field>
     <input matInput fsColorPicker [(ngModel)]="color" placeholder="Color">
   </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Size</mat-label>
+    <mat-select [(ngModel)]="size">
+      <mat-option value="">Default</mat-option>
+      <mat-option value="small">Small</mat-option>
+    </mat-select>
+  </mat-form-field>
 </div>
 
   <fs-chip
@@ -42,6 +50,7 @@
     [selectable]="selectable"
     [removable]="removable"
     [outlined]="outlined"
+    [size]="size"
     (removed)="chipRemoved($event)">
     Tag A
   </fs-chip>

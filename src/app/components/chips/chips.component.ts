@@ -13,6 +13,7 @@ import {
   QueryList,
   AfterViewInit,
   OnDestroy,
+  HostBinding,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -36,6 +37,8 @@ export const CHIP_VALUE_ACCESSOR: Provider = {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FsChipsComponent implements ControlValueAccessor, OnInit, DoCheck, OnDestroy {
+
+  @HostBinding('class.fs-chips') fsChipsClass = true;
 
   @Input() public trackBy: TrackByFunction<any>;
   @Input() set multiple(value) {

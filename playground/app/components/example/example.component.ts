@@ -11,6 +11,7 @@ export class ExampleComponent {
   public image;
   public showImage;
   public removable;
+  public size;
   public outlined = false;
   public selected = false;
   public selectable = false;

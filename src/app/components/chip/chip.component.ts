@@ -31,6 +31,13 @@ export class FsChipComponent implements OnDestroy {
   @HostBinding('style.color') styleColor = '';
   @HostBinding('style.borderColor') styleBorderColor = '';
 
+  @HostBinding('class.small') classSmall = false;
+
+  @Input('size') set setSize(value) {
+    this._size = value;
+    this.classSmall = value === 'small';
+  };
+
   @HostListener('click')
   click() {
 
@@ -117,6 +124,7 @@ export class FsChipComponent implements OnDestroy {
   private _chipsService: ChipsService;
   private _backgroundColor = '';
   private _color = '';
+  private _size;
 
   constructor(
     private _cd: ChangeDetectorRef
