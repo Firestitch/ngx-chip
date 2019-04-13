@@ -8,35 +8,44 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ExampleWithCustomCompareComponent implements OnInit {
 
-  public listOfChips = [];
+  public chips = [];
   public selected = [];
+  public checkboxes = {};
 
-  selectionChange(chip) {
-    chip.selected = !chip.selected;
+  compare(o1, o2) {
+    return o1 === o2;
+  }
 
-    const valIndex = this.selected.indexOf(chip.value);
+  checkboxChange(event) {
+    const value = event.source.value.id;
+    this.checkboxes[value] = event.checked;
+    const valIndex = this.selected.indexOf(value);
     if (valIndex === -1) {
-      this.selected.push(chip.value);
+      this.selected.push(value);
     } else {
       this.selected.splice(valIndex, 1);
     }
+
+    this.selected = this.selected.splice(0);
   }
 
-  compare(modelValue, optionValue) {
-    return modelValue === optionValue;
+  chipsChange(event) {
+    this.chips.forEach(chip => {
+      this.checkboxes[chip.id] = this.selected.indexOf(chip.id) >= 0;
+    });
   }
 
   ngOnInit() {
-    setTimeout(() => {
 
-      this.listOfChips = [
-        { name: 'Tag 1', value: 1, selected: true },
-        { name: 'Tag 2', value: 2, selected: true },
-        { name: 'Tag 3', value: 3 },
-        { name: 'Tag 4', value: 4 }
-      ];
+    this.chips = [
+      { name: 'Tag 1', id: 1 },
+      { name: 'Tag 2', id: 2 },
+      { name: 'Tag 3', id: 3 },
+      { name: 'Tag 4', id: 4 }
+    ];
 
-      this.selected = [1, 2];
-    }, 500);
+    this.selected = [1, 2];
+    this.checkboxes[1] = true;
+    this.checkboxes[2] = true;
   }
 }

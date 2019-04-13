@@ -7,21 +7,16 @@ import { Component } from '@angular/core';
 })
 export class ExampleSingleSelectionComponent {
 
-  public listOfChips = [
+  public chips = [
     { name: 'Tag A', value: 1 },
     { name: 'Tag B', value: 2 },
     { name: 'Tag C', value: 3 },
     { name: 'Tag D', value: 4 },
   ];
 
-  public selectedIds = [];
+  public chip
 
-  selectionChange(val) {
-    const valIndex = this.selectedIds.indexOf(val);
-    if (valIndex === -1) {
-      this.selectedIds.push(val);
-    } else {
-      this.selectedIds.splice(valIndex, 1);
-    }
+  change(event) {
+    console.log(event);
   }
 }

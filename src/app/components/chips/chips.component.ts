@@ -1,73 +1,44 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   ContentChildren,
   DoCheck,
   forwardRef,
   Input,
-  IterableDiffer,
   IterableDiffers,
   OnInit,
-  Provider,
   TrackByFunction,
   QueryList,
   AfterViewInit,
   OnDestroy,
   HostBinding,
-  ChangeDetectorRef,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { ChipsService } from '../../services/chips.service';
 import { FsChipComponent } from '../chip/chip.component';
 import { Subject } from 'rxjs';
-import { takeUntil, take } from 'rxjs/operators';
-
-
-export const CHIP_VALUE_ACCESSOR: Provider = {
-  provide: NG_VALUE_ACCESSOR,
-  useExisting: forwardRef(() => FsChipsComponent),
-  multi: true
-};
-
+import { takeUntil } from 'rxjs/operators';
+import { find, filter } from 'lodash-es';
 
 @Component({
   selector: 'fs-chips',
   templateUrl: 'chips.component.html',
   styleUrls: ['chips.component.scss'],
-  providers: [ ChipsService, CHIP_VALUE_ACCESSOR ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  providers: [{
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => FsChipsComponent),
+    multi: true
+  }]
 })
 export class FsChipsComponent implements ControlValueAccessor, OnInit, OnDestroy, AfterViewInit {
 
   @HostBinding('class.fs-chips') fsChipsClass = true;
 
-  @Input() public trackBy: TrackByFunction<any>;
-  @Input() set multiple(value) {
-    this._chipsService.multiple = value;
-  }
-
-  @Input() set compare(value) {
-    this._chipsService.compareFn = value;
-  }
-
   @ContentChildren(FsChipComponent, { descendants: true }) chips: QueryList<FsChipComponent>;
-  // set chips(value: QueryList<FsChipComponent>) {
 
-  //   debugger;
-  //   value.forEach(component => {
-  //     component.selectedToggled
-  //     .pipe(
-  //       takeUntil(this.$destroy)
-  //     )
-  //     .subscribe((e) => {
-  //       debugger;
-  //     });
-
-  //     //attatchChips(this._chipsService);
-  //   });
-  //   this._chipsService.chips = value;
-  // };
+  @Input() trackBy: TrackByFunction<any>;
+  @Input() ngModel = [];
+  @Input() compare;
+  @Input() multiple = true;
 
   public onChange: any = () => {};
   public onTouched: any = () => {};
@@ -76,15 +47,8 @@ export class FsChipsComponent implements ControlValueAccessor, OnInit, OnDestroy
   private _differ: any;
 
   constructor(
-    private _chipsService: ChipsService,
-    private _differs: IterableDiffers,
-    private cd: ChangeDetectorRef
+    private _differs: IterableDiffers
   ) {}
-
-  public ngOnDestroy() {
-    this.$destroy.next();
-    this.$destroy.complete();
-  }
 
   ngAfterViewInit() {
 
@@ -108,50 +72,23 @@ export class FsChipsComponent implements ControlValueAccessor, OnInit, OnDestroy
           });
 
           changeDiff.forEachRemovedItem((change) => {
-            // TODO destroy
+            this.updateChips();
           });
         }
       });
   }
 
-  private addChip(component: FsChipComponent) {
-    component.selectedToggled
-    .pipe(
-      takeUntil(this.$destroy)
-    )
-    .subscribe(() => {
-      this.onChange(this._chipsService.modelValue);
-    });
-  }
-
   public ngOnInit() {
     this._differ = this._differs.find([]).create(this.trackBy || null);
-
-    // this._chipsService.valuesChange$
-    // .pipe(
-    //   takeUntil(this.$destroy)
-    // )
-    // .subscribe(() => {
-    //   this.onChange(this._chipsService.modelValue);
-    // });
   }
 
-  /*
-  this is calling every tick BAD!
-  */
-  // public ngDoCheck() {
-  //   if (this._differ) {
-  //     const changes = this._differ.diff(this._chipsService.modelValue);
-
-  //     if (changes) {
-  //       this._chipsService.updateSelected();
-  //     }
-  //   }
-  // }
+  public ngOnDestroy() {
+    this.$destroy.next();
+    this.$destroy.complete();
+  }
 
   public writeValue(value: any) {
-    console.log(value);
-    this._chipsService.modelValue = value;
+    this.updateChips();
   }
 
   public registerOnChange(fn: any) {
@@ -160,5 +97,62 @@ export class FsChipsComponent implements ControlValueAccessor, OnInit, OnDestroy
 
   public registerOnTouched(fn: any) {
     this.onTouched = fn;
+  }
+
+  private compareFn(o1, o2) {
+    if (this.compare) {
+      return this.compare(o1, o2);
+    }
+    return o1 === o2;
+  }
+
+  private updateChips() {
+    if (this.multiple && Array.isArray(this.ngModel) && this.chips) {
+      this.chips.forEach((chip) => {
+
+        chip.selected = find(this.ngModel, (o) => {
+          return this.compareFn(o, chip.value);
+        }) !== undefined;
+      });
+    }
+  }
+
+  private addChip(component: FsChipComponent) {
+    component.selectedToggled
+    .pipe(
+      takeUntil(this.$destroy)
+    )
+    .subscribe((e) => {
+
+      if (this.multiple) {
+
+        if (!Array.isArray(this.ngModel)) {
+          this.ngModel = [];
+        }
+
+        const valueIndex = this.ngModel.findIndex((modelItem) => {
+          return this.compareFn(modelItem, component.value);
+        });
+
+        if (valueIndex > -1) {
+          this.ngModel.splice(valueIndex, 1);
+        } else {
+          this.ngModel.push(component.value);
+        }
+
+      } else {
+
+        this.chips.forEach((chip) => {
+          if (component !== chip) {
+            chip.selected = false;
+          };
+        });
+
+        this.ngModel = component.value;
+      }
+
+      this.onChange(this.ngModel);
+      this.onTouched(this.ngModel);
+    });
   }
 }

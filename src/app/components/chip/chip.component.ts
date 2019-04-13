@@ -10,8 +10,6 @@ import {
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { ChipsService } from '../../services/chips.service';
 
 
 @Component({
@@ -44,14 +42,6 @@ export class FsChipComponent implements OnDestroy {
     if (this.selectable) {
       this.selected = !this.selected;
       this.selectedToggled.emit({ value: this.value, selected: this.selected });
-
-      // if (this._chipsService) {
-      //   if (this.selected) {
-      //     this._chipsService.addModelValue(this.value);
-      //   } else {
-      //     this._chipsService.removeModelValue(this.value);
-      //   }
-      // }
     }
   }
 
@@ -121,44 +111,9 @@ export class FsChipComponent implements OnDestroy {
 
   public $destroy = new Subject();
 
-  //private _chipsService: ChipsService;
   private _backgroundColor = '';
   private _color = '';
   private _size;
-
-  constructor(
-    //private _cd: ChangeDetectorRef
-  ) {}
-
-  // public detatchChips() {
-  //   this._chipsService = null;
-  // }
-
-  // public attatchChips(chipsService) {
-  //   this._chipsService = chipsService;
-
-  //   this._chipsService.valuesChange$
-  //     .pipe(
-  //       takeUntil(this.$destroy),
-  //     )
-  //     .subscribe(() => {
-  //       if (this._chipsService.selectedValues) {
-  //         const hasValueSelected = this._chipsService.selectedValues.indexOf(this.value) !== -1;
-
-  //         if (hasValueSelected) {
-  //           if (!this.selected) {
-  //             this.selected = true;
-  //           }
-  //         } else {
-  //           if (this.selected) {
-  //             this.selected = false;
-  //           }
-  //         }
-  //       }
-
-  //       this._cd.markForCheck();
-  //     });
-  // }
 
   public ngOnDestroy() {
     this.$destroy.next();
@@ -166,10 +121,6 @@ export class FsChipComponent implements OnDestroy {
   }
 
   public remove(event) {
-    // if (this._chipsService) {
-    //   this._chipsService.removeModelValue(this.value);
-    // }
-
     this.removed.next(event);
   }
 

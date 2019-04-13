@@ -1,12 +1,18 @@
-<div fxLayout="row wrap" fxLayoutGap="15px">
+<div>
   <fs-label>Tags</fs-label>
-  <fs-chips [(ngModel)]="selectedIds" [multiple]="false">
+  <fs-chips [(ngModel)]="chip" [multiple]="false" (ngModelChange)="change($event)">
     <fs-chip
-      *ngFor="let chip of listOfChips"
+      *ngFor="let chip of chips"
       [value]="chip"
-      [selectable]="true"
-    >
+      [selectable]="true">
       {{ chip.name }}
     </fs-chip>
   </fs-chips>
+
+
+  <div *ngIf="chip">
+    <br>
+    <fs-label>Result</fs-label>
+    {{chip | json}}
+  </div>
 </div>
