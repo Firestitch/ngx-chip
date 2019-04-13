@@ -9,10 +9,11 @@
 <br>
 <div fxLayout="row wrap" fxLayoutGap="15px">
   <fs-label>Tags</fs-label>
-  <fs-chips [(ngModel)]="selected">
+  <fs-chips [(ngModel)]="selected" (ngModelChange)="change($event)">
     <fs-chip
       *ngFor="let chip of listOfChips"
       [value]="chip"
+      selectable="true"
     >
       {{ chip.name }}
     </fs-chip>

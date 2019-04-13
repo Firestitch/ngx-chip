@@ -14,12 +14,14 @@ import {
   AfterViewInit,
   OnDestroy,
   HostBinding,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { ChipsService } from '../../services/chips.service';
 import { FsChipComponent } from '../chip/chip.component';
 import { Subject } from 'rxjs';
+import { takeUntil, take } from 'rxjs/operators';
 
 
 export const CHIP_VALUE_ACCESSOR: Provider = {
@@ -36,7 +38,7 @@ export const CHIP_VALUE_ACCESSOR: Provider = {
   providers: [ ChipsService, CHIP_VALUE_ACCESSOR ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FsChipsComponent implements ControlValueAccessor, OnInit, DoCheck, OnDestroy {
+export class FsChipsComponent implements ControlValueAccessor, OnInit, OnDestroy, AfterViewInit {
 
   @HostBinding('class.fs-chips') fsChipsClass = true;
 
@@ -49,28 +51,34 @@ export class FsChipsComponent implements ControlValueAccessor, OnInit, DoCheck, 
     this._chipsService.compareFn = value;
   }
 
-  @ContentChildren(FsChipComponent, { descendants: true })
-  set chips(value: QueryList<FsChipComponent>) {
-    value.forEach(component => {
-      component.attatchChips(this._chipsService);
-    });
-    this._chipsService.chips = value;
+  @ContentChildren(FsChipComponent, { descendants: true }) chips: QueryList<FsChipComponent>;
+  // set chips(value: QueryList<FsChipComponent>) {
 
-    // HACK: To avoid pressionChangedAfterItHasBeenCheckedError
-    setTimeout(() => {
-      this._chipsService.updateSelected();
-    });
-  };
+  //   debugger;
+  //   value.forEach(component => {
+  //     component.selectedToggled
+  //     .pipe(
+  //       takeUntil(this.$destroy)
+  //     )
+  //     .subscribe((e) => {
+  //       debugger;
+  //     });
+
+  //     //attatchChips(this._chipsService);
+  //   });
+  //   this._chipsService.chips = value;
+  // };
 
   public onChange: any = () => {};
   public onTouched: any = () => {};
 
   private $destroy = new Subject();
-  private _differ: IterableDiffer<any>;
+  private _differ: any;
 
   constructor(
     private _chipsService: ChipsService,
-    private _differs: IterableDiffers
+    private _differs: IterableDiffers,
+    private cd: ChangeDetectorRef
   ) {}
 
   public ngOnDestroy() {
@@ -78,23 +86,72 @@ export class FsChipsComponent implements ControlValueAccessor, OnInit, DoCheck, 
     this.$destroy.complete();
   }
 
+  ngAfterViewInit() {
+
+    let changeDiff = this._differ.diff(this.chips);
+    if (changeDiff) {
+      changeDiff.forEachAddedItem(change => {
+        this.addChip(change.item);
+      });
+    }
+
+    this.chips.changes
+      .pipe(
+        takeUntil(this.$destroy),
+      )
+      .subscribe(chips => {
+
+        changeDiff = this._differ.diff(chips);
+        if (changeDiff) {
+          changeDiff.forEachAddedItem((change) => {
+            this.addChip(change.item);
+          });
+
+          changeDiff.forEachRemovedItem((change) => {
+            // TODO destroy
+          });
+        }
+      });
+  }
+
+  private addChip(component: FsChipComponent) {
+    component.selectedToggled
+    .pipe(
+      takeUntil(this.$destroy)
+    )
+    .subscribe(() => {
+      this.onChange(this._chipsService.modelValue);
+    });
+  }
+
   public ngOnInit() {
     this._differ = this._differs.find([]).create(this.trackBy || null);
+
+    // this._chipsService.valuesChange$
+    // .pipe(
+    //   takeUntil(this.$destroy)
+    // )
+    // .subscribe(() => {
+    //   this.onChange(this._chipsService.modelValue);
+    // });
   }
 
-  public ngDoCheck() {
-    if (this._differ) {
-      const changes = this._differ.diff(this._chipsService.modelValue);
+  /*
+  this is calling every tick BAD!
+  */
+  // public ngDoCheck() {
+  //   if (this._differ) {
+  //     const changes = this._differ.diff(this._chipsService.modelValue);
 
-      if (changes) {
-        this._chipsService.updateSelected();
-      }
-    }
-  }
+  //     if (changes) {
+  //       this._chipsService.updateSelected();
+  //     }
+  //   }
+  // }
 
   public writeValue(value: any) {
+    console.log(value);
     this._chipsService.modelValue = value;
-    this.onChange(value);
   }
 
   public registerOnChange(fn: any) {

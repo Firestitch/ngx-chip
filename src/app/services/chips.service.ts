@@ -34,8 +34,6 @@ export class ChipsService implements OnDestroy {
     if (Array.isArray(this.modelValue) && this.chips) {
       this._updateSelectedValues();
     }
-
-    this._valuesChange$.next(this.selectedValues);
   }
 
   public addModelValue(value) {

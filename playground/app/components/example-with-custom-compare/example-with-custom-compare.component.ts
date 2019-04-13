@@ -9,12 +9,14 @@ import { Component, OnInit } from '@angular/core';
 export class ExampleWithCustomCompareComponent implements OnInit {
 
   public listOfChips = [];
-  public selected = [1, 2];
+  public selected = [];
 
-  selectionChange(val) {
-    const valIndex = this.selected.indexOf(val);
+  selectionChange(chip) {
+    chip.selected = !chip.selected;
+
+    const valIndex = this.selected.indexOf(chip.value);
     if (valIndex === -1) {
-      this.selected.push(val);
+      this.selected.push(chip.value);
     } else {
       this.selected.splice(valIndex, 1);
     }
@@ -28,11 +30,13 @@ export class ExampleWithCustomCompareComponent implements OnInit {
     setTimeout(() => {
 
       this.listOfChips = [
-        { name: 'Tag 1', value: 1 },
-        { name: 'Tag 2', value: 2 },
+        { name: 'Tag 1', value: 1, selected: true },
+        { name: 'Tag 2', value: 2, selected: true },
         { name: 'Tag 3', value: 3 },
         { name: 'Tag 4', value: 4 }
       ];
-    },1000);
+
+      this.selected = [1, 2];
+    }, 500);
   }
 }

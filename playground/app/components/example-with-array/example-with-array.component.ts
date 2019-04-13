@@ -30,4 +30,8 @@ export class ExampleWithArrayComponent implements OnInit {
       this.selected.splice(valIndex, 1);
     }
   }
+
+  change(event) {
+    console.log(event);
+  }
 }

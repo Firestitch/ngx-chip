@@ -2,7 +2,8 @@
   <fs-label>Select by checkbox</fs-label>
   <mat-checkbox *ngFor="let chip of listOfChips"
                 [value]="chip"
-                (change)="selectionChange(chip.value)"
+                [checked]="chip.selected"
+                (change)="selectionChange(chip)"
   >{{ chip.name }}
   </mat-checkbox>
 </div>
