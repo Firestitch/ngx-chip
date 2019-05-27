@@ -4,7 +4,6 @@
     *ngFor="let chip of chips"
     [value]="chip"
     [ngModel]="checkboxes[chip.id]"
-    [value]="chip.id"
     (change)="checkboxChange($event)">
       {{ chip.name }}
   </mat-checkbox>

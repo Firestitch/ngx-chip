@@ -1,15 +1,17 @@
 import {
   EventEmitter,
-  ChangeDetectorRef,
   Component,
   Input,
   OnDestroy,
   Output,
   HostBinding,
   HostListener,
+  Optional,
+  OnInit,
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
+import { FsChipsService } from '../../services/chips.service';
 
 
 @Component({
@@ -17,7 +19,7 @@ import { Subject } from 'rxjs';
   templateUrl: 'chip.component.html',
   styleUrls: ['chip.component.scss']
 })
-export class FsChipComponent implements OnDestroy {
+export class FsChipComponent implements OnInit, OnDestroy {
 
   @HostBinding('class.fs-chip') fsChip = true;
   @HostBinding('class.outlined') _outlined = false;
@@ -37,11 +39,15 @@ export class FsChipComponent implements OnDestroy {
   };
 
   @HostListener('click')
-  click() {
+  public click() {
 
     if (this.selectable) {
       this.selected = !this.selected;
       this.selectedToggled.emit({ value: this.value, selected: this.selected });
+
+      if (this._chips) {
+        this._chips.selectionChanged(this.selected, this.value);
+      }
     }
   }
 
@@ -115,7 +121,19 @@ export class FsChipComponent implements OnDestroy {
   private _color = '';
   private _size;
 
+  constructor(@Optional() private _chips: FsChipsService) {}
+
+  public ngOnInit() {
+    if (this._chips) {
+      this._chips.register(this);
+    }
+  }
+
   public ngOnDestroy() {
+    if (this._chips) {
+      this._chips.destroy(this);
+    }
+
     this.$destroy.next();
     this.$destroy.complete();
   }
