@@ -81,14 +81,14 @@
     margin-right: 8px;
     margin-top: 8px;
 
-    &:last-child {
-      margin-right: 0;
-    }
+    //&:last-child {
+    //  margin-right: 0;
+    //}
   }
 }
 
 .fs-chip.small {
-  padding: 0px 9px;
+  padding: 0 9px;
   font-size: 85%;
   min-height: 28px;
   margin-top: 3px;
