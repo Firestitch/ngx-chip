@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   EventEmitter,
   HostBinding,
@@ -84,6 +84,8 @@ export class FsChipComponent implements OnInit, OnDestroy {
 
   @Input() set removable(value) {
     this._removable = value;
+
+    this._cdRef.markForCheck();
   };
 
   get removable() {
@@ -100,6 +102,8 @@ export class FsChipComponent implements OnInit, OnDestroy {
 
   @Input() set selected(value) {
     this._selected = value;
+
+    this._cdRef.markForCheck();
   };
 
   get selected() {
@@ -108,6 +112,8 @@ export class FsChipComponent implements OnInit, OnDestroy {
 
   @Input() set image(value) {
     this._image = value;
+
+    this._cdRef.markForCheck();
   };
 
   get image() {
@@ -123,7 +129,10 @@ export class FsChipComponent implements OnInit, OnDestroy {
   private _color = '';
   private _size;
 
-  constructor(@Optional() private _chips: FsChipsService) {}
+  constructor(
+    private _cdRef: ChangeDetectorRef,
+    @Optional() private _chips: FsChipsService
+  ) {}
 
   public ngOnInit() {
     if (this._chips) {
@@ -174,5 +183,7 @@ export class FsChipComponent implements OnInit, OnDestroy {
         this.styleBorderColor = this._color;
       }
     }
+
+    this._cdRef.markForCheck();
   }
 }
