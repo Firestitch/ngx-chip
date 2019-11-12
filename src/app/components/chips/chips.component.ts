@@ -1,16 +1,17 @@
 import {
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   forwardRef,
+  HostBinding,
   Input,
   OnDestroy,
-  HostBinding,
 } from '@angular/core';
 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { find, filter } from 'lodash-es';
+import { find } from 'lodash-es';
 
 import { FsChipsService } from '../../services/chips.service';
 
@@ -25,7 +26,8 @@ import { FsChipsService } from '../../services/chips.service';
       multi: true,
     },
     FsChipsService,
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsChipsComponent implements OnDestroy, ControlValueAccessor {
 
@@ -42,7 +44,10 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor {
   private _value = [];
   private _destroy$ = new Subject();
 
-  constructor(private _chipsService: FsChipsService) {
+  constructor(
+    private _cdRef: ChangeDetectorRef,
+    private _chipsService: FsChipsService,
+  ) {
     this.subscribeToItemsChange();
     this.subscribeToSelectionChange();
   }
@@ -136,5 +141,7 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor {
         }) !== undefined;
       });
     }
+
+    this._cdRef.markForCheck();
   }
 }

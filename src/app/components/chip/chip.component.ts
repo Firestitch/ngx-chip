@@ -1,13 +1,14 @@
 import {
-  EventEmitter,
+  ChangeDetectionStrategy,
   Component,
-  Input,
-  OnDestroy,
-  Output,
+  EventEmitter,
   HostBinding,
   HostListener,
-  Optional,
+  Input,
+  OnDestroy,
   OnInit,
+  Optional,
+  Output,
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
@@ -17,7 +18,8 @@ import { FsChipsService } from '../../services/chips.service';
 @Component({
   selector: 'fs-chip',
   templateUrl: 'chip.component.html',
-  styleUrls: ['chip.component.scss']
+  styleUrls: ['chip.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsChipComponent implements OnInit, OnDestroy {
 
