@@ -1,7 +1,3 @@
-@mixin fs-chip($theme) {
-
-}
-
 .fs-chip {
   user-select: none;
   transition: box-shadow 280ms cubic-bezier(.4,0,.2,1);
@@ -10,8 +6,7 @@
   border-radius: 16px;
   align-items: center;
   cursor: default;
-  min-height: 32px;
-  height: 1px;
+  height: 32px;
   background-color: #e0e0e0;
 
   &.imaged {
@@ -55,12 +50,8 @@
   }
 
   .selected-check {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    align-items: center;
+    margin: 0 5px;
     display: flex;
-    justify-content: center;
   }
 
   .remove {
@@ -80,17 +71,13 @@
   .fs-chip {
     margin-right: 8px;
     margin-top: 8px;
-
-    //&:last-child {
-    //  margin-right: 0;
-    //}
   }
 }
 
 .fs-chip.small {
   padding: 0 9px;
   font-size: 85%;
-  min-height: 28px;
+  height: 28px;
   margin-top: 3px;
   margin-right: 6px;
 
