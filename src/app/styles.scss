@@ -68,6 +68,11 @@
 .fs-chips {
   display: flex;
   flex-wrap: wrap;
+
+  &.has-chips {
+    margin-top: -8px;
+  }
+
   .fs-chip {
     margin-right: 8px;
     margin-top: 8px;
@@ -78,8 +83,6 @@
   padding: 0 9px;
   font-size: 85%;
   height: 28px;
-  margin-top: 3px;
-  margin-right: 6px;
 
   .image {
     height: 28px;

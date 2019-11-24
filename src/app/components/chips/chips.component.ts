@@ -31,7 +31,8 @@ import { FsChipsService } from '../../services/chips.service';
 })
 export class FsChipsComponent implements OnDestroy, ControlValueAccessor {
 
-  @HostBinding('class.fs-chips') fsChipsClass = true;
+  @HostBinding('class.fs-chips') classFsChips = true;
+  @HostBinding('class.has-chips') classHasChips = false;
 
   @Input()
   public compare;
@@ -121,6 +122,7 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor {
     this._chipsService.chipItemsChanged$
       .pipe(takeUntil(this._destroy$))
       .subscribe(() => {
+        this.classHasChips = !!this._chipsService.chips.length;
         this.updateChips();
       })
   }
