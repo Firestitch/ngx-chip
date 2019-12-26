@@ -14,7 +14,7 @@ export class ExampleSingleSelectionComponent {
     { name: 'Tag D', value: 4 },
   ];
 
-  public chip
+  public chip = []
 
   change(event) {
     console.log(event);

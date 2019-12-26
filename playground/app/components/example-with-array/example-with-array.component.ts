@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatCheckboxChange } from '@angular/material';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 
 @Component({
@@ -10,7 +10,7 @@ import { MatCheckboxChange } from '@angular/material';
 export class ExampleWithArrayComponent implements OnInit {
 
   public chips = [];
-  public selected;
+  public selected = [];
   public checkboxes = {};
 
   ngOnInit() {
