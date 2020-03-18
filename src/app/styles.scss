@@ -98,3 +98,26 @@
     padding-right: 2px;
   }
 }
+
+.fs-chip.tiny {
+  padding: 0 6px;
+  height: 18px;
+
+  .fs-chip-content {
+    font-size: 75%;
+  }
+
+  .image {
+    height: 18px;
+    width: 18px;
+  }
+
+  &.imaged {
+    padding-left: 0;
+  }
+
+  &.removable,
+  &.selected {
+    padding-right: 0px;
+  }
+}
