@@ -80,13 +80,13 @@
 }
 
 .fs-chip.small {
-  padding: 0 9px;
+  padding: 0 8px;
   font-size: 85%;
-  height: 28px;
+  height: 22px;
 
   .image {
-    height: 28px;
-    width: 28px;
+    height: 22px;
+    width: 22px;
   }
 
   &.imaged {
@@ -95,7 +95,7 @@
 
   &.removable,
   &.selected {
-    padding-right: 2px;
+    padding-right: 0;
   }
 }
 
