@@ -6,8 +6,9 @@
   border-radius: 16px;
   align-items: center;
   cursor: default;
-  height: 32px;
+  height: 30px;
   background-color: #e0e0e0;
+  overflow: hidden;
 
   &.imaged {
     overflow: visible;
@@ -34,10 +35,10 @@
   }
 
   .image {
-    height: 32px;
+    height: 30px;
+    width: 30px;
     border-radius: 50%;
     object-fit: cover;
-    width: 32px;
     margin-left: -1px;
     margin-right: 8px;
   }
@@ -61,8 +62,80 @@
     mat-icon {
       transform: scale(.9);
       color: #929292;
+      height: 23px;
     }
   }
+
+  &.small {
+    padding: 0 8px;
+    font-size: 85%;
+    height: 22px;
+    line-height: 22px;
+
+    .image {
+      height: 22px;
+      width: 22px;
+      margin-right: 5px;
+    }
+
+    &.imaged {
+      padding-left: 0;
+    }
+
+    .remove {
+      margin-left: 3px;
+    }
+
+    .selected-check {
+      margin: 0 2px 0 0;
+      mat-icon {
+        transform: scale(.7);
+      }
+    }
+
+    &.removable,
+    &.selected {
+      padding-right: 0;
+    }
+  }
+
+  &.tiny {
+    padding: 0 6px;
+    height: 18px;
+    line-height: 18px;
+
+    .fs-chip-content {
+      font-size: 75%;
+    }
+
+    .image {
+      height: 18px;
+      width: 18px;
+      margin-right: 3px;
+    }
+
+    .remove {
+      margin-left: 2px;
+    }
+
+    .selected-check {
+      margin: 0 1px 0 0;
+    }
+
+    &.imaged {
+      padding-left: 0;
+    }
+
+    &.removable,
+    &.selected {
+      padding-right: 0px;
+    }
+
+    mat-icon {
+      transform: scale(.7);
+    }
+  }
+
 }
 
 .fs-chips {
@@ -76,48 +149,5 @@
   .fs-chip {
     margin-right: 5px;
     margin-top: 5px;
-  }
-}
-
-.fs-chip.small {
-  padding: 0 8px;
-  font-size: 85%;
-  height: 22px;
-
-  .image {
-    height: 22px;
-    width: 22px;
-  }
-
-  &.imaged {
-    padding-left: 0;
-  }
-
-  &.removable,
-  &.selected {
-    padding-right: 0;
-  }
-}
-
-.fs-chip.tiny {
-  padding: 0 6px;
-  height: 18px;
-
-  .fs-chip-content {
-    font-size: 75%;
-  }
-
-  .image {
-    height: 18px;
-    width: 18px;
-  }
-
-  &.imaged {
-    padding-left: 0;
-  }
-
-  &.removable,
-  &.selected {
-    padding-right: 0px;
   }
 }
