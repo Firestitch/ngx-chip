@@ -70,7 +70,7 @@
     padding: 0 8px;
     font-size: 85%;
     height: 22px;
-    line-height: 22px;
+    line-height: normal;
 
     .image {
       height: 22px;
@@ -102,7 +102,7 @@
   &.tiny {
     padding: 0 6px;
     height: 18px;
-    line-height: 18px;
+    line-height: normal;
 
     .fs-chip-content {
       font-size: 75%;
