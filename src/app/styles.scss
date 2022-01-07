@@ -136,6 +136,43 @@
     }
   }
 
+  &.micro {
+    padding: 0 5px;
+    height: 16px;
+    line-height: normal;
+
+    .fs-chip-content {
+      font-size: 65%;
+    }
+
+    .image {
+      height: 100%;
+      width: 16px;
+      margin-right: 2px;
+    }
+
+    .remove {
+      margin-left: 1px;
+    }
+
+    .selected-check {
+      margin: 0 1px 0 0;
+    }
+
+    &.imaged {
+      padding-left: 0;
+    }
+
+    &.removable,
+    &.selected {
+      padding-right: 0px;
+    }
+
+    mat-icon {
+      transform: scale(.65);
+      width: 20px;
+    }
+  }
 }
 
 .fs-chips {
