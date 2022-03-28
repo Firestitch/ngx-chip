@@ -23,7 +23,7 @@ import { FsChipComponent } from './components/chip/chip.component';
   ]
 })
 export class FsChipModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<FsChipModule> {
     return {
       ngModule: FsChipModule
     };
