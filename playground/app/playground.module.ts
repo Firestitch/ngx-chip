@@ -7,8 +7,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FsExampleModule } from '@firestitch/example';
 import { FsMessageModule } from '@firestitch/message';
 
-import { ToastrModule } from 'ngx-toastr';
-
 import { FsChipModule } from '@firestitch/package';
 import { FsColorPickerModule } from '@firestitch/colorpicker';
 import { FsLabelModule } from '@firestitch/label';
@@ -39,7 +37,6 @@ const routes: Routes = [
     FsColorPickerModule,
     FsExampleModule.forRoot(),
     FsMessageModule.forRoot(),
-    ToastrModule.forRoot({ preventDuplicates: true }),
     RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
   ],
   entryComponents: [
