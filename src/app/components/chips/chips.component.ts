@@ -6,19 +6,20 @@ import {
   Input,
   OnDestroy,
 } from '@angular/core';
-
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
 import { find } from 'lodash-es';
 
 import { FsChipsService } from '../../services/chips.service';
 
+
 @Component({
   selector: 'fs-chips',
-  templateUrl: 'chips.component.html',
-  styleUrls: ['chips.component.scss'],
+  templateUrl: './chips.component.html',
+  styleUrls: ['./chips.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -31,16 +32,15 @@ import { FsChipsService } from '../../services/chips.service';
 })
 export class FsChipsComponent implements OnDestroy, ControlValueAccessor {
 
-  @HostBinding('class.fs-chips') classFsChips = true;
-  @HostBinding('class.has-chips') classHasChips = false;
+  @HostBinding('class.fs-chips') public classFsChips = true;
+  @HostBinding('class.has-chips') public classHasChips = false;
 
-  @Input()
-  public compare;
+  @Input() public compare;
 
-  @Input() multiple = true;
+  @Input() public multiple = true;
 
-  public onChange: any = () => {};
-  public onTouch: any = () => {};
+  public onChange: (value) => void;
+  public onTouch: (value) => void;
 
   private _value = [];
   private _destroy$ = new Subject();
@@ -49,15 +49,15 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor {
     private _cdRef: ChangeDetectorRef,
     private _chipsService: FsChipsService,
   ) {
-    this.subscribeToItemsChange();
-    this.subscribeToSelectionChange();
+    this._subscribeToItemsChange();
+    this._subscribeToSelectionChange();
   }
 
-  get chips() {
+  public get chips() {
     return this._chipsService.chips;
   }
 
-  set value(value) {
+  public set value(value) {
     if (this._value !== value) {
       this._value = value;
 
@@ -66,7 +66,7 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor {
     }
   }
 
-  get value() {
+  public get value() {
     return this._value;
   }
 
@@ -80,16 +80,20 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor {
       this._value = value;
     }
 
-    this.updateChips();
+    this._updateChips();
   }
 
-  public registerOnChange(fn) { this.onChange = fn;  }
-  public registerOnTouched(fn) { this.onTouch = fn; }
+  public registerOnChange(fn) {
+    this.onChange = fn;
+  }
+  public registerOnTouched(fn) {
+    this.onTouch = fn;
+  }
 
   /**
    * Update ngModel value when selection changed
    */
-  private subscribeToSelectionChange() {
+  private _subscribeToSelectionChange() {
     this._chipsService.selectionChanged$
       .pipe(
         takeUntil(this._destroy$),
@@ -97,7 +101,7 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor {
       .subscribe(({ selected, value }) => {
         if (!selected) {
           const valueIndex = this.value.findIndex((item) => {
-            return this.compareFn(item, value);
+            return this._compareFn(item, value);
           });
 
           if (valueIndex > -1) {
@@ -118,28 +122,29 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor {
   /**
    * Update selection if item was added or removed
    */
-  private subscribeToItemsChange() {
+  private _subscribeToItemsChange() {
     this._chipsService.chipItemsChanged$
       .pipe(takeUntil(this._destroy$))
       .subscribe(() => {
         this.classHasChips = !!this._chipsService.chips.length;
-        this.updateChips();
-      })
+        this._updateChips();
+      });
   }
 
-  private compareFn(o1, o2) {
+  private _compareFn(o1, o2) {
     if (this.compare) {
       return this.compare(o1, o2);
     }
+
     return o1 === o2;
   }
 
-  private updateChips() {
+  private _updateChips() {
     if (this.multiple && Array.isArray(this.value) && this.chips) {
       this.chips.forEach((chip) => {
 
         chip.selected = find(this.value, (o) => {
-          return this.compareFn(o, chip.value);
+          return this._compareFn(o, chip.value);
         }) !== undefined;
       });
     }

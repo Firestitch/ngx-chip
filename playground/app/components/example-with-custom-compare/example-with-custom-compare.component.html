@@ -1,24 +1,24 @@
 <div fxLayout="row wrap" fxLayoutGap="15px">
   <fs-label>Select by checkbox</fs-label>
   <mat-checkbox
-    *ngFor="let chip of chips"
-    [value]="chip"
-    [ngModel]="checkboxes[chip.id]"
-    (change)="checkboxChange($event)">
-      {{ chip.name }}
+      *ngFor="let chip of chips"
+      [value]="chip"
+      [ngModel]="checkboxes[chip.id]"
+      (change)="checkboxChange($event)">
+    {{ chip.name }}
   </mat-checkbox>
 </div>
 <br>
 <div>
   <fs-label>Tags</fs-label>
   <fs-chips
-    [(ngModel)]="selected"
-    [compare]="compare"
-    (ngModelChange)="chipsChange($event)">
+      [(ngModel)]="selected"
+      [compare]="compare"
+      (ngModelChange)="chipsChange($event)">
     <fs-chip
-      *ngFor="let chip of chips"
-      [value]="chip.id"
-      [selectable]="true">
+        *ngFor="let chip of chips"
+        [value]="chip.id"
+        [selectable]="true">
       {{ chip.name }}
     </fs-chip>
   </fs-chips>
