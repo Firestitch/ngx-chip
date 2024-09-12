@@ -57,7 +57,11 @@ export class FsChipComponent implements OnInit, OnDestroy {
     }
   }
 
-  @Input() public value = null;
+  @Input() public value;
+  
+  @Input() 
+  @HostBinding('class.iconed') 
+  public icon;
 
   @Input() set backgroundColor(value) {
     this._backgroundColor = value;

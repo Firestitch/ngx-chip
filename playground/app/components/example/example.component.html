@@ -1,8 +1,13 @@
 
-<div fxLayout="row wrap" fxLayoutGap="15px">
+<div class="fs-row.gap-md.wrap">
   <fs-label-field>
     <fs-label>Show Image</fs-label>
     <mat-checkbox [(ngModel)]="showImage" (ngModelChange)="imageChanged()"></mat-checkbox>
+  </fs-label-field>
+
+  <fs-label-field>
+    <fs-label>Show Icon</fs-label>
+    <mat-checkbox [(ngModel)]="showIcon"></mat-checkbox>
   </fs-label-field>
 
   <fs-label-field>
@@ -24,7 +29,9 @@
     <fs-label>Show Outlined</fs-label>
     <mat-checkbox [(ngModel)]="outlined"></mat-checkbox>
   </fs-label-field>
+</div>
 
+<div class="fs-row.gap-md.wrap">
   <mat-form-field *ngIf="!outlined">
     <input matInput fsColorPicker [(ngModel)]="backgroundColor" placeholder="Background Color">
   </mat-form-field>
@@ -43,6 +50,7 @@
     </mat-select>
   </mat-form-field>
 </div>
+<br>
 
   <fs-chip
     [backgroundColor]="backgroundColor"
@@ -52,6 +60,7 @@
     [selectable]="selectable"
     [removable]="removable"
     [outlined]="outlined"
+    [icon]="showIcon ? 'settings' : null"
     [size]="size"
     (removed)="chipRemoved($event)">
     Tag A

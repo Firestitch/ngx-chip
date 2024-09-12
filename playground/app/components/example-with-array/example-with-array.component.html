@@ -1,5 +1,6 @@
-<div fxLayout="row wrap" fxLayoutGap="15px">
-  <fs-label>Select by checkbox</fs-label>
+
+<fs-label>Select by checkbox</fs-label>
+<div class="fs-row.gap-md.wrap">
   <mat-checkbox *ngFor="let chip of chips"
                 [value]="chip"
                 [ngModel]="checkboxes[chip.value]"
@@ -11,11 +12,12 @@
 <br>
 <div>
   <fs-label>Tags</fs-label>
-  <fs-chips [(ngModel)]="selected" (ngModelChange)="chipsChange($event)">
+  <fs-chips 
+    [(ngModel)]="selected" (ngModelChange)="chipsChange($event)">
     <fs-chip
-      *ngFor="let chip of chips"
-      [value]="chip"
-      [selectable]="true">
+        *ngFor="let chip of chips"
+        [value]="chip"
+        [selectable]="true">
       {{ chip.name }}
     </fs-chip>
   </fs-chips>

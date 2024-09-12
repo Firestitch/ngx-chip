@@ -1,0 +1,13 @@
+:host {
+  display: flex;
+  flex-wrap: wrap;
+
+  &.has-chips {
+    margin-top: -5px;
+  }
+
+  ::ng-deep .fs-chip {
+    margin-right: 5px;
+    margin-top: 5px;
+  }
+}

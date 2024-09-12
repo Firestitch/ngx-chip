@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FsMessage } from '@firestitch/message';
 
 @Component({
   selector: 'example',
   templateUrl: 'example.component.html',
-  styleUrls: ['example.component.scss']
+  styleUrls: ['example.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExampleComponent {
 
   public image;
   public showImage;
+  public showIcon;
   public removable;
   public size;
   public outlined = false;
@@ -17,6 +19,7 @@ export class ExampleComponent {
   public selectable = false;
   public backgroundColor = '';
   public color;
+  public icon;
   public config: any = {};
   public mm = [1, 2, 3];
 
