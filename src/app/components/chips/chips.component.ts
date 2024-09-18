@@ -1,19 +1,22 @@
 import {
+  AfterContentInit,
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
+  ContentChildren,
   forwardRef,
   HostBinding,
   Input,
+  IterableDiffer,
+  IterableDiffers,
   OnDestroy,
+  QueryList,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { find } from 'lodash-es';
-
-import { FsChipsService } from '../../services/chips.service';
+import { FsChipComponent } from '../chip';
 
 
 @Component({
@@ -26,14 +29,19 @@ import { FsChipsService } from '../../services/chips.service';
       useExisting: forwardRef(() => FsChipsComponent),
       multi: true,
     },
-    FsChipsService,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FsChipsComponent implements OnDestroy, ControlValueAccessor {
+export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterContentInit {
 
-  @HostBinding('class.fs-chips') public classFsChips = true;
-  @HostBinding('class.has-chips') public classHasChips = false;
+  @HostBinding('class.fs-chips') 
+  public classFsChips = true;
+
+  @HostBinding('class.has-chips') 
+  public classHasChips = false;
+
+  @ContentChildren(FsChipComponent)
+  public chips: QueryList<FsChipComponent>;
 
   @Input() public compare;
 
@@ -44,19 +52,24 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor {
 
   private _value = [];
   private _destroy$ = new Subject();
+  private _chipDiffer: IterableDiffer<FsChipComponent>;
 
   constructor(
     private _cdRef: ChangeDetectorRef,
-    private _chipsService: FsChipsService,
+    private _iterable: IterableDiffers,
   ) {
-    this._subscribeToItemsChange();
+    this._chipDiffer = this._iterable.find([]).create();
+  }
+  
+  public setDisabledState?(isDisabled: boolean): void {
+    //
+  }
+
+  public ngAfterContentInit(): void {
     this._subscribeToSelectionChange();
+    this._subscribeToItemsChange();
   }
-
-  public get chips() {
-    return this._chipsService.chips;
-  }
-
+ 
   public set value(value) {
     if (this._value !== value) {
       this._value = value;
@@ -94,39 +107,47 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor {
    * Update ngModel value when selection changed
    */
   private _subscribeToSelectionChange() {
-    this._chipsService.selectionChanged$
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe(({ selected, value }) => {
-        if (!selected) {
-          const valueIndex = this.value.findIndex((item) => {
-            return this._compareFn(item, value);
+    this._chipDiffer.diff(this.chips)
+      .forEachAddedItem((change) => {
+        change.item.selectedToggled
+          .pipe(
+            takeUntil(change.item.destroy$),
+            takeUntil(this._destroy$),
+          )
+          .subscribe(({ selected, value }) => {
+            if (!selected) {
+              const valueIndex = this.value.findIndex((item) => {
+                return this._compareFn(item, value);
+              });
+
+              if (valueIndex > -1) {
+                this.value.splice(valueIndex, 1);
+
+                this.onChange(this._value);
+                this.onTouch(this._value);
+              }
+            } else {
+              this.value.push(value);
+
+              this.onChange(this._value);
+              this.onTouch(this._value);
+            }
           });
-
-          if (valueIndex > -1) {
-            this.value.splice(valueIndex, 1);
-
-            this.onChange(this._value);
-            this.onTouch(this._value);
-          }
-        } else {
-          this.value.push(value);
-
-          this.onChange(this._value);
-          this.onTouch(this._value);
-        }
       });
+
+
   }
 
   /**
    * Update selection if item was added or removed
    */
   private _subscribeToItemsChange() {
-    this._chipsService.chipItemsChanged$
-      .pipe(takeUntil(this._destroy$))
+    this.chips.changes
+      .pipe(
+        takeUntil(this._destroy$),
+      )
       .subscribe(() => {
-        this.classHasChips = !!this._chipsService.chips.length;
+        this.classHasChips = this.chips.length !== 0;
         this._updateChips();
       });
   }
@@ -142,13 +163,17 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor {
   private _updateChips() {
     if (this.multiple && Array.isArray(this.value) && this.chips) {
       this.chips.forEach((chip) => {
+        const selected = this.value
+          .some((o) => {
+            return this._compareFn(o, chip.value);
+          });
 
-        chip.selected = find(this.value, (o) => {
-          return this._compareFn(o, chip.value);
-        }) !== undefined;
+        if(selected) {
+          chip.select();
+        } else {
+          chip.unselect();
+        }
       });
-    }
-
-    this._cdRef.markForCheck();
+    }    
   }
 }

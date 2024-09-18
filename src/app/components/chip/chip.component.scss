@@ -13,6 +13,7 @@
   &.imaged {
     overflow: visible;
     padding-left: 0;
+    vertical-align: middle;
 
     &.outlined .image {
       margin-left: -2px;
@@ -40,6 +41,10 @@
 
   .icon {
     margin-right: 5px;
+  }
+
+  mat-icon {
+    font-size: 25px;
   }
 
   .image {

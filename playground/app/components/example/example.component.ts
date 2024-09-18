@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+
 import { FsMessage } from '@firestitch/message';
 
 @Component({
   selector: 'example',
-  templateUrl: 'example.component.html',
-  styleUrls: ['example.component.scss'],
+  templateUrl: './example.component.html',
+  styleUrls: ['./example.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExampleComponent {
@@ -23,31 +24,33 @@ export class ExampleComponent {
   public config: any = {};
   public mm = [1, 2, 3];
 
-  constructor(private fsMessage: FsMessage) {}
+  constructor(
+    private _message: FsMessage,
+  ) {}
 
-  imageChanged() {
+  public imageChanged() {
     this.image = this.showImage ? '/assets/headshot2.jpg' : '';
   }
 
-  chipSelectedToggled(e) {
+  public chipSelectedToggled(e) {
     this.selected = e.selected;
-    this.fsMessage.success('Chip ' + ( e.selected ? 'Selected' : 'Unselected'));
+    this._message.success(`Chip ${   e.selected ? 'Selected' : 'Unselected'}`);
   }
 
-  removedChanged() {
+  public removedChanged() {
     if (this.removable) {
       this.selectable = false;
       this.selected = false;
     }
   }
 
-  selectedChanged() {
+  public selectedChanged() {
     if (this.selected || this.selectable) {
       this.removable = false;
     }
   }
 
-  chipRemoved(e) {
-    this.fsMessage.success('Removed Clicked');
+  public chipRemoved(e) {
+    this._message.success('Removed Clicked');
   }
 }

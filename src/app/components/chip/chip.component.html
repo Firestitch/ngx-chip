@@ -5,9 +5,11 @@
 <div class="fs-chip-content">
   <ng-content></ng-content>
 </div>
-<div class="selected-check" *ngIf="selected">
-  <mat-icon [style.color]="styleColor">check</mat-icon>
-</div>
+<ng-container *ngIf="selected">
+  <div class="selected-check">
+    <mat-icon [style.color]="styleColor">check</mat-icon>
+  </div>
+</ng-container>
 <div *ngIf="removed.observers.length && removable" class="remove" (click)="remove($event)">
   <mat-icon [style.color]="styleColor">cancel</mat-icon>
 </div>

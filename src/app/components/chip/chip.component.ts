@@ -7,13 +7,10 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  Optional,
   Output,
 } from '@angular/core';
 
-import { Subject } from 'rxjs';
-
-import { FsChipsService } from '../../services/chips.service';
+import { Observable, Subject } from 'rxjs';
 
 
 @Component({
@@ -24,29 +21,51 @@ import { FsChipsService } from '../../services/chips.service';
 })
 export class FsChipComponent implements OnInit, OnDestroy {
 
-  @HostBinding('class.fs-chip') public fsChip = true;
-  @HostBinding('class.outlined') public _outlined = false;
-  @HostBinding('class.selectable') public _selectable = false;
-  @HostBinding('class.imaged') public _image = false;
-  @HostBinding('class.selected') public _selected = false;
+  @HostBinding('class.fs-chip') 
+  public fsChip = true;
+
+  @HostBinding('class.outlined') 
+  public _outlined = false;
+
+  @Input()
+  @HostBinding('class.selectable') 
+  public selectable = false;
   
   @Input()
   @HostBinding('class.removable') 
   public removable = true;
   
-  @HostBinding('style.backgroundColor') public styleBackgroundColor = '';
-  @HostBinding('style.color') public styleColor = '';
-  @HostBinding('style.borderColor') public styleBorderColor = '';
+  @HostBinding('style.backgroundColor') 
+  public styleBackgroundColor = '';
 
-  @HostBinding('class.small') public classSmall = false;
-  @HostBinding('class.tiny') public classTiny = false;
-  @HostBinding('class.micro') public classMicro = false;
+  @HostBinding('style.color') 
+  public styleColor = '';
+
+  @HostBinding('style.borderColor') 
+  public styleBorderColor = '';
+
+  @HostBinding('class.small') 
+  public classSmall = false;
+
+  @HostBinding('class.tiny') 
+  public classTiny = false;
+
+  @HostBinding('class.micro') 
+  public classMicro = false;
 
   @Input() public value;
   
   @Input() 
   @HostBinding('class.iconed') 
   public icon;
+  
+  @Input() 
+  @HostBinding('class.imaged') 
+  public image;
+  
+  @Input() 
+  @HostBinding('class.selected') 
+  public selected = false;
 
   @Output() public selectedToggled = new EventEmitter();
   @Output() public removed = new EventEmitter();
@@ -58,9 +77,7 @@ export class FsChipComponent implements OnInit, OnDestroy {
 
   constructor(
     private _cdRef: ChangeDetectorRef,
-    @Optional() private _chips: FsChipsService,
   ) {}
-
 
   @Input('size') public set setSize(value) {
     this.classSmall = value === 'small';
@@ -73,10 +90,6 @@ export class FsChipComponent implements OnInit, OnDestroy {
     if (this.selectable) {
       this.selected = !this.selected;
       this.selectedToggled.emit({ value: this.value, selected: this.selected });
-
-      if (this._chips) {
-        this._chips.selectionChanged(this.selected, this.value);
-      }
     }
   }
 
@@ -95,8 +108,8 @@ export class FsChipComponent implements OnInit, OnDestroy {
     this._updateStyles();
   }
 
-  public getcolor() {
-    return this._color;
+  public get destroy$(): Observable<any> {
+    return this._destroy$.asObservable();
   }
 
   @Input() public set outlined(value) {
@@ -104,53 +117,23 @@ export class FsChipComponent implements OnInit, OnDestroy {
     this._updateStyles();
   }
 
-  public getoutlined() {
-    return this._outlined;
-  }
-
-  @Input() public set selectable(value) {
-    this._selectable = value;
-  }
-
-  public getselectable() {
-    return this._selectable;
-  }
-
-  @Input() public set selected(value) {
-    this._selected = value;
-
+  public select() {
+    this.selected = true;
     this._cdRef.markForCheck();
   }
 
-  public getselected() {
-    return this._selected;
-  }
-
-  @Input() public set image(value) {
-    this._image = value;
-
+  public unselect() {
+    this.selected = false;
     this._cdRef.markForCheck();
-  }
-
-  public getimage() {
-    return this._image;
   }
 
   public ngOnInit() {
     if(this.removed.observers.length === 0) {
       this.removable = false;
     }
-
-    if (this._chips) {
-      this._chips.register(this);
-    }
   }
 
   public ngOnDestroy() {
-    if (this._chips) {
-      this._chips.destroy(this);
-    }
-
     this._destroy$.next();
     this._destroy$.complete();
   }
