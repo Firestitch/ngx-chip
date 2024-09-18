@@ -12,41 +12,64 @@ import {
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
+
 import { FsChipsService } from '../../services/chips.service';
 
 
 @Component({
   selector: 'fs-chip',
-  templateUrl: 'chip.component.html',
-  styleUrls: ['chip.component.scss'],
+  templateUrl: './chip.component.html',
+  styleUrls: ['./chip.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsChipComponent implements OnInit, OnDestroy {
 
-  @HostBinding('class.fs-chip') fsChip = true;
-  @HostBinding('class.outlined') _outlined = false;
-  @HostBinding('class.selectable') _selectable = false;
-  @HostBinding('class.imaged') _image = false;
-  @HostBinding('class.selected') _selected = false;
-  @HostBinding('class.removable') _removable = false;
-  @HostBinding('style.backgroundColor') styleBackgroundColor = '';
-  @HostBinding('style.color') styleColor = '';
-  @HostBinding('style.borderColor') styleBorderColor = '';
+  @HostBinding('class.fs-chip') public fsChip = true;
+  @HostBinding('class.outlined') public _outlined = false;
+  @HostBinding('class.selectable') public _selectable = false;
+  @HostBinding('class.imaged') public _image = false;
+  @HostBinding('class.selected') public _selected = false;
+  
+  @Input()
+  @HostBinding('class.removable') 
+  public removable = true;
+  
+  @HostBinding('style.backgroundColor') public styleBackgroundColor = '';
+  @HostBinding('style.color') public styleColor = '';
+  @HostBinding('style.borderColor') public styleBorderColor = '';
 
-  @HostBinding('class.small') classSmall = false;
-  @HostBinding('class.tiny') classTiny = false;
-  @HostBinding('class.micro') classMicro = false;
+  @HostBinding('class.small') public classSmall = false;
+  @HostBinding('class.tiny') public classTiny = false;
+  @HostBinding('class.micro') public classMicro = false;
 
-  @Input('size') set setSize(value) {
-    this._size = value;
+  @Input() public value;
+  
+  @Input() 
+  @HostBinding('class.iconed') 
+  public icon;
+
+  @Output() public selectedToggled = new EventEmitter();
+  @Output() public removed = new EventEmitter();
+
+  private _destroy$ = new Subject();
+
+  private _backgroundColor = '';
+  private _color = '';
+
+  constructor(
+    private _cdRef: ChangeDetectorRef,
+    @Optional() private _chips: FsChipsService,
+  ) {}
+
+
+  @Input('size') public set setSize(value) {
     this.classSmall = value === 'small';
     this.classTiny = value === 'tiny';
     this.classMicro = value === 'micro';
-  };
+  }
 
   @HostListener('click')
   public click() {
-
     if (this.selectable) {
       this.selected = !this.selected;
       this.selectedToggled.emit({ value: this.value, selected: this.selected });
@@ -57,92 +80,67 @@ export class FsChipComponent implements OnInit, OnDestroy {
     }
   }
 
-  @Input() public value;
-  
-  @Input() 
-  @HostBinding('class.iconed') 
-  public icon;
-
-  @Input() set backgroundColor(value) {
+  @Input() public set backgroundColor(value) {
     this._backgroundColor = value;
-    this.updateStyles();
-  };
+    this._updateStyles();
+  }
 
-  @Input() set borderColor(value) {
+  @Input() public set borderColor(value) {
     this.styleBorderColor = value;
-    this.updateStyles();
-  }
-  @Input() set color(value) {
-    this._color = value;
-    this.updateStyles();
+    this._updateStyles();
   }
 
-  get color() {
+  @Input() public set color(value) {
+    this._color = value;
+    this._updateStyles();
+  }
+
+  public getcolor() {
     return this._color;
   }
 
-  @Input() set outlined(value) {
+  @Input() public set outlined(value) {
     this._outlined = value;
-    this.updateStyles();
-  };
+    this._updateStyles();
+  }
 
-  get outlined() {
+  public getoutlined() {
     return this._outlined;
   }
 
-  @Input() set removable(value) {
-    this._removable = value;
-
-    this._cdRef.markForCheck();
-  };
-
-  get removable() {
-    return this._removable;
+  @Input() public set selectable(value) {
+    this._selectable = value;
   }
 
-  @Input() set selectable(value) {
-    this._selectable = value;
-  };
-
-  get selectable() {
+  public getselectable() {
     return this._selectable;
   }
 
-  @Input() set selected(value) {
+  @Input() public set selected(value) {
     this._selected = value;
 
     this._cdRef.markForCheck();
-  };
+  }
 
-  get selected() {
+  public getselected() {
     return this._selected;
   }
 
-  @Input() set image(value) {
+  @Input() public set image(value) {
     this._image = value;
 
     this._cdRef.markForCheck();
-  };
+  }
 
-  get image() {
+  public getimage() {
     return this._image;
   }
 
-  @Output() public selectedToggled = new EventEmitter();
-  @Output() public removed = new EventEmitter();
-
-  public $destroy = new Subject();
-
-  private _backgroundColor = '';
-  private _color = '';
-  private _size;
-
-  constructor(
-    private _cdRef: ChangeDetectorRef,
-    @Optional() private _chips: FsChipsService
-  ) {}
-
   public ngOnInit() {
+    if(this.removed.observers.length === 0) {
+      this.removable = false;
+    }
+
     if (this._chips) {
       this._chips.register(this);
     }
@@ -153,15 +151,17 @@ export class FsChipComponent implements OnInit, OnDestroy {
       this._chips.destroy(this);
     }
 
-    this.$destroy.next();
-    this.$destroy.complete();
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
-  public remove(event) {
+  public remove(event: MouseEvent) {
+    event.stopImmediatePropagation();
+    event.stopPropagation();
     this.removed.next(event);
   }
 
-  private isContrastYIQBlack(hexcolor) {
+  private _isContrastYIQBlack(hexcolor) {
     if (!hexcolor) {
       return true;
     }
@@ -175,13 +175,13 @@ export class FsChipComponent implements OnInit, OnDestroy {
     return yiq >= 200;
   }
 
-  private updateStyles() {
+  private _updateStyles() {
     this.styleBackgroundColor = this._backgroundColor;
 
     if (this._color) {
       this.styleColor = this._color;
     } else if (!this._outlined) {
-      this.styleColor = this.isContrastYIQBlack(this.styleBackgroundColor) ? '#474747' : '#fff';
+      this.styleColor = this._isContrastYIQBlack(this.styleBackgroundColor) ? '#474747' : '#fff';
     }
 
     if (this._outlined) {

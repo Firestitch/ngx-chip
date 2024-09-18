@@ -8,6 +8,6 @@
 <div class="selected-check" *ngIf="selected">
   <mat-icon [style.color]="styleColor">check</mat-icon>
 </div>
-<a *ngIf="removable" class="remove" (click)="remove($event)">
+<div *ngIf="removed.observers.length && removable" class="remove" (click)="remove($event)">
   <mat-icon [style.color]="styleColor">cancel</mat-icon>
-</a>
+</div>
