@@ -44,13 +44,13 @@ export class FsChipComponent implements OnInit, OnDestroy {
   @HostBinding('style.borderColor') 
   public styleBorderColor = '';
 
-  @HostBinding('class.small') 
+  @HostBinding('class.size-small') 
   public classSmall = false;
 
-  @HostBinding('class.tiny') 
+  @HostBinding('class.size-tiny') 
   public classTiny = false;
 
-  @HostBinding('class.micro') 
+  @HostBinding('class.size-micro') 
   public classMicro = false;
 
   @Input() public value;
