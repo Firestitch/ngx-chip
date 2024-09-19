@@ -148,8 +148,12 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
       )
       .subscribe(() => {
         this.classHasChips = this.chips.length !== 0;
+        this._cdRef.markForCheck();
         this._updateChips();
       });
+
+    this.classHasChips = this.chips.length !== 0;
+    this._cdRef.markForCheck();
   }
 
   private _compareFn(o1, o2) {
