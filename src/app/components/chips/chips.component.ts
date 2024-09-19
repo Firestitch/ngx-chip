@@ -66,7 +66,7 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
   }
 
   public ngAfterContentInit(): void {
-    this._subscribeToSelectionChange();
+    this._subscribeToSelectionChanges();
     this._subscribeToItemsChange();
   }
  
@@ -103,39 +103,48 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
     this.onTouch = fn;
   }
 
-  /**
-   * Update ngModel value when selection changed
-   */
   private _subscribeToSelectionChange() {
-    this._chipDiffer.diff(this.chips)
-      .forEachAddedItem((change) => {
-        change.item.selectedToggled
-          .pipe(
-            takeUntil(change.item.destroy$),
-            takeUntil(this._destroy$),
-          )
-          .subscribe(({ selected, value }) => {
-            if (!selected) {
-              const valueIndex = this.value.findIndex((item) => {
-                return this._compareFn(item, value);
-              });
+    const changed = this._chipDiffer.diff(this.chips);
+    changed?.forEachAddedItem((change) => {
+      change.item.selectedToggled
+        .pipe(
+          takeUntil(change.item.destroy$),
+          takeUntil(this._destroy$),
+        )
+        .subscribe(({ selected, value }) => {
+          if (!selected) {
+            const valueIndex = this.value.findIndex((item) => {
+              return this._compareFn(item, value);
+            });
 
-              if (valueIndex > -1) {
-                this.value.splice(valueIndex, 1);
-
-                this.onChange(this._value);
-                this.onTouch(this._value);
-              }
-            } else {
-              this.value.push(value);
+            if (valueIndex > -1) {
+              this.value.splice(valueIndex, 1);
 
               this.onChange(this._value);
               this.onTouch(this._value);
             }
-          });
+          } else {
+            this.value.push(value);
+
+            this.onChange(this._value);
+            this.onTouch(this._value);
+          }
+        });
+    });
+  }
+
+  /**
+   * Update ngModel value when selection changed
+   */
+  private _subscribeToSelectionChanges() {
+    this._subscribeToSelectionChange();
+    this.chips.changes
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        this._subscribeToSelectionChange();
       });
-
-
   }
 
   /**
