@@ -24,7 +24,7 @@
     padding-left: 5px;
   }
 
-  &.removable,
+  &.actionable,
   &.selected {
     padding-right: 3px;
   }
@@ -68,7 +68,7 @@
     display: flex;
   }
 
-  .remove {
+  .action {
     display: flex;
     margin-left: 5px;
     cursor: pointer;
@@ -89,7 +89,7 @@
       margin-right: 2px;
     }
 
-    .remove {
+    .action {
       margin-left: 1px;
     }
 
@@ -101,7 +101,7 @@
       padding-left: 0;
     }
 
-    &.removable,
+    &.actionable,
     &.selected {
       padding-right: 0px;
     }
@@ -132,11 +132,10 @@
       padding-left: 3px;
     }
 
-    .remove {
+    .action {
       margin-left: 2px;
       margin-right: 2px;
     }
-
 
     .selected-check {
       margin: 0 1px 0 0;
@@ -146,7 +145,7 @@
       padding-left: 0;
     }
 
-    &.removable,
+    &.actionable,
     &.selected {
       padding-right: 0px;
     }
@@ -178,7 +177,7 @@
       padding-left: 0;
     }
 
-    .remove {
+    .action {
       margin-right: 2px;
     }
 
@@ -189,7 +188,7 @@
       }
     }
 
-    &.removable,
+    &.actionable,
     &.selected {
       padding-right: 0;
     }

@@ -16,6 +16,11 @@
   </fs-label-field>
 
   <fs-label-field>
+    <fs-label>Show Actions</fs-label>
+    <mat-checkbox [(ngModel)]="actionable" (ngModelChange)="actionsChanged()"></mat-checkbox>
+  </fs-label-field>
+
+  <fs-label-field>
     <fs-label>Show Selected</fs-label>
     <mat-checkbox [(ngModel)]="selected" (ngModelChange)="selectedChanged()"></mat-checkbox>
   </fs-label-field>
@@ -62,6 +67,7 @@
     [outlined]="outlined"
     [icon]="showIcon ? 'settings' : null"
     [size]="size"
+    [actions]="actions"
     (removed)="chipRemoved($event)">
     Tag A
   </fs-chip>

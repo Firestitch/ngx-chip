@@ -14,6 +14,7 @@ export class ExampleComponent {
   public showImage;
   public showIcon;
   public removable;
+  public actionable = false;
   public size;
   public outlined = false;
   public selected = false;
@@ -23,6 +24,7 @@ export class ExampleComponent {
   public icon;
   public config: any = {};
   public mm = [1, 2, 3];
+  public actions = [];
 
   constructor(
     private _message: FsMessage,
@@ -35,6 +37,19 @@ export class ExampleComponent {
   public chipSelectedToggled(e) {
     this.selected = e.selected;
     this._message.success(`Chip ${   e.selected ? 'Selected' : 'Unselected'}`);
+  }
+
+  public actionsChanged() {
+    this.actions = this.actionable ? 
+      [
+        {
+          icon: 'help',
+          click: () => {
+            this._message.success('Action clicked');
+          },
+        },
+      ]
+      : [];
   }
 
   public removedChanged() {

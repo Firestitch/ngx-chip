@@ -5,8 +5,8 @@ import {
   HostBinding,
   HostListener,
   Input,
+  OnChanges,
   OnDestroy,
-  OnInit,
   Output,
 } from '@angular/core';
 
@@ -19,7 +19,7 @@ import { Observable, Subject } from 'rxjs';
   styleUrls: ['./chip.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FsChipComponent implements OnInit, OnDestroy {
+export class FsChipComponent implements OnDestroy, OnChanges {
 
   @HostBinding('class.fs-chip') 
   public fsChip = true;
@@ -30,10 +30,14 @@ export class FsChipComponent implements OnInit, OnDestroy {
   @Input()
   @HostBinding('class.selectable') 
   public selectable = false;
-  
+
   @Input()
   @HostBinding('class.removable') 
   public removable = true;
+  
+  @Input()
+  @HostBinding('class.actionable') 
+  public actionable = true;
   
   @HostBinding('style.backgroundColor') 
   public styleBackgroundColor = '';
@@ -54,6 +58,12 @@ export class FsChipComponent implements OnInit, OnDestroy {
   public classMicro = false;
 
   @Input() public value;
+
+  @Input() public actions: {
+    icon: string, 
+    click: (event: MouseEvent) => void, 
+    type?: 'remove' 
+  }[] = [];
   
   @Input() 
   @HostBinding('class.iconed') 
@@ -127,10 +137,19 @@ export class FsChipComponent implements OnInit, OnDestroy {
     this._cdRef.markForCheck();
   }
 
-  public ngOnInit() {
-    if(this.removed.observers.length === 0) {
-      this.removable = false;
+  public ngOnChanges() {
+    this.actions = this.actions
+      .filter((action) => action.type !== 'remove');
+
+    if(this.removed.observed && this.removable) {
+      this.actions.push({
+        icon: 'remove_circle_outline',
+        click: (event) => this.remove(event),
+        type: 'remove',
+      });
     }
+
+    this.actionable = this.actions.length !== 0;
   }
 
   public ngOnDestroy() {

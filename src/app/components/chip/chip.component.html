@@ -1,4 +1,6 @@
-<img *ngIf="image" [src]="image" class="image" alt="">
+<ng-container *ngIf="image">
+  <img [src]="image" class="image" alt="">
+</ng-container>
 <ng-container *ngIf="icon">
   <mat-icon class="icon">{{icon}}</mat-icon>
 </ng-container>
@@ -10,6 +12,11 @@
     <mat-icon [style.color]="styleColor">check</mat-icon>
   </div>
 </ng-container>
-<div *ngIf="removed.observers.length && removable" class="remove" (click)="remove($event)">
-  <mat-icon [style.color]="styleColor">remove_circle_outline</mat-icon>
-</div>
+@for (action of actions; track action.icon) {
+  <mat-icon   
+      [style.color]="styleColor" 
+      class="action"
+      (click)="action.click($event)">
+    {{action.icon}}
+  </mat-icon>
+}
