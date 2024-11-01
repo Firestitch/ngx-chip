@@ -59,10 +59,14 @@ export class FsChipComponent implements OnDestroy, OnChanges {
 
   @Input() public value;
 
+  @Input() public maxWidth: string;
+
   @Input() public actions: {
     icon: string, 
     click: (event: MouseEvent) => void, 
-    type?: 'remove' 
+    type?: 'remove',
+    link?: string,
+    linkTarget?: string,
   }[] = [];
   
   @Input() 
@@ -150,6 +154,12 @@ export class FsChipComponent implements OnDestroy, OnChanges {
     }
 
     this.actionable = this.actions.length !== 0;
+  }
+
+  public actionClick(action, event: MouseEvent) {
+    if(action.click) {
+      action.click(event);
+    }
   }
 
   public ngOnDestroy() {

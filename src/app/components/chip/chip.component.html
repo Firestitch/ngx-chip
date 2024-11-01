@@ -4,7 +4,9 @@
 <ng-container *ngIf="icon">
   <mat-icon class="icon">{{icon}}</mat-icon>
 </ng-container>
-<div class="fs-chip-content">
+<div 
+    class="fs-chip-content"
+    [ngStyle]="{ 'max-width': maxWidth }">
   <ng-content></ng-content>
 </div>
 <ng-container *ngIf="selected">
@@ -13,10 +15,20 @@
   </div>
 </ng-container>
 @for (action of actions; track action.icon) {
-  <mat-icon   
-      [style.color]="styleColor" 
-      class="action"
-      (click)="action.click($event)">
-    {{action.icon}}
-  </mat-icon>
+  @if(action.link) {
+    <a [href]="action.link" [target]="action.linkTarget || '_self'">
+      <ng-container *ngTemplateOutlet="actionTemplate"></ng-container>
+    </a>
+  } @else {
+    <ng-container *ngTemplateOutlet="actionTemplate"></ng-container>
+  }
+
+  <ng-template #actionTemplate>
+    <mat-icon   
+        [style.color]="styleColor" 
+        class="action"
+        (click)="actionClick(action, $event)">
+      {{action.icon}}
+    </mat-icon>
+  </ng-template>
 }
