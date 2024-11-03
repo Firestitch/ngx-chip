@@ -110,6 +110,8 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
     const changed = this._chipDiffer.diff(this.chips);
     changed?.forEachAddedItem((change) => {
       this._selectable = this.chips.some((chip) => chip.selectable);
+
+      change.item.hasChips = true;
       change.item.selectedToggled
         .pipe(
           takeUntil(change.item.destroy$),
