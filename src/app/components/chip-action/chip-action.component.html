@@ -1,0 +1,18 @@
+@if (link) {
+  <a
+      [href]="link"
+      [target]="linkTarget || '_self'">
+    <ng-container *ngTemplateOutlet="actionTemplate"></ng-container>
+  </a>
+} @else {
+  <ng-container *ngTemplateOutlet="actionTemplate"></ng-container>
+}
+<ng-template #actionTemplate>
+  <mat-icon
+      cdkHighlight
+      [style.color]="color"
+      class="action"
+      (click)="actionClick.emit($event)">
+    {{ icon }}
+  </mat-icon>
+</ng-template>

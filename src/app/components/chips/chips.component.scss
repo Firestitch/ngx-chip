@@ -1,16 +1,54 @@
-:host {
-  display: flex;
-  flex-wrap: wrap;
+.fs-chips {
+  display: flex;  
 
-  &.has-chips {
-    margin-top: -5px;
+  &:not(.chips-sortable) {
+    gap: 5px;
   }
 
-  ::ng-deep .fs-chip {
-    margin-top: 5px;
-    
-    + .fs-chip {
-      margin-left: 5px;
+  &.chips-sortable {
+    flex-direction: column;
+
+    .chip-container {
+      display: flex;
+      align-items: center;
+
+      + .chip-container {
+        border-top: 7px solid transparent;
+      }
+
+      .chip-handle {
+        color: inherit;
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    ::ng-deep {
+      .cdk-drag-placeholder {
+        opacity: .3;
+      }
+    }
+  }
+
+  .fs-chip-container {
+    display: flex;
+  }
+}
+
+::ng-deep {
+  .fs-chip-drag-preview {
+    display: flex;
+    overflow: visible;
+
+    .chip-handle {
+      color: inherit;
+      display: flex;
+      align-items: center;
+    }
+
+    &.chip-container .fs-chip {
+      box-shadow: 3px 3px 3px 0px rgba(196,196,196,1);
     }
   }
 }
+

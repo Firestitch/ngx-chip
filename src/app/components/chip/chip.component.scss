@@ -1,4 +1,4 @@
-:host {
+.fs-chip {
   user-select: none;
   transition: box-shadow 280ms cubic-bezier(.4,0,.2,1);
   display: inline-flex;
@@ -7,7 +7,7 @@
   align-items: center;
   cursor: default;
   height: 30px;
-  background-color: #e0e0e0;
+  background-color: #e7e7e7;
   overflow: hidden;
 
   &.imaged {
@@ -46,6 +46,12 @@
   mat-icon {
     font-size: 25px;
   }
+  
+  .actions {
+    display: flex;
+    flex-direction: row;
+    margin-left: 5px;
+  }
 
   .image {
     height: 30px;
@@ -67,9 +73,8 @@
     display: flex;
   }
 
-  .action {
+  fs-chip-action {
     display: flex;
-    margin-left: 5px;
     cursor: pointer;
   }
 
@@ -88,7 +93,7 @@
       margin-right: 2px;
     }
 
-    .action {
+    fs-chip-action {
       margin-left: 1px;
     }
 
@@ -131,7 +136,7 @@
       padding-left: 3px;
     }
 
-    .action {
+    fs-chip-action {
       margin-left: 2px;
       margin-right: 2px;
     }
@@ -176,7 +181,7 @@
       padding-left: 0;
     }
 
-    .action {
+    fs-chip-action {
       margin-right: 2px;
     }
 

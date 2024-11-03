@@ -1,1 +1,32 @@
-<ng-content></ng-content>
+@if (sortable) {
+  <div
+      class="fs-chips chips-sortable"
+      cdkDropList
+      [cdkDropListLockAxis]="'y'"
+      (cdkDropListDropped)="drop($event)">
+    @for (chip of chips; track chip) {
+      <div
+          class="chip-container"
+          cdkDrag
+          [cdkDragPreviewClass]="'fs-chip-drag-preview'">
+        <a
+            class="chip-handle"
+            mat-icon-button
+            cdkDragHandle>
+          <mat-icon>
+            drag_indicator
+          </mat-icon>
+        </a>
+        <ng-component [ngTemplateOutlet]="chip.templateRef"></ng-component>
+      </div>
+    }
+  </div>
+} @else {
+  <div class="fs-chips">
+    @for (chip of chips; track chip) {
+      <div class="chip-container">
+        <ng-component [ngTemplateOutlet]="chip.templateRef"></ng-component>
+      </div>
+    }
+  </div>
+}

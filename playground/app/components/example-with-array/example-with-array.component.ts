@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 
 @Component({
   selector: 'example-with-array',
-  templateUrl: 'example-with-array.component.html',
-  styleUrls: ['example-with-array.component.scss']
+  templateUrl: './example-with-array.component.html',
+  styleUrls: ['./example-with-array.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExampleWithArrayComponent implements OnInit {
 
@@ -13,17 +13,17 @@ export class ExampleWithArrayComponent implements OnInit {
   public selected = [];
   public checkboxes = {};
 
-  ngOnInit() {
+  public ngOnInit() {
 
-      this.chips = [
-        { name: 'Tag 1', value: 1 },
-        { name: 'Tag 2', value: 2 },
-        { name: 'Tag 3', value: 3 },
-        { name: 'Tag 4', value: 4 }
-      ];
+    this.chips = [
+      { name: 'Tag 1', value: 1 },
+      { name: 'Tag 2', value: 2 },
+      { name: 'Tag 3', value: 3 },
+      { name: 'Tag 4', value: 4 },
+    ];
   }
 
-  checkboxChange(event) {
+  public checkboxChange(event) {
     if (!this.selected) {
       this.selected = [];
     }
@@ -39,13 +39,13 @@ export class ExampleWithArrayComponent implements OnInit {
     this.selected = this.selected.splice(0);
   }
 
-  chipsChange(event) {
+  public chipsChange(event) {
 
     if (!this.selected) {
       this.selected = [];
     }
 
-    this.chips.forEach(chip => {
+    this.chips.forEach((chip) => {
       this.checkboxes[chip.value] = this.selected.indexOf(chip) >= 0;
     });
   }

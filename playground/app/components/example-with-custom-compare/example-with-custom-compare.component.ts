@@ -27,7 +27,9 @@ export class ExampleWithCustomCompareComponent implements OnInit {
       this.selected.splice(valIndex, 1);
     }
 
-    this.selected = this.selected.splice(0);
+    this.selected = [
+      ...this.selected,
+    ];
   }
 
   public chipsChange(event) {

@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'example-single-selection',
-  templateUrl: 'example-single-selection.component.html',
-  styleUrls: ['example-single-selection.component.scss']
+  templateUrl: './example-single-selection.component.html',
+  styleUrls: ['./example-single-selection.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExampleSingleSelectionComponent {
 
@@ -14,9 +15,9 @@ export class ExampleSingleSelectionComponent {
     { name: 'Tag D', value: 4 },
   ];
 
-  public chip = []
+  public chip = [];
 
-  change(event) {
+  public change(event) {
     console.log(event);
   }
 }

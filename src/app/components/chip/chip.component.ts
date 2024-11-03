@@ -2,15 +2,20 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   EventEmitter,
-  HostBinding,
-  HostListener,
   Input,
   OnChanges,
   OnDestroy,
+  Optional,
   Output,
+  SimpleChanges,
+  TemplateRef,
+  ViewChild,
 } from '@angular/core';
 
+
 import { Observable, Subject } from 'rxjs';
+
+import { FsChipsComponent } from '../chips/chips.component';
 
 
 @Component({
@@ -21,129 +26,118 @@ import { Observable, Subject } from 'rxjs';
 })
 export class FsChipComponent implements OnDestroy, OnChanges {
 
-  @HostBinding('class.fs-chip') 
-  public fsChip = true;
+  @ViewChild(TemplateRef, { static: true }) 
+  public templateRef: TemplateRef<void>;
 
-  @HostBinding('class.outlined') 
-  public _outlined = false;
-
-  @Input()
-  @HostBinding('class.selectable') 
+  @Input() 
   public selectable = false;
 
   @Input()
-  @HostBinding('class.removable') 
   public removable = true;
-  
-  @Input()
-  @HostBinding('class.actionable') 
-  public actionable = true;
-  
-  @HostBinding('style.backgroundColor') 
-  public styleBackgroundColor = '';
 
-  @HostBinding('style.color') 
-  public styleColor = '';
+  @Input() 
+  public value: any;
 
-  @HostBinding('style.borderColor') 
-  public styleBorderColor = '';
+  @Input() 
+  public maxWidth: string;
 
-  @HostBinding('class.size-small') 
-  public classSmall = false;
+  @Input() 
+  public width: string;
 
-  @HostBinding('class.size-tiny') 
-  public classTiny = false;
+  @Input() public backgroundColor;
 
-  @HostBinding('class.size-micro') 
-  public classMicro = false;
+  @Input() public borderColor;
 
-  @Input() public value;
+  @Input() public color;
 
-  @Input() public maxWidth: string;
+  @Input() public outlined;
 
-  @Input() public actions: {
+  @Input() 
+  public actions: {
     icon: string, 
     click: (event: MouseEvent) => void, 
     type?: 'remove',
     link?: string,
     linkTarget?: string,
   }[] = [];
+
+  @Input() 
+  public icon: string;
   
   @Input() 
-  @HostBinding('class.iconed') 
-  public icon;
+  public image: string;
   
-  @Input() 
-  @HostBinding('class.imaged') 
-  public image;
-  
-  @Input() 
-  @HostBinding('class.selected') 
-  public selected = false;
+  @Input('selected') 
+  public set setSelected(value: boolean) {
+    this.classes.selected = value;
+    this._selected = value;
+  }
+
+  public get selected() {
+    return this._selected;
+  }
 
   @Output() public selectedToggled = new EventEmitter();
   @Output() public removed = new EventEmitter();
 
-  private _destroy$ = new Subject();
+  public styles: any = {};
+  public classes: any = {};
 
-  private _backgroundColor = '';
-  private _color = '';
+  private _destroy$ = new Subject();
+  private _selected = false;
+
 
   constructor(
+    @Optional() public chips: FsChipsComponent,
     private _cdRef: ChangeDetectorRef,
   ) {}
 
   @Input('size') public set setSize(value) {
-    this.classSmall = value === 'small';
-    this.classTiny = value === 'tiny';
-    this.classMicro = value === 'micro';
+    this.classes['size-small'] = value === 'small';
+    this.classes['size-tiny'] = value === 'tiny';
+    this.classes['size-micro'] = value === 'micro';
   }
 
-  @HostListener('click')
   public click() {
     if (this.selectable) {
-      this.selected = !this.selected;
+      this.setSelected = !this.selected;
       this.selectedToggled.emit({ value: this.value, selected: this.selected });
     }
   }
 
-  @Input() public set backgroundColor(value) {
-    this._backgroundColor = value;
-    this._updateStyles();
+  public select() {
+    this.setSelected = true;
+    this._cdRef.markForCheck();
   }
 
-  @Input() public set borderColor(value) {
-    this.styleBorderColor = value;
-    this._updateStyles();
-  }
-
-  @Input() public set color(value) {
-    this._color = value;
-    this._updateStyles();
+  public unselect() {
+    this.setSelected = false;
+    this._cdRef.markForCheck();
   }
 
   public get destroy$(): Observable<any> {
     return this._destroy$.asObservable();
   }
 
-  @Input() public set outlined(value) {
-    this._outlined = value;
-    this._updateStyles();
-  }
-
-  public select() {
-    this.selected = true;
-    this._cdRef.markForCheck();
-  }
-
-  public unselect() {
-    this.selected = false;
-    this._cdRef.markForCheck();
-  }
-
-  public ngOnChanges() {
+  public ngOnChanges(changes: SimpleChanges) {
     this.actions = this.actions
       .filter((action) => action.type !== 'remove');
+
+    if(changes.selectable) {
+      this.classes.selectable = this.selectable;
+    }
+
+    if(changes.removable) {
+      this.classes.removable = this.removable;
+    }
+
+    if(changes.icon) {
+      this.classes.iconed = !!this.icon;
+    }
+
+    if(changes.image) {
+      this.classes.imaged = !!this.image;
+    }
 
     if(this.removed.observed && this.removable) {
       this.actions.push({
@@ -153,7 +147,9 @@ export class FsChipComponent implements OnDestroy, OnChanges {
       });
     }
 
-    this.actionable = this.actions.length !== 0;
+    this.classes.actionable = this.actions.length !== 0;
+
+    this._updateStyles();
   }
 
   public actionClick(action, event: MouseEvent) {
@@ -188,19 +184,22 @@ export class FsChipComponent implements OnDestroy, OnChanges {
   }
 
   private _updateStyles() {
-    this.styleBackgroundColor = this._backgroundColor;
+    this.styles.backgroundColor = this.backgroundColor;
+    this.styles.borderColor = this.borderColor;
+    this.styles.width = this.width;
+    this.classes.outlined = this.outlined;
 
-    if (this._color) {
-      this.styleColor = this._color;
-    } else if (!this._outlined) {
-      this.styleColor = this._isContrastYIQBlack(this.styleBackgroundColor) ? '#474747' : '#fff';
+    if (this.color) {
+      this.styles.color = this.color;
+    } else if (!this.outlined) {
+      this.styles.color = this._isContrastYIQBlack(this.backgroundColor) ? '#474747' : '#fff';
     }
 
-    if (this._outlined) {
-      this.styleBackgroundColor = '';
+    if (this.outlined) {
+      this.styles.backgroundColor = '';
 
-      if (this._color) {
-        this.styleBorderColor = this._color;
+      if (this.color) {
+        this.styles.borderColor = this.color;
       }
     }
 

@@ -1,0 +1,16 @@
+<fs-chips
+    [(ngModel)]="chips"
+    [sortable]="true">
+  @for (chip of chips; track chip) {
+    <fs-chip
+        [value]="chip"
+        [width]="'100%'">
+      {{ chip.name }}
+    </fs-chip>
+  }
+</fs-chips>
+<br>
+<fs-label>
+  Result
+</fs-label>
+{{ chips | json }}

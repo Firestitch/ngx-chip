@@ -1,17 +1,23 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ModuleWithProviders, NgModule } from '@angular/core';
+
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
 
 import { FsLabelModule } from '@firestitch/label';
 
-import { FsChipsComponent } from './components/chips/chips.component';
+import { FsChipActionComponent } from './components/chip-action/chip-action.component';
 import { FsChipComponent } from './components/chip/chip.component';
+import { FsChipsComponent } from './components/chips/chips.component';
 
 @NgModule({
   imports: [
     CommonModule,
+
+    DragDropModule,
     MatIconModule,
-    FsLabelModule
+
+    FsLabelModule,
   ],
   exports: [
     FsChipsComponent,
@@ -20,12 +26,13 @@ import { FsChipComponent } from './components/chip/chip.component';
   declarations: [
     FsChipsComponent,
     FsChipComponent,
-  ]
+    FsChipActionComponent,
+  ],
 })
 export class FsChipModule {
-  static forRoot(): ModuleWithProviders<FsChipModule> {
+  public static forRoot(): ModuleWithProviders<FsChipModule> {
     return {
-      ngModule: FsChipModule
+      ngModule: FsChipModule,
     };
   }
 }
