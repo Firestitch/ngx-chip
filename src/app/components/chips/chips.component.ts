@@ -18,8 +18,7 @@ import { CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-dro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-
-import { FsChipComponent } from '../chip';
+import { FsChipComponent } from '../chip/chip.component';
 
 
 @Component({
