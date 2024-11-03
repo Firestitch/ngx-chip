@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   EventEmitter,
+  Injector,
   Input,
   OnChanges,
   OnDestroy,
@@ -12,6 +13,8 @@ import {
 } from '@angular/core';
 
 import { Observable, Subject } from 'rxjs';
+
+import { FsChipsComponent } from '../chips/chips.component';
 
 
 @Component({
@@ -82,15 +85,19 @@ export class FsChipComponent implements OnDestroy, OnChanges {
   private _destroy$ = new Subject();
   private _selected = false;
 
-
   constructor(
     private _cdRef: ChangeDetectorRef,
+    private _injector: Injector,
   ) {}
 
   @Input('size') public set setSize(value) {
     this.classes['size-small'] = value === 'small';
     this.classes['size-tiny'] = value === 'tiny';
     this.classes['size-micro'] = value === 'micro';
+  }
+
+  public get hasChips(): boolean {
+    return !!this._injector.get(FsChipsComponent, null, { optional: true });
   }
 
   public click() {
