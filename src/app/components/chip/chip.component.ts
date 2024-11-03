@@ -5,17 +5,13 @@ import {
   Input,
   OnChanges,
   OnDestroy,
-  Optional,
   Output,
   SimpleChanges,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
 
-
 import { Observable, Subject } from 'rxjs';
-
-import { FsChipsComponent } from '../chips/chips.component';
 
 
 @Component({
@@ -88,7 +84,6 @@ export class FsChipComponent implements OnDestroy, OnChanges {
 
 
   constructor(
-    @Optional() public chips: FsChipsComponent,
     private _cdRef: ChangeDetectorRef,
   ) {}
 
