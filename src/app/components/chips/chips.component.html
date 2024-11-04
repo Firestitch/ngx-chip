@@ -3,20 +3,44 @@
       class="fs-chips chips-sortable"
       cdkDropList
       [cdkDropListLockAxis]="'y'"
+      [cdkDropListSortPredicate]="sortPredicate"
       (cdkDropListDropped)="drop($event)">
     @for (chip of chips; track chip) {
       <div
-          class="chip-container"
           cdkDrag
+          class="fs-chip-drag-container"
+          [class.chips-selectable]="!!selected"
           [cdkDragPreviewClass]="'fs-chip-drag-preview'">
         <a
             class="chip-handle"
             mat-icon-button
+            [ngClass]="{ 'visible': !selected || selected.includes(chip.value)}"
             cdkDragHandle>
           <mat-icon>
             drag_indicator
           </mat-icon>
         </a>
+        @if (selected) {
+        @if (selected.includes(chip.value)) {
+          <a
+              class="select-button select-button-selected"
+              (click)="unselect(chip)"
+              mat-icon-button>
+            <mat-icon>
+              remove_circle_outline
+            </mat-icon>
+          </a>
+        } @else {
+          <a
+              class="select-button select-button-unselected"
+              (click)="select(chip)"
+              mat-icon-button>
+            <mat-icon>
+              add_circle_outline
+            </mat-icon>
+          </a>
+        }
+        }
         <ng-component [ngTemplateOutlet]="chip.templateRef"></ng-component>
       </div>
     }

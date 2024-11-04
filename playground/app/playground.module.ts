@@ -17,6 +17,7 @@ import {
   ExampleComponent,
   ExamplesComponent,
   ExampleSingleSelectionComponent,
+  ExampleSortableSelectedComponent,
   ExampleWithArrayComponent,
   ExampleWithCustomCompareComponent,
 } from './components';
@@ -49,6 +50,7 @@ const routes: Routes = [
     ExampleSingleSelectionComponent,
     ExampleWithCustomCompareComponent,
     ExampleSortableComponent,
+    ExampleSortableSelectedComponent,
   ],
   providers: [],
 })

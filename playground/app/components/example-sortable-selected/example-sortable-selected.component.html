@@ -1,6 +1,7 @@
 <fs-chips
     [(ngModel)]="chips"
     [name]="'chips'"
+    [(selected)]="selected"
     [sortable]="true">
   @for (chip of chips; track chip) {
     <fs-chip
@@ -13,6 +14,6 @@
 </fs-chips>
 <br>
 <fs-label>
-  Result
+  Selected
 </fs-label>
-{{ chips | json }}
+{{ selected | json }}

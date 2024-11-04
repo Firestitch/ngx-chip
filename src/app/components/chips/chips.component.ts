@@ -3,11 +3,13 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ContentChildren,
+  EventEmitter,
   forwardRef,
   Input,
   IterableDiffer,
   IterableDiffers,
   OnDestroy,
+  Output,
   QueryList,
   ViewChild,
 } from '@angular/core';
@@ -48,6 +50,9 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
 
   @Input() public sortable = false;
 
+  @Input() public selected: any[];
+  @Output() public selectedChange = new EventEmitter();
+
   public onChange: (value) => void;
   public onTouch: (value) => void;
 
@@ -65,6 +70,13 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
 
   public drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this._value, event.previousIndex, event.currentIndex);
+
+    if(this.selected) {
+      this.selected = this._value
+        .filter((value) => this.selected.includes(value));
+      this.selectedChange.emit(this.selected);
+    }
+      
     this.onChange(this._value);
   }
 
@@ -72,6 +84,10 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
     this._subscribeToSelectionChange();
     this._subscribeChanges();
   }
+
+  public sortPredicate = (index: number) => {
+    return !this.selected ||  index <= this.selected.length - 1;
+  };
  
   public set value(value) {
     if (this._value !== value) {
@@ -89,6 +105,41 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
   public ngOnDestroy() {
     this._destroy$.next(null);
     this._destroy$.complete();
+  }
+
+  public select(chip: FsChipComponent) {
+    this.selected = [
+      ...this.selected, 
+      chip.value,
+    ];
+
+    this.selectedChange.emit(this.selected);
+
+    this.updateSelected();  
+  }
+  
+  public unselect(chip: FsChipComponent) {
+    this.selected = this.selected
+      .filter((item) => item !== chip.value);
+
+    this.selectedChange.emit(this.selected);
+
+    this.updateSelected();
+  }
+  
+  public updateSelected() {
+    const chipArray = this.chips.toArray().sort((a, b) => {
+      const aSelected = this.selected.includes(a.value);
+      const bSelected = this.selected.includes(b.value);
+      
+      if (aSelected === bSelected) return 0;
+
+      return aSelected ? -1 : 1;
+    });
+
+    this.chips.reset(chipArray);
+    this._value = this.chips.toArray().map((chip) => chip.value);
+    this.onChange(this._value);
   }
 
   public writeValue(value: any) {
