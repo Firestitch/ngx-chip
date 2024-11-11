@@ -8,11 +8,14 @@
   <ng-container *ngTemplateOutlet="actionTemplate"></ng-container>
 }
 <ng-template #actionTemplate>
-  <mat-icon
-      cdkHighlight
-      [style.color]="color"
-      class="action"
-      (click)="actionClick.emit($event)">
-    {{ icon }}
-  </mat-icon>
+  <ng-content></ng-content>
+  @if (icon) {
+    <mat-icon
+        cdkHighlight
+        [style.color]="color"
+        class="action"
+        (click)="click.emit($event)">
+      {{ icon }}
+    </mat-icon>
+  }
 </ng-template>

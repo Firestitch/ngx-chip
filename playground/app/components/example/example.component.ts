@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
 
 import { FsMessage } from '@firestitch/message';
 
@@ -26,9 +26,8 @@ export class ExampleComponent {
   public mm = [1, 2, 3];
   public actions = [];
 
-  constructor(
-    private _message: FsMessage,
-  ) {}
+  private _cdRef = inject(ChangeDetectorRef); 
+  private _message = inject(FsMessage);
 
   public imageChanged() {
     this.image = this.showImage ? '/assets/headshot2.jpg' : '';
@@ -50,6 +49,7 @@ export class ExampleComponent {
         },
       ]
       : [];
+    this._cdRef.markForCheck();
   }
 
   public removedChanged() {

@@ -3,6 +3,7 @@
       class="fs-chip"
       (click)="click()"
       [ngStyle]="styles"
+      [class.actionable]="chipSuffixes.length !== 0 || (removed.observed && removable)"
       [ngClass]="classes">
     <ng-container *ngIf="image">
       <img
@@ -27,16 +28,26 @@
         </mat-icon>
       </div>
     }
-    @if (actions) {
+    @if (chipSuffixes.length !== 0 || (removed.observed && removable)) {
       <div class="actions">
-        @for (action of actions; track action.icon) {
-          <fs-chip-action
-            [icon]="action.icon"
-            [link]="action.link"
-            [linkTarget]="action.linkTarget"
+        @for (chipSuffix of chipSuffixes; track chipSuffix) {
+          <fs-chip-suffix
+              [ngClass]="{ 'clickable': chipSuffix.click.observers.length }"
+              [icon]="chipSuffix.icon"
+              [link]="chipSuffix.link"
+              [linkTarget]="chipSuffix.linkTarget"
+              [color]="styles.color"
+              (click)="chipSuffixClick(chipSuffix, $event)">
+            <ng-container *ngTemplateOutlet="chipSuffix.templateRef"></ng-container>
+          </fs-chip-suffix>
+        }
+        @if (removed.observed && removable) {
+          <fs-chip-suffix
+            [ngClass]="{ 'clickable': true }"
+            [icon]="'remove_circle_outline'"
             [color]="styles.color"
-            (actionClick)="actionClick(action, $event)">
-          </fs-chip-action>
+            (click)="remove($event)">
+          </fs-chip-suffix>
         }
       </div>
     }

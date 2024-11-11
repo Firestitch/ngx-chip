@@ -7,11 +7,13 @@ import {
   TemplateRef,
 } from '@angular/core';
 
+import { FsChipSuffixDirective } from './chip-suffix.directive';
+
 
 @Directive({
   selector: '[fsChipSuffix]',
 })
-export class FsChipSuffixDirective {
+export class FsChipRemoveSuffixDirective extends FsChipSuffixDirective {
 
   @Input() public icon: string;
 

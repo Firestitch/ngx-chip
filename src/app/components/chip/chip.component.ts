@@ -1,17 +1,21 @@
 import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
+  ContentChildren,
   EventEmitter,
   Input,
   OnChanges,
   OnDestroy,
   Output,
+  QueryList,
   SimpleChanges,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
 
 import { Observable, Subject } from 'rxjs';
+
+import { FsChipSuffixDirective } from '../../directives';
 
 
 @Component({
@@ -24,6 +28,9 @@ export class FsChipComponent implements OnDestroy, OnChanges {
 
   @ViewChild(TemplateRef, { static: true }) 
   public templateRef: TemplateRef<void>;
+
+  @ContentChildren(FsChipSuffixDirective) 
+  public chipSuffixes: QueryList<FsChipSuffixDirective>;
 
   @Input() 
   public selectable = false;
@@ -47,15 +54,6 @@ export class FsChipComponent implements OnDestroy, OnChanges {
   @Input() public color;
 
   @Input() public outlined;
-
-  @Input() 
-  public actions: {
-    icon: string, 
-    click: (event: MouseEvent) => void, 
-    type?: 'remove',
-    link?: string,
-    linkTarget?: string,
-  }[] = [];
 
   @Input() 
   public icon: string;
@@ -115,9 +113,6 @@ export class FsChipComponent implements OnDestroy, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    this.actions = this.actions
-      .filter((action) => action.type !== 'remove');
-
     if(changes.selectable) {
       this.classes.selectable = this.selectable;
     }
@@ -134,15 +129,8 @@ export class FsChipComponent implements OnDestroy, OnChanges {
       this.classes.imaged = !!this.image;
     }
 
-    if(this.removed.observed && this.removable) {
-      this.actions.push({
-        icon: 'remove_circle_outline',
-        click: (event) => this.remove(event),
-        type: 'remove',
-      });
-    }
-
-    this.classes.actionable = this.actions.length !== 0;
+    // this.classes.actionable = this.chipSuffixes.length !== 0 || 
+    // (this.removed.observed && this.removable);
 
     this._updateStyles();
   }
@@ -151,6 +139,10 @@ export class FsChipComponent implements OnDestroy, OnChanges {
     if(action.click) {
       action.click(event);
     }
+  }
+
+  public chipSuffixClick(chipSuffix, event: MouseEvent) {
+    chipSuffix.click.emit(event);
   }
 
   public ngOnDestroy() {

@@ -1,63 +1,99 @@
-
 <div class="fs-row.gap-md.wrap">
   <fs-label-field>
-    <fs-label>Show Image</fs-label>
-    <mat-checkbox [(ngModel)]="showImage" (ngModelChange)="imageChanged()"></mat-checkbox>
+    <fs-label>
+      Show Image
+    </fs-label>
+    <mat-checkbox
+      [(ngModel)]="showImage"
+      (ngModelChange)="imageChanged()">
+    </mat-checkbox>
   </fs-label-field>
-
   <fs-label-field>
-    <fs-label>Show Icon</fs-label>
+    <fs-label>
+      Show Icon
+    </fs-label>
     <mat-checkbox [(ngModel)]="showIcon"></mat-checkbox>
   </fs-label-field>
-
   <fs-label-field>
-    <fs-label>Show Remove</fs-label>
-    <mat-checkbox [(ngModel)]="removable" (ngModelChange)="removedChanged()"></mat-checkbox>
+    <fs-label>
+      Show Remove
+    </fs-label>
+    <mat-checkbox
+      [(ngModel)]="removable"
+      (ngModelChange)="removedChanged()">
+    </mat-checkbox>
   </fs-label-field>
-
   <fs-label-field>
-    <fs-label>Show Actions</fs-label>
-    <mat-checkbox [(ngModel)]="actionable" (ngModelChange)="actionsChanged()"></mat-checkbox>
+    <fs-label>
+      Show Actions
+    </fs-label>
+    <mat-checkbox
+      [(ngModel)]="actionable"
+      (ngModelChange)="actionsChanged()">
+    </mat-checkbox>
   </fs-label-field>
-
   <fs-label-field>
-    <fs-label>Show Selected</fs-label>
-    <mat-checkbox [(ngModel)]="selected" (ngModelChange)="selectedChanged()"></mat-checkbox>
+    <fs-label>
+      Show Selected
+    </fs-label>
+    <mat-checkbox
+      [(ngModel)]="selected"
+      (ngModelChange)="selectedChanged()">
+    </mat-checkbox>
   </fs-label-field>
-
   <fs-label-field>
-    <fs-label>Allow Selectable</fs-label>
-    <mat-checkbox [(ngModel)]="selectable" (ngModelChange)="selectedChanged()"></mat-checkbox>
+    <fs-label>
+      Allow Selectable
+    </fs-label>
+    <mat-checkbox
+      [(ngModel)]="selectable"
+      (ngModelChange)="selectedChanged()">
+    </mat-checkbox>
   </fs-label-field>
-
   <fs-label-field>
-    <fs-label>Show Outlined</fs-label>
+    <fs-label>
+      Show Outlined
+    </fs-label>
     <mat-checkbox [(ngModel)]="outlined"></mat-checkbox>
   </fs-label-field>
 </div>
-
 <div class="fs-row.gap-md.wrap">
   <mat-form-field *ngIf="!outlined">
-    <input matInput fsColorPicker [(ngModel)]="backgroundColor" placeholder="Background Color">
+    <input
+      matInput
+      fsColorPicker
+      [(ngModel)]="backgroundColor"
+      placeholder="Background Color">
   </mat-form-field>
-
   <mat-form-field>
-    <input matInput fsColorPicker [(ngModel)]="color" placeholder="Color">
+    <input
+      matInput
+      fsColorPicker
+      [(ngModel)]="color"
+      placeholder="Color">
   </mat-form-field>
-
   <mat-form-field>
-    <mat-label>Size</mat-label>
+    <mat-label>
+      Size
+    </mat-label>
     <mat-select [(ngModel)]="size">
-      <mat-option value="">Default</mat-option>
-      <mat-option value="small">Small</mat-option>
-      <mat-option value="tiny">Tiny</mat-option>
-      <mat-option value="micro">Micro</mat-option>
+      <mat-option value="">
+        Default
+      </mat-option>
+      <mat-option value="small">
+        Small
+      </mat-option>
+      <mat-option value="tiny">
+        Tiny
+      </mat-option>
+      <mat-option value="micro">
+        Micro
+      </mat-option>
     </mat-select>
   </mat-form-field>
 </div>
 <br>
-
-  <fs-chip
+<fs-chip
     [backgroundColor]="backgroundColor"
     [image]="image"
     [color]="color"
@@ -67,9 +103,13 @@
     [outlined]="outlined"
     [icon]="showIcon ? 'settings' : null"
     [size]="size"
-    [actions]="actions"
     (removed)="chipRemoved($event)">
-    Tag A
-  </fs-chip>
-
-
+  Tag A
+  @for (action of actions; track action.icon) {
+    <ng-template
+      fsChipSuffix
+      [icon]="action.icon"
+      (click)="action.click($event)">
+    </ng-template>
+  }
+</fs-chip>

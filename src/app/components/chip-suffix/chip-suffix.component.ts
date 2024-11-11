@@ -1,17 +1,19 @@
 import {
-  Directive,
+  ChangeDetectionStrategy,
+  Component,
   EventEmitter,
-  inject,
   Input,
   Output,
-  TemplateRef,
 } from '@angular/core';
 
 
-@Directive({
-  selector: '[fsChipSuffix]',
+@Component({
+  selector: 'fs-chip-suffix',
+  templateUrl: './chip-suffix.component.html',
+  styleUrls: ['./chip-suffix.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FsChipSuffixDirective {
+export class FsChipSuffixComponent {
 
   @Input() public icon: string;
 
@@ -22,6 +24,4 @@ export class FsChipSuffixDirective {
   @Input() public color: string;
 
   @Output() public click = new EventEmitter<MouseEvent>();
-
-  public templateRef = inject(TemplateRef);
 }

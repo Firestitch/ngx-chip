@@ -1,3 +1,3 @@
 export * from './chip';
-export * from './chip-action';
+export * from './chip-suffix';
 export * from './chips';

@@ -5,9 +5,15 @@
   @for (chip of chips; track chip) {
     <fs-chip
         [value]="chip"
-        [removable]="true"
+        (removed)="remove($event)"
         [width]="'100%'">
       {{ chip.name }}
+      <ng-template
+        fsChipSuffix
+        [icon]="'edit'"
+        [color]="'primary'"
+        (click)="suffixClick($event)">
+      </ng-template>
     </fs-chip>
   }
 </fs-chips>

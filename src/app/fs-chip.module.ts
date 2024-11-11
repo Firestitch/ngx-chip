@@ -6,9 +6,8 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { FsLabelModule } from '@firestitch/label';
 
-import { FsChipActionComponent } from './components/chip-action/chip-action.component';
-import { FsChipComponent } from './components/chip/chip.component';
-import { FsChipsComponent } from './components/chips/chips.component';
+import { FsChipComponent, FsChipsComponent, FsChipSuffixComponent } from './components';
+import { FsChipSuffixDirective } from './directives/chip-suffix.directive';
 
 @NgModule({
   imports: [
@@ -22,11 +21,13 @@ import { FsChipsComponent } from './components/chips/chips.component';
   exports: [
     FsChipsComponent,
     FsChipComponent,
+    FsChipSuffixDirective,
   ],
   declarations: [
     FsChipsComponent,
     FsChipComponent,
-    FsChipActionComponent,
+    FsChipSuffixComponent,
+    FsChipSuffixDirective,  
   ],
 })
 export class FsChipModule {
