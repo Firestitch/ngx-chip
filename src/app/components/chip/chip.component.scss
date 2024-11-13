@@ -1,3 +1,7 @@
+:host {
+  display: flex;
+}
+
 .fs-chip {
   user-select: none;
   transition: box-shadow 280ms cubic-bezier(.4,0,.2,1);
