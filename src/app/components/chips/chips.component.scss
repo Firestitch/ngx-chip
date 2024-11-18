@@ -1,7 +1,8 @@
 @use '@firestitch/style/styles' as fs-styles;
 
 .fs-chips {
-  display: flex;  
+  display: flex;
+  flex-wrap: wrap;
 
   &:not(.chips-sortable) {
     gap: 5px;
@@ -34,11 +35,11 @@
     &.fs-chip-drag-preview {
       display: flex;
       overflow: visible;
-  
+
       .select-button {
         visibility: hidden;
       }
-  
+
       &.chip-container .fs-chip {
         box-shadow: 3px 3px 3px 0px rgba(196,196,196,1);
       }
