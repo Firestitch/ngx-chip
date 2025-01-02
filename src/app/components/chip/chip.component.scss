@@ -10,7 +10,7 @@
   border-radius: 16px;
   align-items: center;
   cursor: default;
-  height: 30px;
+  min-height: 30px;
   background-color: #e7e7e7;
   overflow: hidden;
 
@@ -93,7 +93,7 @@
 
   &.size-micro {
     padding: 0 5px;
-    height: 16px;
+    min-height: 16px;
     line-height: normal;
 
     .fs-chip-content {
@@ -132,7 +132,7 @@
 
   &.size-tiny {
     padding: 0 6px;
-    height: 18px;
+    min-height: 18px;
     line-height: normal;
 
     .fs-chip-content {
@@ -177,7 +177,7 @@
   &.size-small {
     padding: 0 8px;
     font-size: 85%;
-    height: 25px;
+    min-height: 25px;
     line-height: normal;
 
     .image {
