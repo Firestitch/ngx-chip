@@ -24,7 +24,7 @@ export class ExampleSortableComponent implements OnInit {
     console.log('remove', event);
   }
 
-  public suffixClick(event: MouseEvent): void {
-    console.log('suffixClick', event);
+  public suffixClick({ data, event }): void {
+    console.log('suffixClick', data, event);
   }
 }

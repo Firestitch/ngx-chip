@@ -141,10 +141,10 @@ export class FsChipComponent implements OnDestroy, OnChanges {
     }
   }
 
-  public chipSuffixClick(chipSuffix, event: MouseEvent) {
+  public chipSuffixClick(chipSuffix: FsChipSuffixDirective, event: MouseEvent) {
     event.stopImmediatePropagation();
     event.stopPropagation();
-    chipSuffix.click.emit(event);
+    chipSuffix.click.emit({ event, data: chipSuffix.data });
   }
 
   public ngOnDestroy() {

@@ -21,7 +21,10 @@ export class FsChipSuffixDirective {
 
   @Input() public color: string;
 
-  @Output() public click = new EventEmitter<MouseEvent>();
+  @Input() public data: any;
+
+  // eslint-disable-next-line @angular-eslint/no-output-native
+  @Output() public click = new EventEmitter<{ event: MouseEvent, data: any }>();
 
   public templateRef = inject(TemplateRef);
 }

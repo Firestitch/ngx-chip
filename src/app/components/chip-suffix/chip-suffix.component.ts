@@ -22,6 +22,7 @@ export class FsChipSuffixComponent {
   @Input() public linkTarget: string;
 
   @Input() public color: string;
+  
+  @Output() public click = new EventEmitter<MouseEvent>();  
 
-  @Output() public click = new EventEmitter<MouseEvent>();
 }
