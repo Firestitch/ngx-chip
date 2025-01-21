@@ -142,6 +142,8 @@ export class FsChipComponent implements OnDestroy, OnChanges {
   }
 
   public chipSuffixClick(chipSuffix, event: MouseEvent) {
+    event.stopImmediatePropagation();
+    event.stopPropagation();
     chipSuffix.click.emit(event);
   }
 
