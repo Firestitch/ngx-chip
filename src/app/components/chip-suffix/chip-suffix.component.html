@@ -1,21 +1,24 @@
-@if (link) {
-  <a
-      [href]="link"
-      [target]="linkTarget || '_self'">
+@if (show) {
+  @if (link) {
+    <a
+        [href]="link"
+        [target]="linkTarget || '_self'">
+      <ng-container *ngTemplateOutlet="actionTemplate"></ng-container>
+    </a>
+  } @else {
     <ng-container *ngTemplateOutlet="actionTemplate"></ng-container>
-  </a>
-} @else {
-  <ng-container *ngTemplateOutlet="actionTemplate"></ng-container>
-}
-<ng-template #actionTemplate>
-  <ng-content></ng-content>
-  @if (icon) {
-    <mat-icon
-        cdkHighlight
-        [style.color]="color"
-        class="action"
-        (click)="click.emit($event)">
-      {{ icon }}
-    </mat-icon>
   }
-</ng-template>
+  <ng-template #actionTemplate>
+    <ng-content></ng-content>
+    @if (icon) {
+      <mat-icon
+          cdkHighlight
+          [style.color]="color"
+          [matTooltip]="tooltip"
+          class="action"
+          (click)="click.emit($event)">
+        {{ icon }}
+      </mat-icon>
+    }
+  </ng-template>
+}

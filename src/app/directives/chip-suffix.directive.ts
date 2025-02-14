@@ -23,6 +23,10 @@ export class FsChipSuffixDirective {
 
   @Input() public data: any;
 
+  @Input() public show: boolean = true;
+
+  @Input() public tooltip: string;
+
   // eslint-disable-next-line @angular-eslint/no-output-native
   @Output() public click = new EventEmitter<{ event: MouseEvent, data: any }>();
 

@@ -3,6 +3,7 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { FsLabelModule } from '@firestitch/label';
 
@@ -15,6 +16,7 @@ import { FsChipSuffixDirective } from './directives/chip-suffix.directive';
 
     DragDropModule,
     MatIconModule,
+    MatTooltipModule,
 
     FsLabelModule,
   ],

@@ -36,7 +36,9 @@
               [icon]="chipSuffix.icon"
               [link]="chipSuffix.link"
               [linkTarget]="chipSuffix.linkTarget"
-              [color]="styles.color"
+              [color]="chipSuffix.color || styles.color"
+              [show]="chipSuffix.show"
+              [tooltip]="chipSuffix.tooltip"
               (click)="chipSuffixClick(chipSuffix, $event)">
             <ng-container *ngTemplateOutlet="chipSuffix.templateRef"></ng-container>
           </fs-chip-suffix>
