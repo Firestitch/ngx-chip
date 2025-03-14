@@ -4,22 +4,39 @@
       (click)="click()"
       [ngStyle]="styles"
       [class.actionable]="chipSuffixes.length !== 0 || (removed.observed && removable)"
-      [ngClass]="classes">
-    <ng-container *ngIf="image">
+      [class.round]="shape === 'round'"
+      [class.square]="shape === 'square'"
+      [class.size-small]="size === 'small'"
+      [class.size-tiny]="size === 'tiny'"
+      [class.size-micro]="size === 'micro'"
+      [class.size-large]="size === 'large'"
+      [class.selectable]="selectable"
+      [class.removable]="removable"
+      [class.iconed]="!!icon"
+      [class.imaged]="!!image"
+      [class.outlined]="outlined"
+      [class.selected]="selected"
+      [class.subcontented]="!!chipSubcontentTemplateRef">
+    @if (image) {
       <img
         [src]="image"
         class="image"
         alt="">
-    </ng-container>
-    <ng-container *ngIf="icon">
+    }
+    @if (icon) {
       <mat-icon class="icon">
         {{ icon }}
       </mat-icon>
-    </ng-container>
+    }
     <div
         class="fs-chip-content"
         [ngStyle]="{ 'max-width': maxWidth }">
       <ng-content></ng-content>
+      @if (chipSubcontentTemplateRef) {
+        <div class="fs-chip-subcontent">
+          <ng-container *ngTemplateOutlet="chipSubcontentTemplateRef"></ng-container>
+        </div>
+      }
     </div>
     @if (selected) {
       <div class="selected-check">

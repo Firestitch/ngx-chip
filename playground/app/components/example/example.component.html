@@ -77,8 +77,8 @@
       Size
     </mat-label>
     <mat-select [(ngModel)]="size">
-      <mat-option value="">
-        Default
+      <mat-option value="large">
+        Large
       </mat-option>
       <mat-option value="small">
         Small
@@ -93,23 +93,54 @@
   </mat-form-field>
 </div>
 <br>
-<fs-chip
-    [backgroundColor]="backgroundColor"
-    [image]="image"
-    [color]="color"
-    [selected]="selected"
-    [selectable]="selectable"
-    [removable]="removable"
-    [outlined]="outlined"
-    [icon]="showIcon ? 'settings' : null"
-    [size]="size"
-    (removed)="chipRemoved($event)">
-  Tag A
-  @for (action of actions; track action.icon) {
-    <ng-template
-      fsChipSuffix
-      [icon]="action.icon"
-      (click)="action.click($event)">
-    </ng-template>
-  }
-</fs-chip>
+<div class="fs-row.gap-md.wrap.align-start">
+  <fs-label-field>
+    <fs-label>
+      Round shape
+    </fs-label>
+    <ng-container *ngTemplateOutlet="chipTemplate; context: { shape: 'round' }"></ng-container>
+  </fs-label-field>
+  <fs-label-field>
+    <fs-label>
+      Square shape
+    </fs-label>
+    <ng-container *ngTemplateOutlet="chipTemplate; context: { shape: 'square' }"></ng-container>
+  </fs-label-field>
+  <fs-label-field>
+    <fs-label>
+      Square shape with subcontent
+    </fs-label>
+    <ng-container *ngTemplateOutlet="chipTemplate; context: { shape: 'square', subcontent: 'Subcontent' }"></ng-container>
+  </fs-label-field>
+</div>
+<ng-template
+    #chipTemplate
+    let-shape="shape"
+    let-subcontent="subcontent">
+  <fs-chip
+      [backgroundColor]="backgroundColor"
+      [image]="image"
+      [shape]="shape"
+      [color]="color"
+      [selected]="selected"
+      [selectable]="selectable"
+      [removable]="removable"
+      [outlined]="outlined"
+      [icon]="showIcon ? 'settings' : null"
+      [size]="size"
+      (removed)="chipRemoved($event)">
+    Tag A
+    @for (action of actions; track action.icon) {
+      <ng-template
+        fsChipSuffix
+        [icon]="action.icon"
+        (click)="action.click($event)">
+      </ng-template>
+    }
+    @if (subcontent) {
+      <ng-template fsChipSubtemplate>
+        {{ subcontent }}
+      </ng-template>
+    }
+  </fs-chip>
+</ng-template>

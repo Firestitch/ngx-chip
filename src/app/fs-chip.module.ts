@@ -8,7 +8,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FsLabelModule } from '@firestitch/label';
 
 import { FsChipComponent, FsChipsComponent, FsChipSuffixComponent } from './components';
-import { FsChipSuffixDirective } from './directives/chip-suffix.directive';
+import { FsChipSubcontentDirective, FsChipSuffixDirective } from './directives';
 
 @NgModule({
   imports: [
@@ -24,12 +24,14 @@ import { FsChipSuffixDirective } from './directives/chip-suffix.directive';
     FsChipsComponent,
     FsChipComponent,
     FsChipSuffixDirective,
+    FsChipSubcontentDirective,
   ],
   declarations: [
     FsChipsComponent,
     FsChipComponent,
     FsChipSuffixComponent,
-    FsChipSuffixDirective,  
+    FsChipSuffixDirective,
+    FsChipSubcontentDirective,
   ],
 })
 export class FsChipModule {

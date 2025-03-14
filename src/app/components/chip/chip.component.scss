@@ -6,31 +6,41 @@
   user-select: none;
   transition: box-shadow 280ms cubic-bezier(.4,0,.2,1);
   display: inline-flex;
-  padding: 0px 12px;
-  border-radius: 16px;
   align-items: center;
   cursor: default;
   min-height: 30px;
   background-color: #e7e7e7;
   overflow: hidden;
+  padding: 0px 12px;
 
-  &.imaged {
-    overflow: visible;
-    padding-left: 0;
-    vertical-align: middle;
+  &.round {
+    border-radius: 16px;
 
-    &.outlined .image {
-      margin-left: -2px;
+    &.imaged {
+      overflow: visible;
+      padding-left: 0;
+      vertical-align: middle;
+
+      &.outlined .image {
+        margin-left: -2px;
+      }
+    }
+  }
+
+  &.subcontented {
+    padding: 3px 10px;
+  }
+
+  &.square {
+    border-radius: 5px;
+
+    .image {
+      padding: 2px 0;
     }
   }
 
   &.iconed:not(.imaged) {
     padding-left: 5px;
-  }
-
-  &.actionable,
-  &.selected {
-    padding-right: 5px;
   }
 
   &.selectable {
@@ -71,6 +81,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
     flex: 1;
+
+    .fs-chip-subcontent {
+      font-size: 85%;
+    }
   }
 
   .selected-check {
@@ -88,6 +102,13 @@
 
     &.clickable {
       cursor: pointer;
+    }
+  }
+
+  &.size-large {
+    &.actionable,
+    &.selected {
+      padding-right: 5px;
     }
   }
 
@@ -114,13 +135,10 @@
       margin: 0 1px 0 0;
     }
 
-    &.imaged {
-      padding-left: 0;
-    }
-
-    &.actionable,
-    &.selected {
-      padding-right: 0px;
+    &.round {
+      &.imaged {
+        padding-left: 0;
+      }
     }
 
     ::ng-deep mat-icon {
@@ -158,13 +176,10 @@
       margin: 0 1px 0 0;
     }
 
-    &.imaged {
-      padding-left: 0;
-    }
-
-    &.actionable,
-    &.selected {
-      padding-right: 0px;
+    &.round {
+      &.imaged {
+        padding-left: 0;
+      }
     }
 
     ::ng-deep mat-icon {
@@ -190,8 +205,10 @@
       padding-left: 4px;
     }
 
-    &.imaged {
-      padding-left: 0;
+    &.round {
+      &.imaged {
+        padding-left: 0;
+      }
     }
 
     fs-chip-suffix {
@@ -205,15 +222,18 @@
       }
     }
 
-    &.actionable,
-    &.selected {
-      padding-right: 0;
-    }
-
     ::ng-deep mat-icon {
       height: 22px;
       width: 22px;
       font-size: 22px;
+    }
+  }
+
+
+  &:not(.size-large) {
+    &.actionable,
+    &.selected {
+      padding-right: 0px;
     }
   }
 }

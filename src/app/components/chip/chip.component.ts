@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
+  ContentChild,
   ContentChildren,
   EventEmitter,
   Input,
@@ -8,14 +9,13 @@ import {
   OnDestroy,
   Output,
   QueryList,
-  SimpleChanges,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
 
 import { Observable, Subject } from 'rxjs';
 
-import { FsChipSuffixDirective } from '../../directives';
+import { FsChipSubcontentDirective, FsChipSuffixDirective } from '../../directives';
 
 
 @Component({
@@ -31,6 +31,9 @@ export class FsChipComponent implements OnDestroy, OnChanges {
 
   @ContentChildren(FsChipSuffixDirective) 
   public chipSuffixes: QueryList<FsChipSuffixDirective>;
+
+  @ContentChild(FsChipSubcontentDirective, { read: TemplateRef })
+  public chipSubcontentTemplateRef: TemplateRef<void>;
 
   @Input() 
   public selectable = false;
@@ -53,6 +56,8 @@ export class FsChipComponent implements OnDestroy, OnChanges {
 
   @Input() public color;
 
+  @Input() public shape: 'round' | 'square' = 'round';
+
   @Input() public outlined;
 
   @Input() 
@@ -61,50 +66,36 @@ export class FsChipComponent implements OnDestroy, OnChanges {
   @Input() 
   public image: string;
   
-  @Input('selected') 
-  public set setSelected(value: boolean) {
-    this.classes.selected = value;
-    this._selected = value;
-  }
+  @Input() public selected: boolean;
 
-  public get selected() {
-    return this._selected;
-  }
+  @Input() public size: 'small' | 'tiny' | 'micro' | 'large' = 'large';
 
   @Output() public selectedToggled = new EventEmitter();
   @Output() public removed = new EventEmitter();
 
   public styles: any = {};
-  public classes: any = {};
   public hasChips: boolean;
 
   private _destroy$ = new Subject();
-  private _selected = false;
 
   constructor(
     private _cdRef: ChangeDetectorRef,
   ) {}
 
-  @Input('size') public set setSize(value) {
-    this.classes['size-small'] = value === 'small';
-    this.classes['size-tiny'] = value === 'tiny';
-    this.classes['size-micro'] = value === 'micro';
-  }
-
   public click() {
     if (this.selectable) {
-      this.setSelected = !this.selected;
+      this.selected = !this.selected;
       this.selectedToggled.emit({ value: this.value, selected: this.selected });
     }
   }
 
   public select() {
-    this.setSelected = true;
+    this.selected = true;
     this._cdRef.markForCheck();
   }
 
   public unselect() {
-    this.setSelected = false;
+    this.selected = false;
     this._cdRef.markForCheck();
   }
 
@@ -112,26 +103,7 @@ export class FsChipComponent implements OnDestroy, OnChanges {
     return this._destroy$.asObservable();
   }
 
-  public ngOnChanges(changes: SimpleChanges) {
-    if(changes.selectable) {
-      this.classes.selectable = this.selectable;
-    }
-
-    if(changes.removable) {
-      this.classes.removable = this.removable;
-    }
-
-    if(changes.icon) {
-      this.classes.iconed = !!this.icon;
-    }
-
-    if(changes.image) {
-      this.classes.imaged = !!this.image;
-    }
-
-    // this.classes.actionable = this.chipSuffixes.length !== 0 || 
-    // (this.removed.observed && this.removable);
-
+  public ngOnChanges() {
     this._updateStyles();
   }
 
@@ -176,7 +148,6 @@ export class FsChipComponent implements OnDestroy, OnChanges {
     this.styles.backgroundColor = this.backgroundColor;
     this.styles.borderColor = this.borderColor;
     this.styles.width = this.width;
-    this.classes.outlined = this.outlined;
 
     if (this.color) {
       this.styles.color = this.color;

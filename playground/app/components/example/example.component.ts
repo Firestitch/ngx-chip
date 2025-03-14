@@ -15,7 +15,7 @@ export class ExampleComponent {
   public showIcon;
   public removable;
   public actionable = false;
-  public size;
+  public size: any = 'large';
   public outlined = false;
   public selected = false;
   public selectable = false;
