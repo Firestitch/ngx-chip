@@ -4,7 +4,7 @@ import {
 
 
 @Directive({
-  selector: '[fsChipContent]',
+  selector: '[fsChipSubcontent]',
 })
 export class FsChipSubcontentDirective {
 
