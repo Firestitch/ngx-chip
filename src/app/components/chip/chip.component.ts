@@ -15,7 +15,8 @@ import {
 
 import { Observable, Subject } from 'rxjs';
 
-import { FsChipSubcontentDirective, FsChipSuffixDirective } from '../../directives';
+import { FsChipSubcontentDirective } from '../../directives/chip-subcontent.directive';
+import { FsChipSuffixDirective } from '../../directives/chip-suffix.directive';
 
 
 @Component({
