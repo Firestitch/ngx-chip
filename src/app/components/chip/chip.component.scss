@@ -27,10 +27,6 @@
     }
   }
 
-  &.subcontented {
-    padding: 3px 10px;
-  }
-
   &.square {
     border-radius: 5px;
 
@@ -110,6 +106,11 @@
     &.selected {
       padding-right: 5px;
     }
+    
+    &.subcontented {
+      padding-left: 6px;
+      padding-right: 6px;
+    }
   }
 
   &.size-micro {
@@ -133,6 +134,11 @@
 
     .selected-check {
       margin: 0 1px 0 0;
+    }
+
+    &.subcontented {
+      padding-left: 2px;
+      padding-right: 2px;
     }
 
     &.round {
@@ -174,6 +180,12 @@
 
     .selected-check {
       margin: 0 1px 0 0;
+    }
+
+
+    &.subcontented {
+      padding-left: 3px;
+      padding-right: 3px;
     }
 
     &.round {
@@ -220,6 +232,11 @@
       mat-icon {
         transform: scale(.7);
       }
+    }
+    
+    &.subcontented {
+      padding-left: 4px;
+      padding-right: 4px;
     }
 
     ::ng-deep mat-icon {
