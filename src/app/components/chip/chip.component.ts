@@ -55,17 +55,15 @@ export class FsChipComponent implements OnDestroy, OnChanges {
 
   @Input() public borderColor;
 
-  @Input() public color;
+  @Input() public color = '#474747';
 
   @Input() public shape: 'round' | 'square' = 'round';
 
   @Input() public outlined;
 
-  @Input() 
-  public icon: string;
+  @Input() public icon: string;
   
-  @Input() 
-  public image: string;
+  @Input() public image: string;
   
   @Input() public selected: boolean;
 
