@@ -8,9 +8,8 @@
   display: inline-flex;
   align-items: center;
   min-height: 30px;
-  background-color: #e7e7e7;
   overflow: hidden;
-  padding: 0px 12px;
+  padding: 0px 10px;
 
   &.round {
     border-radius: 16px;
@@ -28,6 +27,7 @@
 
   &.square {
     border-radius: 5px;
+    padding: 4px 8px;
 
     .image {
       padding: 4px 0;
@@ -43,7 +43,6 @@
   }
 
   &.outlined {
-    background-color: transparent;
     border: 1px solid #e0e0e0;
     box-sizing: border-box;
   }
@@ -106,97 +105,8 @@
       padding-right: 5px;
     }
     
-    &.subcontented {
-      padding-left: 6px;
-      padding-right: 6px;
-    }
-  }
-
-  &.size-micro {
-    padding: 0 5px;
-    min-height: 16px;
-    line-height: normal;
-
-    .fs-chip-content {
-      font-size: 65%;
-    }
-
-    .image {
-      height: 100%;
-      width: 16px;
-      margin-right: 2px;
-    }
-
-    fs-chip-suffix {
-      margin-left: 1px;
-    }
-
-    .selected-check {
-      margin: 0 1px 0 0;
-    }
-
-    &.subcontented {
-      padding-left: 2px;
-      padding-right: 2px;
-    }
-
-    &.round {
-      &.imaged {
-        padding-left: 0;
-      }
-    }
-
-    ::ng-deep mat-icon {
-      width: 12px;
-      height: 12px;
-      font-size: 11px;
-    }
-  }
-
-  &.size-tiny {
-    padding: 0 6px;
-    min-height: 18px;
-    line-height: normal;
-
-    .fs-chip-content {
-      font-size: 75%;
-    }
-
-    .image {
-      height: 18px;
-      width: 18px;
-      margin-right: 3px;
-    }
-
-    &.iconed:not(.imaged) {
-      padding-left: 3px;
-    }
-
-    fs-chip-suffix {
-      margin-left: 2px;
-      margin-right: 2px;
-    }
-
-    .selected-check {
-      margin: 0 1px 0 0;
-    }
-
-
-    &.subcontented {
-      padding-left: 3px;
-      padding-right: 3px;
-    }
-
-    &.round {
-      &.imaged {
-        padding-left: 0;
-      }
-    }
-
-    ::ng-deep mat-icon {
-      height: 13px;
-      width: 13px;
-      font-size: 13px;
+    &.sub-content {
+      padding: 4px 8px;
     }
   }
 
@@ -233,9 +143,8 @@
       }
     }
     
-    &.subcontented {
-      padding-left: 4px;
-      padding-right: 4px;
+    &.sub-content {
+      padding: 3px 6px;
     }
 
     ::ng-deep mat-icon {
@@ -245,6 +154,91 @@
     }
   }
 
+  &.size-tiny {
+    padding: 0 6px;
+    min-height: 18px;
+    line-height: normal;
+
+    .fs-chip-content {
+      font-size: 75%;
+    }
+
+    .image {
+      height: 18px;
+      width: 18px;
+      margin-right: 3px;
+    }
+
+    &.iconed:not(.imaged) {
+      padding-left: 3px;
+    }
+
+    fs-chip-suffix {
+      margin-left: 2px;
+      margin-right: 2px;
+    }
+
+    .selected-check {
+      margin: 0 1px 0 0;
+    }
+
+
+    &.sub-content {
+      padding: 2px 4px;
+    }
+
+    &.round {
+      &.imaged {
+        padding-left: 0;
+      }
+    }
+
+    ::ng-deep mat-icon {
+      height: 13px;
+      width: 13px;
+      font-size: 13px;
+    }
+  }
+
+  &.size-micro {
+    padding: 0 5px;
+    min-height: 16px;
+    line-height: normal;
+
+    .fs-chip-content {
+      font-size: 65%;
+    }
+
+    .image {
+      height: 100%;
+      width: 16px;
+      margin-right: 2px;
+    }
+
+    fs-chip-suffix {
+      margin-left: 1px;
+    }
+
+    .selected-check {
+      margin: 0 1px 0 0;
+    }
+
+    &.sub-content {
+      padding: 1px 2px;
+    }
+
+    &.round {
+      &.imaged {
+        padding-left: 0;
+      }
+    }
+
+    ::ng-deep mat-icon {
+      width: 12px;
+      height: 12px;
+      font-size: 11px;
+    }
+  }
 
   &:not(.size-large) {
     &.actionable,

@@ -51,7 +51,7 @@ export class FsChipComponent implements OnDestroy, OnChanges {
   @Input() 
   public width: string;
 
-  @Input() public backgroundColor;
+  @Input() public backgroundColor = '#e7e7e7';
 
   @Input() public borderColor;
 
@@ -146,7 +146,7 @@ export class FsChipComponent implements OnDestroy, OnChanges {
   }
 
   private _updateStyles() {
-    this.styles.backgroundColor = this.backgroundColor;
+    this.styles.backgroundColor = this.outlined ? 'transparent' : this.backgroundColor;
     this.styles.borderColor = this.borderColor;
     this.styles.width = this.width;
 
@@ -157,8 +157,6 @@ export class FsChipComponent implements OnDestroy, OnChanges {
     }
 
     if (this.outlined) {
-      this.styles.backgroundColor = '';
-
       if (this.color) {
         this.styles.borderColor = this.color;
       }

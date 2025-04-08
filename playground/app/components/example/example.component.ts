@@ -19,7 +19,7 @@ export class ExampleComponent {
   public outlined = false;
   public selected = false;
   public selectable = false;
-  public backgroundColor = '';
+  public backgroundColor = '#e7e7e7';
   public color;
   public icon;
   public config: any = {};
