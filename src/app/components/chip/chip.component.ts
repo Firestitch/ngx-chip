@@ -9,6 +9,7 @@ import {
   OnDestroy,
   Output,
   QueryList,
+  SimpleChanges,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
@@ -51,11 +52,11 @@ export class FsChipComponent implements OnDestroy, OnChanges {
   @Input() 
   public width: string;
 
-  @Input() public backgroundColor = '#e7e7e7';
+  @Input() public backgroundColor;
 
   @Input() public borderColor;
 
-  @Input() public color = '#474747';
+  @Input() public color;
 
   @Input() public shape: 'round' | 'square' = 'round';
 
@@ -66,14 +67,19 @@ export class FsChipComponent implements OnDestroy, OnChanges {
   @Input() public image: string;
   
   @Input() public selected: boolean;
+  
+  @Input() public padding: string;
+
+  @Input() public contrastColor: string;
 
   @Input() public size: 'small' | 'tiny' | 'micro' | 'large' = 'large';
 
   @Output() public selectedToggled = new EventEmitter();
   @Output() public removed = new EventEmitter();
 
-  public styles: any = {};
   public hasChips: boolean;
+  public defaultColor = '#474747';
+  public defaultBackgroundColor = '#e7e7e7';
 
   private _destroy$ = new Subject();
 
@@ -102,8 +108,12 @@ export class FsChipComponent implements OnDestroy, OnChanges {
     return this._destroy$.asObservable();
   }
 
-  public ngOnChanges() {
-    this._updateStyles();
+  public ngOnChanges(changes: SimpleChanges) {
+    if (changes.backgroundColor) {
+      this.contrastColor = this.backgroundColor ? 
+        this._isContrastYIQBlack(this.backgroundColor) ? '#474747' : '#fff' : 
+        '#474747';
+    }
   }
 
   public actionClick(action, event: MouseEvent) {
@@ -141,25 +151,5 @@ export class FsChipComponent implements OnDestroy, OnChanges {
     const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
 
     return yiq >= 200;
-  }
-
-  private _updateStyles() {
-    this.styles.backgroundColor = this.outlined ? 'transparent' : this.backgroundColor;
-    this.styles.borderColor = this.borderColor;
-    this.styles.width = this.width;
-
-    if (this.color) {
-      this.styles.color = this.color;
-    } else if (!this.outlined) {
-      this.styles.color = this._isContrastYIQBlack(this.backgroundColor) ? '#474747' : '#fff';
-    }
-
-    if (this.outlined) {
-      if (this.color) {
-        this.styles.borderColor = this.color;
-      }
-    }
-
-    this._cdRef.markForCheck();
   }
 }

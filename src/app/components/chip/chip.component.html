@@ -2,10 +2,14 @@
   <div
       class="fs-chip"
       (click)="click()"
-      [ngStyle]="styles"
+      [style.backgroundColor]="outlined ? 'transparent' : backgroundColor || defaultBackgroundColor"
+      [style.padding]="padding"
+      [style.borderColor]="borderColor || (outlined && color ? color : null)"
+      [style.width]="width"
+      [style.color]="color || contrastColor || defaultColor"
       [class.actionable]="chipSuffixes.length !== 0 || (removed.observed && removable)"
-      [class.round]="shape === 'round'"
-      [class.square]="shape === 'square'"
+      [class.shape-round]="shape === 'round'"
+      [class.shape-square]="shape === 'square'"
       [class.size-small]="size === 'small'"
       [class.size-tiny]="size === 'tiny'"
       [class.size-micro]="size === 'micro'"
@@ -40,7 +44,7 @@
     </div>
     @if (selected) {
       <div class="selected-check">
-        <mat-icon [style.color]="styles.color">
+        <mat-icon [style.color]="color || contrastColor || defaultColor">
           check
         </mat-icon>
       </div>
@@ -53,7 +57,7 @@
               [icon]="chipSuffix.icon"
               [link]="chipSuffix.link"
               [linkTarget]="chipSuffix.linkTarget"
-              [color]="chipSuffix.color || styles.color"
+              [color]="chipSuffix.color || color || contrastColor || defaultColor"
               [show]="chipSuffix.show"
               [tooltip]="chipSuffix.tooltip"
               (click)="chipSuffixClick(chipSuffix, $event)">
@@ -64,7 +68,7 @@
           <fs-chip-suffix
             [ngClass]="{ 'clickable': true }"
             [icon]="'remove_circle_outline'"
-            [color]="styles.color"
+            [color]="color || contrastColor || defaultColor"
             (click)="remove($event)">
           </fs-chip-suffix>
         }

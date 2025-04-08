@@ -2,7 +2,7 @@
   "name": "@firestitch/chip",
   "title": "Chip",
   "description": "@firestitch/chip",
-  "version": "18.0.25",
+  "version": "18.0.27",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-chip"

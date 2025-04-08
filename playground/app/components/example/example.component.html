@@ -59,18 +59,22 @@
 </div>
 <div class="fs-row.gap-md.wrap">
   <mat-form-field *ngIf="!outlined">
+    <mat-label>
+      Background Color
+    </mat-label>
     <input
       matInput
       fsColorPicker
-      [(ngModel)]="backgroundColor"
-      placeholder="Background Color">
+      [(ngModel)]="backgroundColor">
   </mat-form-field>
   <mat-form-field>
+    <mat-label>
+      Color
+    </mat-label>
     <input
       matInput
       fsColorPicker
-      [(ngModel)]="color"
-      placeholder="Color">
+      [(ngModel)]="color">
   </mat-form-field>
   <mat-form-field>
     <mat-label>
