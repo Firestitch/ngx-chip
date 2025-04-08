@@ -110,9 +110,12 @@ export class FsChipComponent implements OnDestroy, OnChanges {
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.backgroundColor) {
-      this.contrastColor = this.backgroundColor ? 
-        this._isContrastYIQBlack(this.backgroundColor) ? '#474747' : '#fff' : 
-        '#474747';
+      this.contrastColor = this.defaultColor;
+
+      if(this.backgroundColor && this.backgroundColor !== 'transparent') {
+        this.contrastColor = this._isContrastYIQBlack(this.backgroundColor) ?
+          this.defaultColor : '#fff';
+      }
     }
   }
 
