@@ -50,6 +50,8 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
 
   @Input() public selectable = false;
 
+  @Input() public width;
+
   public onChange: (value) => void;
   public onTouch: (value) => void;
 

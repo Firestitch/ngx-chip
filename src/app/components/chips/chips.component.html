@@ -1,6 +1,7 @@
 @if (sortable) {
   <div
       class="fs-chips chips-sortable"
+      [style.width]="width"
       cdkDropList
       [cdkDropListLockAxis]="'y'"
       [cdkDropListSortPredicate]="sortPredicate"
@@ -27,7 +28,7 @@
                 (click)="unselect(chip)"
                 mat-icon-button>
               <mat-icon>
-                remove_circle_outline
+                check_box
               </mat-icon>
             </a>
           } @else {
@@ -36,7 +37,7 @@
                 (click)="select(chip)"
                 mat-icon-button>
               <mat-icon>
-                add_circle_outline
+                check_box_outline_blank
               </mat-icon>
             </a>
           }
@@ -46,7 +47,9 @@
     }
   </div>
 } @else {
-  <div class="fs-chips">
+  <div
+      class="fs-chips"
+      [style.width]="width">
     @for (chip of chips; track chip) {
       <div class="chip-container">
         <ng-component [ngTemplateOutlet]="chip.templateRef"></ng-component>

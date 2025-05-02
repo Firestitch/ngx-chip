@@ -61,13 +61,13 @@
 
       &.select-button-selected {
         mat-icon {
-          color: fs-styles.$error-color;
+          color: fs-styles.$success-color;
         }
       }
 
       &.select-button-unselected {
         mat-icon {
-          color: fs-styles.$success-color;
+          color: #ddd;
         }
       }
     }
