@@ -60,7 +60,7 @@
               [color]="chipSuffix.color || color || contrastColor || defaultColor"
               [show]="chipSuffix.show"
               [tooltip]="chipSuffix.tooltip"
-              (click)="chipSuffixClick(chipSuffix, $event)">
+              (click)="chipSuffixClick(chipSuffix, $event, value)">
             <ng-container *ngTemplateOutlet="chipSuffix.templateRef"></ng-container>
           </fs-chip-suffix>
         }

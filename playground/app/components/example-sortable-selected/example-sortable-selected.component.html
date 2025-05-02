@@ -1,14 +1,22 @@
 <fs-chips
-    [(ngModel)]="chips"
+    [(ngModel)]="selected"
+    [compare]="compare"
     [name]="'chips'"
-    [(selected)]="selected"
+    [selectable]="true"
     [sortable]="true">
   @for (chip of chips; track chip) {
     <fs-chip
+        #chipComponent
         [value]="chip"
-        [removable]="true"
         [width]="'100%'">
       {{ chip.name }}
+      @if (chipComponent.selected) {
+        <ng-template
+          fsChipSuffix
+          [icon]="'edit'"
+          (click)="suffixClick($event)">
+        </ng-template>
+      }
     </fs-chip>
   }
 </fs-chips>

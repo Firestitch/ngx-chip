@@ -3,21 +3,19 @@
 .fs-chips {
   display: flex;
   flex-wrap: wrap;
-
-  &:not(.chips-sortable) {
-    gap: 5px;
-  }
+  gap: 5px;
 
   &.chips-sortable {
+    gap: 8px;
     flex-direction: column;
-
-    .fs-chip-drag-container {
-      border-bottom: 8px solid transparent;
-    }
 
     ::ng-deep {
       .cdk-drag-placeholder {
         opacity: .3;
+      }
+
+      .selected-check {
+        display: none !important;
       }
     }
   }
@@ -63,13 +61,13 @@
 
       &.select-button-selected {
         mat-icon {
-          color: fs-styles.$success-color;
+          color: fs-styles.$error-color;
         }
       }
 
       &.select-button-unselected {
         mat-icon {
-          color: fs-styles.$error-color;
+          color: fs-styles.$success-color;
         }
       }
     }

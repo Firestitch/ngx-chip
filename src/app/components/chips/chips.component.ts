@@ -3,13 +3,11 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ContentChildren,
-  EventEmitter,
   forwardRef,
   Input,
   IterableDiffer,
   IterableDiffers,
   OnDestroy,
-  Output,
   QueryList,
   ViewChild,
 } from '@angular/core';
@@ -44,20 +42,18 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
   @ContentChildren(FsChipComponent)
   public chips: QueryList<FsChipComponent>;
 
-  @Input() public compare;
+  @Input() public compare: (item: any, value: any) => boolean;
 
   @Input() public multiple = true;
 
   @Input() public sortable = false;
 
-  @Input() public selected: any[];
-  @Output() public selectedChange = new EventEmitter();
+  @Input() public selectable = false;
 
   public onChange: (value) => void;
   public onTouch: (value) => void;
 
   private _value = [];
-  private _selectable = false;
   private _destroy$ = new Subject();
   private _chipDiffer: IterableDiffer<FsChipComponent>;
 
@@ -69,14 +65,14 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
   }
 
   public drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this._value, event.previousIndex, event.currentIndex);
+    const chipArray = this.chips.toArray();
+    moveItemInArray(chipArray, event.previousIndex, event.currentIndex);
+    this.chips.reset(chipArray);
 
-    if(this.selected) {
-      this.selected = this._value
-        .filter((value) => this.selected.includes(value));
-      this.selectedChange.emit(this.selected);
-    }
-      
+    this._value = chipArray
+      .filter((chip) => this.selectable ? chip.selected : true)
+      .map((chip) => chip.value);
+
     this.onChange(this._value);
   }
 
@@ -86,7 +82,7 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
   }
 
   public sortPredicate = (index: number) => {
-    return !this.selected ||  index <= this.selected.length - 1;
+    return !this._value || index <= this._value.length - 1;
   };
  
   public set value(value) {
@@ -108,38 +104,35 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
   }
 
   public select(chip: FsChipComponent) {
-    this.selected = [
-      ...this.selected, 
+    this._value = [
+      ...this._value, 
       chip.value,
     ];
-
-    this.selectedChange.emit(this.selected);
-
-    this.updateSelected();  
+    
+    chip.select();
+    this.onChange(this._value);
   }
   
   public unselect(chip: FsChipComponent) {
-    this.selected = this.selected
-      .filter((item) => item !== chip.value);
+    chip.unselect();
+    this._value = this._value
+      .filter((item) => !this._compareFn(item, chip.value));
 
-    this.selectedChange.emit(this.selected);
-
-    this.updateSelected();
+    this.onChange(this._value);
   }
   
-  public updateSelected() {
-    const chipArray = this.chips.toArray().sort((a, b) => {
-      const aSelected = this.selected.includes(a.value);
-      const bSelected = this.selected.includes(b.value);
+  public updateChipOrder() {
+    const chipArray = this.chips.toArray()
+      .sort((a, b) => {
+        const aSelected = this._value.find((item) => this._compareFn(item, a.value));
+        const bSelected = this._value.find((item) => this._compareFn(item, b.value));
       
-      if (aSelected === bSelected) return 0;
+        if (aSelected === bSelected) return 0;
 
-      return aSelected ? -1 : 1;
-    });
+        return aSelected ? -1 : 1;
+      });
 
     this.chips.reset(chipArray);
-    this._value = this.chips.toArray().map((chip) => chip.value);
-    this.onChange(this._value);
   }
 
   public writeValue(value: any) {
@@ -153,6 +146,7 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
   public registerOnChange(fn) {
     this.onChange = fn;
   }
+
   public registerOnTouched(fn) {
     this.onTouch = fn;
   }
@@ -160,8 +154,6 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
   private _subscribeToSelectionChange() {
     const changed = this._chipDiffer.diff(this.chips);
     changed?.forEachAddedItem((change) => {
-      this._selectable = this.chips.some((chip) => chip.selectable);
-
       change.item.hasChips = true;
       change.item.selectedToggled
         .pipe(
@@ -181,16 +173,17 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
                 this.value.splice(valueIndex, 1);
               }
             }
-          } else {
-            this.chips
-              .forEach((chip) => {
-                if(!this._compareFn(chip.value, value)) {
-                  chip.unselect();
-                }
-              });
-
-            this.value = selected ? value : null;
           }
+          // } else {
+          //   this.chips
+          //     .forEach((chip) => {
+          //       if(!this._compareFn(chip.value, value)) {
+          //         chip.unselect();
+          //       }
+          //     });
+
+          //   this.value = selected ? value : null;
+          // }
 
           this.onChange(this._value);
           this.onTouch(this._value);
@@ -215,16 +208,16 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
     this._cdRef.markForCheck();
   }
 
-  private _compareFn(o1, o2) {
+  private _compareFn(item, chipValue) {
     if (this.compare) {
-      return this.compare(o1, o2);
+      return this.compare(item, chipValue);
     }
 
-    return o1 === o2;
+    return item === chipValue;
   }
 
   private _updateChips() {
-    if (this.multiple && this._selectable) {
+    if (this.multiple) {
       if (Array.isArray(this.value)) {
         this.chips.forEach((chip) => {
           const selected = this.value
