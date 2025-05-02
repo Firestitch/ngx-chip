@@ -71,9 +71,11 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
     moveItemInArray(chipArray, event.previousIndex, event.currentIndex);
     this.chips.reset(chipArray);
 
-    this._value = chipArray
-      .filter((chip) => this.selectable ? chip.selected : true)
-      .map((chip) => chip.value);
+    this._value = this.chips
+      .map((chip) => {
+        return this._value.find((item) => this._compareFn(item, chip.value));
+      })
+      .filter((item) => !!item);
 
     this.onChange(this._value);
   }
@@ -138,10 +140,7 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
   }
 
   public writeValue(value: any) {
-    if (value !== this.value) {
-      this._value = value;
-    }
-
+    this._value = value;
     this._updateChips();
   }
 

@@ -29,7 +29,13 @@ export class ExampleSortableSelectedComponent implements OnInit {
   };
 
   public suffixClick(event: { event: MouseEvent, data: any }) {
-    event.data.name = 'Changed';
+    this.selected = this.selected.map((item) => {
+      if (item.value === event.data.value) {
+        return { ...item, name: 'Changed' };
+      }
+
+      return item;
+    });
   }
 
 }

@@ -13,10 +13,6 @@
       .cdk-drag-placeholder {
         opacity: .3;
       }
-
-      .selected-check {
-        display: none !important;
-      }
     }
   }
 
@@ -46,6 +42,10 @@
     &.chips-selectable {
       .chip-handle {
         order: 10;
+      }
+
+      .selected-check {
+        display: none !important;
       }
     }
 
