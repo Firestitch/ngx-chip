@@ -140,7 +140,7 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
   }
 
   public writeValue(value: any) {
-    this._value = value;
+    this._value = value || [];
     this._updateChips();
   }
 
@@ -218,21 +218,39 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
   }
 
   private _updateChips() {
-    if (this.multiple) {
-      if (Array.isArray(this.value)) {
-        this.chips.forEach((chip) => {
-          const selected = this.value
-            .some((item) => {
-              return this._compareFn(item, chip.value);
-            });
-
-          if(selected) {
-            chip.select();
-          } else {
-            chip.unselect();
+    if (this.multiple && this.chips) {
+      const chips = this.chips.toArray()
+        .sort((c1, c2) => {
+          const aIndex = this._value.findIndex((item) => this._compareFn(item, c1.value));
+          const bIndex = this._value.findIndex((item) => this._compareFn(item, c2.value));
+          
+          // If both are in _value, sort by their position in _value
+          if (aIndex !== -1 && bIndex !== -1) {
+            return aIndex - bIndex;
           }
+          
+          // If only one is in _value, it comes first
+          if (aIndex !== -1) return -1;
+          if (bIndex !== -1) return 1;
+          
+          // If neither is in _value, maintain original order
+          return 0;
         });
-      }
+
+      this.chips.reset(chips);
+
+      this.chips.forEach((chip) => {
+        const selected = this.value
+          .some((item) => {
+            return this._compareFn(item, chip.value);
+          });
+
+        if(selected) {
+          chip.select();
+        } else {
+          chip.unselect();
+        }
+      });
     }
   }
 }

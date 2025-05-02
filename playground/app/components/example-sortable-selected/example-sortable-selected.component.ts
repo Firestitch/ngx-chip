@@ -11,8 +11,9 @@ export class ExampleSortableSelectedComponent implements OnInit {
 
   public chips = [];
   public selected = [
-    { name: 'Tag 1', value: 1 },
     { name: 'Tag 2', value: 2 },
+    { name: 'Tag 1', value: 1 },
+    { name: 'Tag 3', value: 3 },
   ];
   
   public ngOnInit(): void {
