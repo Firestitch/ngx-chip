@@ -55,6 +55,12 @@
   ::ng-deep mat-icon {
     font-size: 25px;
   }
+
+  .prefixes {
+    display: flex;
+    flex-direction: row;
+    margin-right: 3px;
+  }
   
   .actions {
     display: flex;
@@ -110,6 +116,10 @@
     &.sub-content {
       padding: 4px 8px;
     }
+
+    &.prefixable:not(.imaged) {
+      padding-left: 4px;
+    }
   }
 
   &.size-small {
@@ -122,6 +132,10 @@
       height: 25px;
       width: 25px;
       margin-right: 5px;
+    }
+
+    &.prefixable:not(.imaged) {
+      padding-left: 3px;
     }
 
     &.iconed:not(.imaged) {
@@ -163,6 +177,10 @@
 
     .fs-chip-content {
       font-size: 75%;
+    }
+
+    &.prefixable:not(.imaged) {
+      padding-left: 2px;
     }
 
     .image {
@@ -209,6 +227,10 @@
 
     .fs-chip-content {
       font-size: 65%;
+    }
+
+    &.prefixable:not(.imaged) {
+      padding-left: 2px;
     }
 
     .image {

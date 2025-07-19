@@ -9,21 +9,15 @@ import {
 
 
 @Directive({
-  selector: '[fsChipSuffix]',
+  selector: '[fsChipPrefix]',
 })
-export class FsChipSuffixDirective {
+export class FsChipPrefixDirective {
 
   @Input() public icon: string;
-
-  @Input() public link: string;
-
-  @Input() public linkTarget: string;
 
   @Input() public color: string;
 
   @Input() public data: any;
-
-  @Input() public tooltip: string;
 
   // eslint-disable-next-line @angular-eslint/no-output-native
   @Output() public click = new EventEmitter<{ event: MouseEvent, data: any }>();

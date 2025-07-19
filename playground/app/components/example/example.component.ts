@@ -18,6 +18,8 @@ export class ExampleComponent {
   public size: any = 'large';
   public outlined = false;
   public selected = false;
+  public showPrefix = false;
+  public show = true;
   public selectable = false;
   public backgroundColor = '#e7e7e7';
   public color;
@@ -32,6 +34,19 @@ export class ExampleComponent {
   public imageChanged() {
     this.image = this.showImage ? '/assets/headshot2.jpg' : '';
   }
+
+  public refresh() {
+    this.show = false;
+    this._cdRef.detectChanges();
+    setTimeout(() => {
+      this.show = true;
+      this._cdRef.detectChanges();
+    });
+  }
+
+  public prefixClick(e) {
+    this._message.success('Prefix clicked');
+  } 
 
   public chipSelectedToggled(e) {
     this.selected = e.selected;

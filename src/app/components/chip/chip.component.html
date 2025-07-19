@@ -8,6 +8,7 @@
       [style.width]="width"
       [style.color]="color || contrastColor || defaultColor"
       [class.actionable]="chipSuffixes.length !== 0 || (removed.observed && removable)"
+      [class.prefixable]="chipPrefixes.length !== 0"
       [class.shape-round]="shape === 'round'"
       [class.shape-square]="shape === 'square'"
       [class.size-small]="size === 'small'"
@@ -26,6 +27,18 @@
         [src]="image"
         class="image"
         alt="">
+    }
+    @if (chipPrefixes.length !== 0) {
+      <div class="prefixes">
+        @for (chipPrefix of chipPrefixes; track chipPrefix) {
+          <fs-chip-prefix
+              [icon]="chipPrefix.icon"
+              [color]="chipPrefix.color || color || contrastColor || defaultColor"
+              (click)="chipPrefix.click.emit({ event: $event, data: value })">
+            <ng-container *ngTemplateOutlet="chipPrefix.templateRef"></ng-container>
+          </fs-chip-prefix>
+        }
+      </div>
     }
     @if (icon) {
       <mat-icon class="icon">
@@ -58,7 +71,6 @@
               [link]="chipSuffix.link"
               [linkTarget]="chipSuffix.linkTarget"
               [color]="chipSuffix.color || color || contrastColor || defaultColor"
-              [show]="chipSuffix.show"
               [tooltip]="chipSuffix.tooltip"
               (click)="chipSuffixClick(chipSuffix, $event, value)">
             <ng-container *ngTemplateOutlet="chipSuffix.templateRef"></ng-container>

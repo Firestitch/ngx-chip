@@ -43,6 +43,15 @@
   </fs-label-field>
   <fs-label-field>
     <fs-label>
+      Show Prefix
+    </fs-label>
+    <mat-checkbox
+      [(ngModel)]="showPrefix"
+      (ngModelChange)="refresh()">
+    </mat-checkbox>
+  </fs-label-field>
+  <fs-label-field>
+    <fs-label>
       Allow Selectable
     </fs-label>
     <mat-checkbox
@@ -121,30 +130,40 @@
     #chipTemplate
     let-shape="shape"
     let-subcontent="subcontent">
-  <fs-chip
-      [backgroundColor]="backgroundColor"
-      [image]="image"
-      [shape]="shape"
-      [color]="color"
-      [selected]="selected"
-      [selectable]="selectable"
-      [removable]="removable"
-      [outlined]="outlined"
-      [icon]="showIcon ? 'settings' : null"
-      [size]="size"
-      (removed)="chipRemoved($event)">
-    Tag A
-    @for (action of actions; track action.icon) {
-      <ng-template
-        fsChipSuffix
-        [icon]="action.icon"
-        (click)="action.click($event)">
-      </ng-template>
-    }
-    @if (subcontent) {
-      <ng-template fsChipSubcontent>
-        {{ subcontent }}
-      </ng-template>
-    }
-  </fs-chip>
+  @if (show) {
+    <fs-chip
+        [backgroundColor]="backgroundColor"
+        [image]="image"
+        [shape]="shape"
+        [color]="color"
+        [selected]="selected"
+        [selectable]="selectable"
+        [removable]="removable"
+        [outlined]="outlined"
+        [icon]="showIcon ? 'settings' : null"
+        [size]="size"
+        (removed)="chipRemoved($event)">
+      @if (showPrefix) {
+        <ng-template
+          fsChipPrefix
+          [icon]="'add_circle_outline'"
+          [show]="showPrefix"
+          (click)="prefixClick($event)">
+        </ng-template>
+      }
+      Tag A
+      @for (action of actions; track action.icon) {
+        <ng-template
+          fsChipSuffix
+          [icon]="action.icon"
+          (click)="action.click($event)">
+        </ng-template>
+      }
+      @if (subcontent) {
+        <ng-template fsChipSubcontent>
+          {{ subcontent }}
+        </ng-template>
+      }
+    </fs-chip>
+  }
 </ng-template>

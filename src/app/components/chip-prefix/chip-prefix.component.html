@@ -1,0 +1,12 @@
+<ng-content></ng-content>
+@if (icon) {
+  <mat-icon
+      [class.clickable]="clickable"
+      cdkHighlight
+      [style.color]="color"
+      [matTooltip]="tooltip"
+      class="action"
+      (click)="click.emit($event)">
+    {{ icon }}
+  </mat-icon>
+}

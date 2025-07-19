@@ -16,6 +16,7 @@ import {
 
 import { Observable, Subject } from 'rxjs';
 
+import { FsChipPrefixDirective } from '../../directives/chip-prefix.directive';
 import { FsChipSubcontentDirective } from '../../directives/chip-subcontent.directive';
 import { FsChipSuffixDirective } from '../../directives/chip-suffix.directive';
 
@@ -33,6 +34,9 @@ export class FsChipComponent implements OnDestroy, OnChanges {
 
   @ContentChildren(FsChipSuffixDirective) 
   public chipSuffixes: QueryList<FsChipSuffixDirective>;
+
+  @ContentChildren(FsChipPrefixDirective)
+  public chipPrefixes: QueryList<FsChipPrefixDirective>;
 
   @ContentChild(FsChipSubcontentDirective, { read: TemplateRef })
   public chipSubcontentTemplateRef: TemplateRef<void>;
