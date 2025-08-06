@@ -26,6 +26,10 @@
     display: flex;
     align-items: center;
 
+    .selected-check {
+      display: none !important;
+    }
+
     &.fs-chip-drag-preview {
       display: flex;
       overflow: visible;
@@ -42,10 +46,6 @@
     &.chips-selectable {
       .chip-handle {
         order: 10;
-      }
-
-      .selected-check {
-        display: none !important;
       }
     }
 
