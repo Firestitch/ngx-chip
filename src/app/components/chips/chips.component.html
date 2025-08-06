@@ -50,6 +50,7 @@
 } @else {
   <div
       class="fs-chips"
+      [class.orientation-vertical]="orientation === 'vertical'"
       [style.width]="width">
     @for (chip of chips; track chip) {
       <div class="chip-container">
