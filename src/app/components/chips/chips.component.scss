@@ -5,10 +5,12 @@
   flex-wrap: wrap;
   gap: 5px;
 
-  &.chips-sortable {
+  &.orientation-vertical {
     gap: 8px;
     flex-direction: column;
+  }
 
+  &.chips-sortable {
     ::ng-deep {
       .cdk-drag-placeholder {
         opacity: .3;
@@ -19,13 +21,23 @@
   .fs-chip-drag-container {
     display: flex;
   }
+    
+  ::ng-deep {
+    .selected-check {
+      display: none !important;
+    }
+
+    .cdk-drag-placeholder {
+      opacity: .5;
+    }
+  }
 }
 
 ::ng-deep {
   .fs-chip-drag-container {
     display: flex;
     align-items: center;
-
+    
     .selected-check {
       display: none !important;
     }

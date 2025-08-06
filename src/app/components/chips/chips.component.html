@@ -1,7 +1,8 @@
 @if (sortable) {
   <div
-      class="fs-chips chips-sortable"
+      [ngClass]="['fs-chips']"
       [style.width]="width"
+      [class.orientation-vertical]="orientation === 'vertical' || sortable"
       cdkDropList
       [cdkDropListLockAxis]="'y'"
       [cdkDropListSortPredicate]="sortPredicate"
