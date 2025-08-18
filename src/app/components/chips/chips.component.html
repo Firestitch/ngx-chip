@@ -2,7 +2,7 @@
   <div
       [ngClass]="['fs-chips']"
       [style.width]="width"
-      [class.orientation-vertical]="orientation === 'vertical' || sortable"
+      [class.orientation-vertical]="orientationVertical"
       cdkDropList
       [cdkDropListLockAxis]="'y'"
       [cdkDropListSortPredicate]="sortPredicate"
@@ -13,47 +13,53 @@
           class="fs-chip-drag-container"
           [class.chips-selectable]="!!selectable"
           [cdkDragPreviewClass]="'fs-chip-drag-preview'">
-        <a
-            class="chip-handle"
-            mat-icon-button
-            [ngClass]="{ 'visible': (selectable && chip.selected) || (!selectable && sortable) }"
-            cdkDragHandle>
-          <mat-icon>
-            drag_indicator
-          </mat-icon>
-        </a>
-        @if (selectable) {
-          @if (chip.selected) {
-            <a
-                class="select-button select-button-selected"
-                (click)="unselect(chip)"
-                mat-icon-button>
-              <mat-icon>
-                check_box
-              </mat-icon>
-            </a>
-          } @else {
-            <a
-                class="select-button select-button-unselected"
-                (click)="select(chip)"
-                mat-icon-button>
-              <mat-icon>
-                check_box_outline_blank
-              </mat-icon>
-            </a>
+        <div
+            class="fs-chip-container"
+            [class.orientation-vertical]="orientationVertical">
+          <a
+              class="chip-handle"
+              mat-icon-button
+              [ngClass]="{ 'visible': (selectable && chip.selected) || (!selectable && sortable) }"
+              cdkDragHandle>
+            <mat-icon>
+              drag_indicator
+            </mat-icon>
+          </a>
+          @if (selectable) {
+            @if (chip.selected) {
+              <a
+                  class="select-button select-button-selected"
+                  (click)="unselect(chip)"
+                  mat-icon-button>
+                <mat-icon>
+                  check_box
+                </mat-icon>
+              </a>
+            } @else {
+              <a
+                  class="select-button select-button-unselected"
+                  (click)="select(chip)"
+                  mat-icon-button>
+                <mat-icon>
+                  check_box_outline_blank
+                </mat-icon>
+              </a>
+            }
           }
-        }
-        <ng-component [ngTemplateOutlet]="chip.templateRef"></ng-component>
+          <ng-component [ngTemplateOutlet]="chip.templateRef"></ng-component>
+        </div>
       </div>
     }
   </div>
 } @else {
   <div
       class="fs-chips"
-      [class.orientation-vertical]="orientation === 'vertical'"
+      [class.orientation-vertical]="orientationVertical"
       [style.width]="width">
     @for (chip of chips; track chip) {
-      <div class="chip-container">
+      <div
+          class="fs-chip-container"
+          [class.orientation-vertical]="orientationVertical">
         <ng-component [ngTemplateOutlet]="chip.templateRef"></ng-component>
       </div>
     }

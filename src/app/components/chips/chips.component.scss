@@ -1,5 +1,20 @@
 @use '@firestitch/style/styles' as fs-styles;
 
+::ng-deep {
+  .fs-chip-container {
+    &.orientation-vertical {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      
+      .selected-check {
+        display: none !important;
+      }
+    }
+  }
+}
+
+
 .fs-chips {
   display: flex;
   flex-wrap: wrap;
@@ -9,7 +24,7 @@
     gap: 8px;
     flex-direction: column;
   }
-
+  
   &.chips-sortable {
     ::ng-deep {
       .cdk-drag-placeholder {
@@ -23,10 +38,6 @@
   }
     
   ::ng-deep {
-    .selected-check {
-      display: none !important;
-    }
-
     .cdk-drag-placeholder {
       opacity: .5;
     }
@@ -37,10 +48,6 @@
   .fs-chip-drag-container {
     display: flex;
     align-items: center;
-    
-    .selected-check {
-      display: none !important;
-    }
 
     &.fs-chip-drag-preview {
       display: flex;
@@ -50,7 +57,7 @@
         visibility: hidden;
       }
 
-      &.chip-container .fs-chip {
+      &.fs-chip-container .fs-chip {
         box-shadow: 3px 3px 3px 0px rgba(196,196,196,1);
       }
     }

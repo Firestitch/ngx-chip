@@ -154,6 +154,10 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
     this.onTouch = fn;
   }
 
+  public get orientationVertical(): boolean {
+    return this.orientation === 'vertical' || this.sortable;
+  }
+
   private _subscribeToSelectionChange() {
     const changed = this._chipDiffer.diff(this.chips);
     changed?.forEachAddedItem((change) => {
