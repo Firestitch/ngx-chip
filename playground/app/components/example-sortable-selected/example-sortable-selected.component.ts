@@ -13,7 +13,7 @@ export class ExampleSortableSelectedComponent implements OnInit {
   public selected = [
     { name: 'Tag 2', value: 2 },
     { name: 'Tag 1', value: 1 },
-    { name: 'Tag 3', value: 3 },
+    { name: 'Tag 4', value: 4 },
   ];
   
   public ngOnInit(): void {

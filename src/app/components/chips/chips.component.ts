@@ -4,6 +4,7 @@ import {
   Component,
   ContentChildren,
   forwardRef,
+  inject,
   Input,
   IterableDiffer,
   IterableDiffers,
@@ -60,11 +61,10 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
   private _value = [];
   private _destroy$ = new Subject();
   private _chipDiffer: IterableDiffer<FsChipComponent>;
+  private _cdRef = inject(ChangeDetectorRef);
+  private _iterable = inject(IterableDiffers);
 
-  constructor(
-    private _cdRef: ChangeDetectorRef,
-    private _iterable: IterableDiffers,
-  ) {
+  constructor() {
     this._chipDiffer = this._iterable.find([]).create();
   }
 
@@ -126,20 +126,6 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
 
     this.onChange(this._value);
   }
-  
-  public updateChipOrder() {
-    const chipArray = this.chips.toArray()
-      .sort((a, b) => {
-        const aSelected = this._value.find((item) => this._compareFn(item, a.value));
-        const bSelected = this._value.find((item) => this._compareFn(item, b.value));
-      
-        if (aSelected === bSelected) return 0;
-
-        return aSelected ? -1 : 1;
-      });
-
-    this.chips.reset(chipArray);
-  }
 
   public writeValue(value: any) {
     this._value = value || [];
@@ -181,16 +167,6 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
               }
             }
           }
-          // } else {
-          //   this.chips
-          //     .forEach((chip) => {
-          //       if(!this._compareFn(chip.value, value)) {
-          //         chip.unselect();
-          //       }
-          //     });
-
-          //   this.value = selected ? value : null;
-          // }
 
           this.onChange(this._value);
           this.onTouch(this._value);
@@ -225,25 +201,27 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
 
   private _updateChips() {
     if (this.multiple && this.chips) {
-      const chips = this.chips.toArray()
-        .sort((c1, c2) => {
-          const aIndex = this._value.findIndex((item) => this._compareFn(item, c1.value));
-          const bIndex = this._value.findIndex((item) => this._compareFn(item, c2.value));
+      if(this.orientationVertical) {
+        const chips = this.chips.toArray()
+          .sort((c1, c2) => {
+            const aIndex = this._value.findIndex((item) => this._compareFn(item, c1.value));
+            const bIndex = this._value.findIndex((item) => this._compareFn(item, c2.value));
           
-          // If both are in _value, sort by their position in _value
-          if (aIndex !== -1 && bIndex !== -1) {
-            return aIndex - bIndex;
-          }
+            // If both are in _value, sort by their position in _value
+            if (aIndex !== -1 && bIndex !== -1) {
+              return aIndex - bIndex;
+            }
           
-          // If only one is in _value, it comes first
-          if (aIndex !== -1) return -1;
-          if (bIndex !== -1) return 1;
+            // If only one is in _value, it comes first
+            if (aIndex !== -1) return -1;
+            if (bIndex !== -1) return 1;
           
-          // If neither is in _value, maintain original order
-          return 0;
-        });
+            // If neither is in _value, maintain original order
+            return 0;
+          });
 
-      this.chips.reset(chips);
+        this.chips.reset(chips);
+      }
 
       this.chips.forEach((chip) => {
         const selected = this.value
