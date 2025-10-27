@@ -9,7 +9,8 @@ import {
 
 
 @Directive({
-  selector: '[fsChipSuffix]',
+    selector: '[fsChipSuffix]',
+    standalone: true,
 })
 export class FsChipSuffixDirective {
 

@@ -16,31 +16,27 @@ import { FsChipSubcontentDirective } from './directives/chip-subcontent.directiv
 import { FsChipSuffixDirective } from './directives/chip-suffix.directive';
 
 @NgModule({
-  imports: [
-    CommonModule,
-
-    DragDropModule,
-    MatIconModule,
-    MatTooltipModule,
-
-    FsLabelModule,
-  ],
-  exports: [
-    FsChipsComponent,
-    FsChipComponent,
-    FsChipSuffixDirective,
-    FsChipPrefixDirective,
-    FsChipSubcontentDirective,
-  ],
-  declarations: [
-    FsChipsComponent,
-    FsChipComponent,
-    FsChipSuffixComponent,
-    FsChipPrefixComponent,
-    FsChipPrefixDirective,
-    FsChipSuffixDirective,
-    FsChipSubcontentDirective,
-  ],
+    imports: [
+        CommonModule,
+        DragDropModule,
+        MatIconModule,
+        MatTooltipModule,
+        FsLabelModule,
+        FsChipsComponent,
+        FsChipComponent,
+        FsChipSuffixComponent,
+        FsChipPrefixComponent,
+        FsChipPrefixDirective,
+        FsChipSuffixDirective,
+        FsChipSubcontentDirective,
+    ],
+    exports: [
+        FsChipsComponent,
+        FsChipComponent,
+        FsChipSuffixDirective,
+        FsChipPrefixDirective,
+        FsChipSubcontentDirective,
+    ],
 })
 export class FsChipModule {
   public static forRoot(): ModuleWithProviders<FsChipModule> {

@@ -1,11 +1,26 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { FsLabelModule } from '@firestitch/label';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { FormsModule } from '@angular/forms';
+import { FsChipsComponent } from '../../../../src/app/components/chips/chips.component';
+import { FsChipComponent } from '../../../../src/app/components/chip/chip.component';
+import { JsonPipe } from '@angular/common';
 
 
 @Component({
-  selector: 'example-with-array',
-  templateUrl: './example-with-array.component.html',
-  styleUrls: ['./example-with-array.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'example-with-array',
+    templateUrl: './example-with-array.component.html',
+    styleUrls: ['./example-with-array.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        FsLabelModule,
+        MatCheckbox,
+        FormsModule,
+        FsChipsComponent,
+        FsChipComponent,
+        JsonPipe,
+    ],
 })
 export class ExampleWithArrayComponent implements OnInit {
 

@@ -19,13 +19,26 @@ import { Observable, Subject } from 'rxjs';
 import { FsChipPrefixDirective } from '../../directives/chip-prefix.directive';
 import { FsChipSubcontentDirective } from '../../directives/chip-subcontent.directive';
 import { FsChipSuffixDirective } from '../../directives/chip-suffix.directive';
+import { FsChipPrefixComponent } from '../chip-prefix/chip-prefix.component';
+import { NgTemplateOutlet, NgStyle, NgClass } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { FsChipSuffixComponent } from '../chip-suffix/chip-suffix.component';
 
 
 @Component({
-  selector: 'fs-chip',
-  templateUrl: './chip.component.html',
-  styleUrls: ['./chip.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'fs-chip',
+    templateUrl: './chip.component.html',
+    styleUrls: ['./chip.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        FsChipPrefixComponent,
+        NgTemplateOutlet,
+        MatIcon,
+        NgStyle,
+        FsChipSuffixComponent,
+        NgClass,
+    ],
 })
 export class FsChipComponent implements OnDestroy, OnChanges {
 
