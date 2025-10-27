@@ -1,18 +1,4 @@
-import {
-  ChangeDetectionStrategy, ChangeDetectorRef,
-  Component,
-  ContentChild,
-  ContentChildren,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnDestroy,
-  Output,
-  QueryList,
-  SimpleChanges,
-  TemplateRef,
-  ViewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, EventEmitter, Input, OnChanges, OnDestroy, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, inject } from '@angular/core';
 
 import { Observable, Subject } from 'rxjs';
 
@@ -41,6 +27,8 @@ import { FsChipSuffixComponent } from '../chip-suffix/chip-suffix.component';
     ],
 })
 export class FsChipComponent implements OnDestroy, OnChanges {
+  private _cdRef = inject(ChangeDetectorRef);
+
 
   @ViewChild(TemplateRef, { static: true }) 
   public templateRef: TemplateRef<void>;
@@ -99,10 +87,6 @@ export class FsChipComponent implements OnDestroy, OnChanges {
   public defaultBackgroundColor = '#e7e7e7';
 
   private _destroy$ = new Subject();
-
-  constructor(
-    private _cdRef: ChangeDetectorRef,
-  ) {}
 
   public click() {
     if (this.selectable) {
