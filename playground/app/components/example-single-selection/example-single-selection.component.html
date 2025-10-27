@@ -3,21 +3,24 @@
     Tags
   </fs-label>
   <fs-chips
-      [(ngModel)]="chip"
-      [multiple]="false"
-      (ngModelChange)="change($event)">
-    <fs-chip
-        *ngFor="let chip of chips"
+    [(ngModel)]="chip"
+    [multiple]="false"
+    (ngModelChange)="change($event)">
+    @for (chip of chips; track chip) {
+      <fs-chip
         [selectable]="true"
         [value]="chip">
-      {{ chip.name }}
-    </fs-chip>
+        {{ chip.name }}
+      </fs-chip>
+    }
   </fs-chips>
-  <div *ngIf="chip">
-    <br>
-    <fs-label>
-      Result
-    </fs-label>
-    {{ chip | json }}
+  @if (chip) {
+    <div>
+      <br>
+        <fs-label>
+          Result
+        </fs-label>
+        {{ chip | json }}
+      </div>
+    }
   </div>
-</div>
