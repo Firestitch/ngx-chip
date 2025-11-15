@@ -1,4 +1,7 @@
+import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, EventEmitter, Input, OnChanges, OnDestroy, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, inject } from '@angular/core';
+
+import { MatIcon } from '@angular/material/icon';
 
 import { Observable, Subject } from 'rxjs';
 
@@ -6,29 +9,25 @@ import { FsChipPrefixDirective } from '../../directives/chip-prefix.directive';
 import { FsChipSubcontentDirective } from '../../directives/chip-subcontent.directive';
 import { FsChipSuffixDirective } from '../../directives/chip-suffix.directive';
 import { FsChipPrefixComponent } from '../chip-prefix/chip-prefix.component';
-import { NgTemplateOutlet, NgStyle, NgClass } from '@angular/common';
-import { MatIcon } from '@angular/material/icon';
 import { FsChipSuffixComponent } from '../chip-suffix/chip-suffix.component';
 
 
 @Component({
-    selector: 'fs-chip',
-    templateUrl: './chip.component.html',
-    styleUrls: ['./chip.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        FsChipPrefixComponent,
-        NgTemplateOutlet,
-        MatIcon,
-        NgStyle,
-        FsChipSuffixComponent,
-        NgClass,
-    ],
+  selector: 'fs-chip',
+  templateUrl: './chip.component.html',
+  styleUrls: ['./chip.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    FsChipPrefixComponent,
+    NgTemplateOutlet,
+    MatIcon,
+    NgStyle,
+    FsChipSuffixComponent,
+    NgClass,
+  ],
 })
 export class FsChipComponent implements OnDestroy, OnChanges {
-  private _cdRef = inject(ChangeDetectorRef);
-
 
   @ViewChild(TemplateRef, { static: true }) 
   public templateRef: TemplateRef<void>;
@@ -81,14 +80,16 @@ export class FsChipComponent implements OnDestroy, OnChanges {
 
   @Output() public selectedToggled = new EventEmitter();
   @Output() public removed = new EventEmitter();
+  @Output() public click = new EventEmitter();
 
   public hasChips: boolean;
   public defaultColor = '#474747';
   public defaultBackgroundColor = '#e7e7e7';
 
-  private _destroy$ = new Subject();
+  private _destroy$ = new Subject();  
+  private _cdRef = inject(ChangeDetectorRef);
 
-  public click() {
+  public clicked() {
     if (this.selectable) {
       this.selected = !this.selected;
       this.selectedToggled.emit({ value: this.value, selected: this.selected });
@@ -127,9 +128,19 @@ export class FsChipComponent implements OnDestroy, OnChanges {
   }
 
   public chipSuffixClick(chipSuffix: FsChipSuffixDirective, event: MouseEvent, value: any) {
-    event.stopImmediatePropagation();
-    event.stopPropagation();
-    chipSuffix.click.emit({ event, data: value ?? chipSuffix.data });
+    if(chipSuffix.click.observed) {
+      event.stopImmediatePropagation();
+      event.stopPropagation();
+      chipSuffix.click.emit({ event, data: value ?? chipSuffix.data });
+    }
+  }
+
+  public chipPrefixClick(chipPrefix: FsChipPrefixDirective, event: MouseEvent, value: any) {
+    if(chipPrefix.click.observed) {
+      event.stopImmediatePropagation();
+      event.stopPropagation();
+      chipPrefix.click.emit({ event, data: value ?? chipPrefix.data });
+    }
   }
 
   public ngOnDestroy() {

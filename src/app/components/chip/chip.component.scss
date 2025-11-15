@@ -46,8 +46,22 @@
   }
 
   &.outlined {
-    border: 1px solid #e0e0e0;
+    border: 1px solid #f0f0f0;
     box-sizing: border-box;
+
+    &.clickable {
+      &:hover {
+        background-color: #efefef;
+      }
+    }
+  }
+
+  &.clickable {
+    cursor: pointer;
+
+    &:hover {
+      filter: brightness(90%);
+    }
   }
 
   .icon {
@@ -107,9 +121,15 @@
     + fs-chip-suffix {
       margin-left: 3px;
     }
+  }
 
+  fs-chip-suffix,
+  fs-chip-prefix {
     &.clickable {
       cursor: pointer;
+      &:hover {
+        filter: brightness(200%);
+      }
     }
   }
 

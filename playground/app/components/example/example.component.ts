@@ -1,42 +1,45 @@
+import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
-
-import { FsMessage } from '@firestitch/message';
-import { FsLabelModule } from '@firestitch/label';
-import { MatCheckbox } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
+
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatOption } from '@angular/material/core';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { FsColorPickerModule } from '@firestitch/colorpicker';
 import { MatSelect } from '@angular/material/select';
-import { MatOption } from '@angular/material/core';
-import { NgTemplateOutlet } from '@angular/common';
+
+import { FsColorPickerModule } from '@firestitch/colorpicker';
+import { FsLabelModule } from '@firestitch/label';
+import { FsMessage } from '@firestitch/message';
+
+
 import { FsChipComponent } from '../../../../src/app/components/chip/chip.component';
 import { FsChipPrefixDirective } from '../../../../src/app/directives/chip-prefix.directive';
-import { FsChipSuffixDirective } from '../../../../src/app/directives/chip-suffix.directive';
 import { FsChipSubcontentDirective } from '../../../../src/app/directives/chip-subcontent.directive';
+import { FsChipSuffixDirective } from '../../../../src/app/directives/chip-suffix.directive';
 
 @Component({
-    selector: 'example',
-    templateUrl: './example.component.html',
-    styleUrls: ['./example.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        FsLabelModule,
-        MatCheckbox,
-        FormsModule,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        FsColorPickerModule,
-        MatSelect,
-        MatOption,
-        NgTemplateOutlet,
-        FsChipComponent,
-        FsChipPrefixDirective,
-        FsChipSuffixDirective,
-        FsChipSubcontentDirective,
-    ],
+  selector: 'example',
+  templateUrl: './example.component.html',
+  styleUrls: ['./example.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    FsLabelModule,
+    MatCheckbox,
+    FormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    FsColorPickerModule,
+    MatSelect,
+    MatOption,
+    NgTemplateOutlet,
+    FsChipComponent,
+    FsChipPrefixDirective,
+    FsChipSuffixDirective,
+    FsChipSubcontentDirective,
+  ],
 })
 export class ExampleComponent {
 
@@ -74,9 +77,13 @@ export class ExampleComponent {
     });
   }
 
-  public prefixClick(e) {
+  public prefixClick() {
     this._message.success('Prefix clicked');
   } 
+
+  public suffixClick() {
+    this._message.success('Suffix clicked');
+  }
 
   public chipSelectedToggled(e) {
     this.selected = e.selected;
@@ -110,7 +117,11 @@ export class ExampleComponent {
     }
   }
 
-  public chipRemoved(e) {
+  public chipRemoved() {
     this._message.success('Removed Clicked');
+  }
+
+  public chipClicked() {
+    this._message.success('Chip clicked');
   }
 }

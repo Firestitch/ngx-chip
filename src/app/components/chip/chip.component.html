@@ -1,8 +1,8 @@
 <ng-template>
   <div
       class="fs-chip"
-      (click)="click()"
-      [style.backgroundColor]="outlined ? 'transparent' : backgroundColor || defaultBackgroundColor"
+      (click)="clicked()"
+      [style.backgroundColor]="backgroundColor ? backgroundColor : (outlined ? undefined : defaultBackgroundColor)"
       [style.padding]="padding"
       [style.borderColor]="borderColor || (outlined && color ? color : null)"
       [style.width]="width"
@@ -21,6 +21,7 @@
       [class.imaged]="!!image"
       [class.outlined]="outlined"
       [class.selected]="selected"
+      [class.clickable]="click.observed"
       [class.sub-content]="!!chipSubcontentTemplateRef">
     @if (image) {
       <img
@@ -32,9 +33,10 @@
       <div class="prefixes">
         @for (chipPrefix of chipPrefixes; track chipPrefix) {
           <fs-chip-prefix
+              [ngClass]="{ 'clickable': chipPrefix.click.observed }"
               [icon]="chipPrefix.icon"
               [color]="chipPrefix.color || color || contrastColor || defaultColor"
-              (click)="chipPrefix.click.emit({ event: $event, data: value })">
+              (click)="chipPrefixClick(chipPrefix, $event, value)">
             <ng-container *ngTemplateOutlet="chipPrefix.templateRef"></ng-container>
           </fs-chip-prefix>
         }
@@ -66,7 +68,7 @@
       <div class="actions">
         @for (chipSuffix of chipSuffixes; track chipSuffix) {
           <fs-chip-suffix
-              [ngClass]="{ 'clickable': chipSuffix.click.observers.length }"
+              [ngClass]="{ 'clickable': chipSuffix.click.observed }"
               [icon]="chipSuffix.icon"
               [link]="chipSuffix.link"
               [linkTarget]="chipSuffix.linkTarget"

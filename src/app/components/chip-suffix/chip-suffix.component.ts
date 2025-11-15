@@ -1,3 +1,4 @@
+import { NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -5,22 +6,22 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { NgTemplateOutlet } from '@angular/common';
+
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 
 
 @Component({
-    selector: 'fs-chip-suffix',
-    templateUrl: './chip-suffix.component.html',
-    styleUrls: ['./chip-suffix.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        NgTemplateOutlet,
-        MatIcon,
-        MatTooltip,
-    ],
+  selector: 'fs-chip-suffix',
+  templateUrl: './chip-suffix.component.html',
+  styleUrls: ['./chip-suffix.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgTemplateOutlet,
+    MatIcon,
+    MatTooltip,
+  ],
 })
 export class FsChipSuffixComponent {
 

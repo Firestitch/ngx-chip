@@ -1,26 +1,29 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FsLabelModule } from '@firestitch/label';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { FormsModule } from '@angular/forms';
-import { FsChipsComponent } from '../../../../src/app/components/chips/chips.component';
-import { FsChipComponent } from '../../../../src/app/components/chip/chip.component';
 import { JsonPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { MatCheckbox } from '@angular/material/checkbox';
+
+import { FsLabelModule } from '@firestitch/label';
+
+import { FsChipComponent } from '../../../../src/app/components/chip/chip.component';
+import { FsChipsComponent } from '../../../../src/app/components/chips/chips.component';
 
 
 @Component({
-    selector: 'example-with-custom-compare',
-    templateUrl: './example-with-custom-compare.component.html',
-    styleUrls: ['./example-with-custom-compare.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        FsLabelModule,
-        MatCheckbox,
-        FormsModule,
-        FsChipsComponent,
-        FsChipComponent,
-        JsonPipe,
-    ],
+  selector: 'example-with-custom-compare',
+  templateUrl: './example-with-custom-compare.component.html',
+  styleUrls: ['./example-with-custom-compare.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    FsLabelModule,
+    MatCheckbox,
+    FormsModule,
+    FsChipsComponent,
+    FsChipComponent,
+    JsonPipe,
+  ],
 })
 export class ExampleWithCustomCompareComponent implements OnInit {
 
