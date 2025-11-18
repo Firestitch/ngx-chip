@@ -50,6 +50,7 @@ export class ExampleComponent {
   public actionable = false;
   public size: any = 'large';
   public outlined = false;
+  public outlineDash = false;
   public selected = false;
   public showPrefix = false;
   public show = true;

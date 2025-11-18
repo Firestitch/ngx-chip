@@ -64,7 +64,9 @@ export class FsChipComponent implements OnDestroy, OnChanges {
 
   @Input() public shape: 'round' | 'square' = 'round';
 
-  @Input() public outlined;
+  @Input() public outlined: boolean;
+
+  @Input() public outlineDash: boolean;
 
   @Input() public icon: string;
   
@@ -76,7 +78,7 @@ export class FsChipComponent implements OnDestroy, OnChanges {
 
   @Input() public contrastColor: string;
 
-  @Input() public size: 'small' | 'tiny' | 'micro' | 'large' = 'large';
+  @Input() public size: 'small' | 'tiny' | 'micro' | 'large' | 'medium' = 'large';
 
   @Output() public selectedToggled = new EventEmitter();
   @Output() public removed = new EventEmitter();

@@ -65,6 +65,12 @@
     </fs-label>
     <mat-checkbox [(ngModel)]="outlined"></mat-checkbox>
   </fs-label-field>
+  <fs-label-field>
+    <fs-label>
+      Show Outline Dash
+    </fs-label>
+    <mat-checkbox [(ngModel)]="outlineDash"></mat-checkbox>
+  </fs-label-field>
 </div>
 <div class="fs-row.gap-md.wrap">
   @if (!outlined) {
@@ -94,6 +100,9 @@
     <mat-select [(ngModel)]="size">
       <mat-option value="large">
         Large
+      </mat-option>
+      <mat-option value="medium">
+        Medium
       </mat-option>
       <mat-option value="small">
         Small
@@ -142,6 +151,7 @@
         [selectable]="selectable"
         [removable]="removable"
         [outlined]="outlined"
+        [outlineDash]="outlineDash"
         (click)="chipClicked()"
         [icon]="showIcon ? 'settings' : null"
         [size]="size"
