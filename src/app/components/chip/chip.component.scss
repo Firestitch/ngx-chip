@@ -155,7 +155,7 @@
   &.size-medium {
     padding: 0 8px;
     font-size: 90%;
-    min-height: 26px;
+    min-height: 25px;
     line-height: normal;
 
     .image {
@@ -179,7 +179,7 @@
     }
 
     fs-chip-suffix {
-      margin-right: 3px;
+      margin-right: 2px;
     }
 
     .selected-check {
@@ -203,12 +203,12 @@
   &.size-small {
     padding: 0 8px;
     font-size: 85%;
-    min-height: 25px;
+    min-height: 24px;
     line-height: normal;
 
     .image {
-      height: 25px;
-      width: 25px;
+      height: 24px;
+      width: 24px;
       margin-right: 5px;
     }
 
@@ -227,7 +227,7 @@
     }
 
     fs-chip-suffix {
-      margin-right: 2px;
+      margin-right: 1px;
     }
 
     .selected-check {
