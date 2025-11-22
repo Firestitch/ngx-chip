@@ -53,9 +53,11 @@ export class ExampleComponent {
   public outlineDash = false;
   public selected = false;
   public showPrefix = false;
+  public showSuffix = false;
   public show = true;
   public selectable = false;
   public backgroundColor = '#e7e7e7';
+  public borderColor = '';
   public color;
   public icon;
   public config: any = {};

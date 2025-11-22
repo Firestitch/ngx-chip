@@ -52,6 +52,15 @@
   </fs-label-field>
   <fs-label-field>
     <fs-label>
+      Show Suffix
+    </fs-label>
+    <mat-checkbox
+      [(ngModel)]="showSuffix"
+      (ngModelChange)="refresh()">
+    </mat-checkbox>
+  </fs-label-field>
+  <fs-label-field>
+    <fs-label>
       Allow Selectable
     </fs-label>
     <mat-checkbox
@@ -82,6 +91,16 @@
         matInput
         fsColorPicker
         [(ngModel)]="backgroundColor">
+    </mat-form-field>
+  } @else {
+    <mat-form-field>
+      <mat-label>
+        Border Color
+      </mat-label>
+      <input
+        matInput
+        fsColorPicker
+        [(ngModel)]="borderColor">
     </mat-form-field>
   }
   <mat-form-field>
@@ -147,6 +166,7 @@
         [image]="image"
         [shape]="shape"
         [color]="color"
+        [borderColor]="borderColor"
         [selected]="selected"
         [selectable]="selectable"
         [removable]="removable"
@@ -162,6 +182,8 @@
           [icon]="'add_circle_outline'"
           (click)="prefixClick()">
         </ng-template>
+      }
+      @if (showSuffix) {
         <ng-template
           fsChipSuffix
           [icon]="'edit'"

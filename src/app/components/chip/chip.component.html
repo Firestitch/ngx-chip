@@ -7,7 +7,7 @@
       [style.borderColor]="borderColor || (outlined && color ? color : null)"
       [style.width]="width"
       [style.color]="color || contrastColor || defaultColor"
-      [class.actionable]="chipSuffixes.length !== 0 || (removed.observed && removable)"
+      [class.suffixable]="chipSuffixes.length !== 0 || (removed.observed && removable)"
       [class.prefixable]="chipPrefixes.length !== 0"
       [class.shape-round]="shape === 'round'"
       [class.shape-square]="shape === 'square'"
@@ -67,7 +67,7 @@
       </div>
     }
     @if (chipSuffixes.length !== 0 || (removed.observed && removable)) {
-      <div class="actions">
+      <div class="suffixes">
         @for (chipSuffix of chipSuffixes; track chipSuffix) {
           <fs-chip-suffix
               [ngClass]="{ 'clickable': chipSuffix.click.observed }"
@@ -83,7 +83,7 @@
         @if (removed.observed && removable) {
           <fs-chip-suffix
             [ngClass]="{ 'clickable': true }"
-            [icon]="'remove_circle_outline'"
+            [icon]="'cancel'"
             [color]="color || contrastColor || defaultColor"
             (click)="remove($event)">
           </fs-chip-suffix>
