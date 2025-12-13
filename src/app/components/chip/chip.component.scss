@@ -114,7 +114,7 @@
   }
 
   .selected-check {
-    margin: 0 5px;
+    margin: 0 3px 0 3px;
     display: flex;
   }
 
@@ -138,11 +138,7 @@
   }
 
   &.size-large {
-    &.suffixable,
-    &.selected {
-      padding-right: 5px;
-    }
-    
+    &.suffixable,    
     &.sub-content {
       padding: 4px 8px;
     }
@@ -189,7 +185,6 @@
     }
 
     .selected-check {
-      margin: 0 3px 0 0;
       mat-icon {
         transform: scale(.8);
       }
@@ -237,7 +232,6 @@
     }
 
     .selected-check {
-      margin: 0 2px 0 0;
       mat-icon {
         transform: scale(.7);
       }
@@ -282,11 +276,6 @@
       margin-right: 2px;
     }
 
-    .selected-check {
-      margin: 0 1px 0 0;
-    }
-
-
     &.sub-content {
       padding: 2px 4px;
     }
@@ -327,10 +316,6 @@
       margin-left: 1px;
     }
 
-    .selected-check {
-      margin: 0 1px 0 0;
-    }
-
     &.sub-content {
       padding: 1px 2px;
     }
@@ -350,6 +335,6 @@
 
   &.suffixable,
   &.selected {
-    padding-right: 3px;
+    padding-right: 1px;
   }
 }
