@@ -1,50 +1,51 @@
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 import {
   AfterContentInit,
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ContentChildren,
-  forwardRef,
-  inject,
   Input,
   IterableDiffer,
   IterableDiffers,
   OnDestroy,
   QueryList,
   ViewChild,
+  forwardRef,
+  inject,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { CdkDragDrop, CdkDropList, moveItemInArray, CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
+import { MatIcon } from '@angular/material/icon';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+
 import { FsChipComponent } from '../chip/chip.component';
-import { NgClass, NgTemplateOutlet } from '@angular/common';
-import { MatIcon } from '@angular/material/icon';
 
 
 @Component({
-    selector: 'fs-chips',
-    templateUrl: './chips.component.html',
-    styleUrls: ['./chips.component.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => FsChipsComponent),
-            multi: true,
-        },
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        CdkDropList,
-        NgClass,
-        CdkDrag,
-        CdkDragHandle,
-        MatIcon,
-        NgTemplateOutlet,
-    ],
+  selector: 'fs-chips',
+  templateUrl: './chips.component.html',
+  styleUrls: ['./chips.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => FsChipsComponent),
+      multi: true,
+    },
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    CdkDropList,
+    NgClass,
+    CdkDrag,
+    CdkDragHandle,
+    MatIcon,
+    NgTemplateOutlet,
+  ],
 })
 export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterContentInit {
 
@@ -90,7 +91,11 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
       })
       .filter((item) => !!item);
 
-    this.onChange(this._value);
+    this.change();
+  }
+
+  public change() {
+    this.onChange([...this._value]);
   }
 
   public ngAfterContentInit(): void {
@@ -106,7 +111,7 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
     if (this._value !== value) {
       this._value = value;
 
-      this.onChange(this._value);
+      this.change();
       this.onTouch(this._value);
     }
   }
@@ -127,7 +132,7 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
     ];
     
     chip.select();
-    this.onChange(this._value);
+    this.change();
   }
   
   public unselect(chip: FsChipComponent) {
@@ -135,7 +140,7 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
     this._value = this._value
       .filter((item) => !this._compareFn(item, chip.value));
 
-    this.onChange(this._value);
+    this.change();
   }
 
   public writeValue(value: any) {
@@ -179,7 +184,7 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
             }
           }
 
-          this.onChange(this._value);
+          this.change();
           this.onTouch(this._value);
         });
     });
