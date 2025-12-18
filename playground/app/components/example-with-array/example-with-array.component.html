@@ -4,37 +4,37 @@
 <div class="fs-row.gap-md.wrap">
   @for (chip of chips; track chip) {
     <mat-checkbox
-      [value]="chip"
-      [ngModel]="checkboxes[chip.value]"
-      [value]="chip"
-      (change)="checkboxChange($event)">
+        [value]="chip"
+        [ngModel]="checkboxes[chip.value]"
+        [value]="chip"
+        (change)="checkboxChange($event)">
       {{ chip.name }}
     </mat-checkbox>
   }
 </div>
 <br>
-  <div>
-    <fs-label>
-      Tags
-    </fs-label>
-    <fs-chips
+<div>
+  <fs-label>
+    Tags
+  </fs-label>
+  <fs-chips
       [(ngModel)]="selected"
-      (ngModelChange)="chipsChange($event)">
-      @for (chip of chips; track chip) {
-        <fs-chip
+      (ngModelChange)="chipsChange()">
+    @for (chip of chips; track chip) {
+      <fs-chip
           [value]="chip"
           [selectable]="true">
-          {{ chip.name }}
-        </fs-chip>
-      }
-    </fs-chips>
-  </div>
-  @if (selected) {
-    <div>
-      <br>
-        <fs-label>
-          Result
-        </fs-label>
-        {{ selected | json }}
-      </div>
+        {{ chip.name }}
+      </fs-chip>
     }
+  </fs-chips>
+</div>
+@if (selected) {
+  <div>
+    <br>
+    <fs-label>
+      Result
+    </fs-label>
+    {{ selected | json }}
+  </div>
+}

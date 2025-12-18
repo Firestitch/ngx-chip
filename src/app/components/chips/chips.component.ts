@@ -144,7 +144,7 @@ export class FsChipsComponent implements OnDestroy, ControlValueAccessor, AfterC
   }
 
   public writeValue(value: any) {
-    this._value = value || [];
+    this._value = [...(value || [])];
     this._updateChips();
   }
 

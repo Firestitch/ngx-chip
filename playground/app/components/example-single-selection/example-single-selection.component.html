@@ -3,13 +3,12 @@
     Tags
   </fs-label>
   <fs-chips
-    [(ngModel)]="chip"
-    [multiple]="false"
-    (ngModelChange)="change($event)">
+      [(ngModel)]="chip"
+      (ngModelChange)="change($event)">
     @for (chip of chips; track chip) {
       <fs-chip
-        [selectable]="true"
-        [value]="chip">
+          [selectable]="true"
+          [value]="chip">
         {{ chip.name }}
       </fs-chip>
     }
@@ -17,10 +16,10 @@
   @if (chip) {
     <div>
       <br>
-        <fs-label>
-          Result
-        </fs-label>
-        {{ chip | json }}
-      </div>
-    }
-  </div>
+      <fs-label>
+        Result
+      </fs-label>
+      {{ chip | json }}
+    </div>
+  }
+</div>
