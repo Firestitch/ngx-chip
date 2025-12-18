@@ -30,11 +30,11 @@
 
   &.shape-square {
     border-radius: 5px;
-    padding: 4px 8px;
+    padding: 0 8px;
 
     .image {
-      padding: 4px 0;
-    }
+      padding: 5% 0;
+    }   
   }
 
   &.iconed:not(.imaged) {
@@ -66,6 +66,11 @@
     &:hover {
       filter: brightness(90%);
     }
+  }
+
+  &.sub-content .fs-chip-content{
+    padding-top: 4px;
+    padding-bottom: 4px;
   }
 
   .icon {
@@ -111,6 +116,7 @@
     .fs-chip-subcontent {
       font-size: 85%;
     }
+    
   }
 
   .selected-check {
@@ -123,7 +129,7 @@
     align-items: center;
 
     + fs-chip-suffix {
-      margin-left: 3px;
+      margin-left: 2px;
     }
   }
 
@@ -137,12 +143,24 @@
     }
   }
 
-  &.size-large {
-    &.suffixable,    
-    &.sub-content {
-      padding: 4px 8px;
+  &:not(.shape-square) {
+    &.suffixable,
+    &.selected {
+      padding-right: 0;
     }
+    
+    fs-chip-suffix:last-child {
+      margin-right: 3px;
+    }
+  }
+  
+  &.shape-square {
+    fs-chip-suffix:last-child {
+      margin-right: -3px;
+    }
+  }
 
+  &.size-large {
     &.prefixable:not(.imaged) {
       padding-left: 4px;
     }
@@ -180,18 +198,10 @@
       }
     }
 
-    fs-chip-suffix {
-      margin-right: 2px;
-    }
-
     .selected-check {
       mat-icon {
         transform: scale(.8);
       }
-    }
-    
-    &.sub-content {
-      padding: 4px 7px;
     }
 
     ::ng-deep mat-icon {
@@ -227,18 +237,10 @@
       }
     }
 
-    fs-chip-suffix {
-      margin-right: 2px;
-    }
-
     .selected-check {
       mat-icon {
         transform: scale(.7);
       }
-    }
-    
-    &.sub-content {
-      padding: 3px 6px;
     }
 
     ::ng-deep mat-icon {
@@ -273,11 +275,6 @@
 
     fs-chip-suffix {
       margin-left: 2px;
-      margin-right: 2px;
-    }
-
-    &.sub-content {
-      padding: 2px 4px;
     }
 
     &.shape-round {
@@ -316,10 +313,6 @@
       margin-left: 1px;
     }
 
-    &.sub-content {
-      padding: 1px 2px;
-    }
-
     &.shape-round {
       &.imaged {
         padding-left: 0;
@@ -331,10 +324,5 @@
       height: 12px;
       font-size: 11px;
     }
-  }
-
-  &.suffixable,
-  &.selected {
-    padding-right: 1px;
   }
 }

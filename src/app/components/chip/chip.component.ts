@@ -78,7 +78,7 @@ export class FsChipComponent implements OnDestroy, OnChanges {
 
   @Input() public contrastColor: string;
 
-  @Input() public size: 'small' | 'tiny' | 'micro' | 'large' | 'medium' = 'large';
+  @Input() public size: 'small' | 'tiny' | 'micro' | 'large' | 'medium' = 'medium';
 
   @Output() public selectedToggled = new EventEmitter();
   @Output() public removed = new EventEmitter();

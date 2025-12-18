@@ -48,7 +48,7 @@ export class ExampleComponent {
   public showIcon;
   public removable;
   public actionable = false;
-  public size: any = 'large';
+  public size: any = 'medium';
   public outlined = false;
   public outlineDash = false;
   public selected = false;
