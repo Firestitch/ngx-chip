@@ -7,4 +7,7 @@ export { FsChipPrefixDirective } from './app/directives/chip-prefix.directive';
 export { FsChipSubcontentDirective } from './app/directives/chip-subcontent.directive';
 export { FsChipSuffixDirective } from './app/directives/chip-suffix.directive';
 
+export { FsChipSelectOptionComponent } from './app/components/chip-select/chip-select-option.component';
+export { FsChipSelectTriggerDirective } from './app/components/chip-select/chip-select-trigger.directive';
 export { FsChipSelectComponent } from './app/components/chip-select/chip-select.component';
+

@@ -8,6 +8,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FsLabelModule } from '@firestitch/label';
 
 import { FsChipPrefixComponent } from './components/chip-prefix/chip-prefix.component';
+import { FsChipSelectOptionComponent } from './components/chip-select/chip-select-option.component';
+import { FsChipSelectTriggerDirective } from './components/chip-select/chip-select-trigger.directive';
 import { FsChipSelectComponent } from './components/chip-select/chip-select.component';
 import { FsChipSuffixComponent } from './components/chip-suffix/chip-suffix.component';
 import { FsChipComponent } from './components/chip/chip.component';
@@ -31,6 +33,8 @@ import { FsChipSuffixDirective } from './directives/chip-suffix.directive';
     FsChipSuffixDirective,
     FsChipSubcontentDirective,
     FsChipSelectComponent,
+    FsChipSelectTriggerDirective,
+    FsChipSelectOptionComponent,
   ],
   exports: [
     FsChipsComponent,
@@ -39,6 +43,8 @@ import { FsChipSuffixDirective } from './directives/chip-suffix.directive';
     FsChipPrefixDirective,
     FsChipSubcontentDirective,
     FsChipSelectComponent,
+    FsChipSelectTriggerDirective,
+    FsChipSelectOptionComponent,
   ],
 })
 export class FsChipModule {
