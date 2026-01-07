@@ -1,0 +1,44 @@
+<div class="fs-row.gap-md.wrap">
+  <mat-form-field>
+    <mat-label>
+      Size
+    </mat-label>
+    <mat-select [(ngModel)]="size">
+      <mat-option value="large">
+        Large
+      </mat-option>
+      <mat-option value="medium">
+        Medium
+      </mat-option>
+      <mat-option value="small">
+        Small
+      </mat-option>
+      <mat-option value="tiny">
+        Tiny
+      </mat-option>
+      <mat-option value="micro">
+        Micro
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<br>
+<div class="fs-row.gap-md.wrap.align-start">
+  <fs-label-field>
+    <fs-label>
+      Chip Select
+    </fs-label>
+    <fs-chip-select
+        [size]="size"
+        (select)="onSelect($event)">
+      <fs-chip-select-trigger>
+        More filters
+      </fs-chip-select-trigger>
+      @for (option of filterOptions; track option.value) {
+        <fs-chip-select-option [value]="option.value">
+          {{ option.label }}
+        </fs-chip-select-option>
+      }
+    </fs-chip-select>
+  </fs-label-field>
+</div>

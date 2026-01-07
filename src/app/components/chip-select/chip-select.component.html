@@ -1,0 +1,37 @@
+<fs-chip
+    #chip
+    cdkOverlayOrigin
+    #overlayOrigin="cdkOverlayOrigin"
+    [size]="size"
+    [backgroundColor]="backgroundColor"
+    [borderColor]="borderColor"
+    [color]="color"
+    [shape]="shape"
+    [outlined]="outlined"
+    [outlineDash]="outlineDash"
+    (click)="toggleDropdown()">
+  <div class="fs-chip-select-trigger">
+    @if (trigger) {
+      <ng-container *ngTemplateOutlet="trigger.templateRef"></ng-container>
+    }
+    <span
+        class="fs-chip-select-caret"
+        [class.open]="isOpen">
+      <mat-icon>
+        arrow_drop_down
+      </mat-icon>
+    </span>
+  </div>
+</fs-chip>
+<ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="overlayOrigin"
+    [cdkConnectedOverlayOpen]="isOpen"
+    [cdkConnectedOverlayPositions]="positions"
+    [cdkConnectedOverlayHasBackdrop]="true"
+    [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'"
+    (backdropClick)="closeDropdown()">
+  <div class="fs-chip-select-panel">
+    <ng-content></ng-content>
+  </div>
+</ng-template>

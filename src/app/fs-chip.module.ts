@@ -8,6 +8,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FsLabelModule } from '@firestitch/label';
 
 import { FsChipPrefixComponent } from './components/chip-prefix/chip-prefix.component';
+import { FsChipSelectComponent } from './components/chip-select/chip-select.component';
 import { FsChipSuffixComponent } from './components/chip-suffix/chip-suffix.component';
 import { FsChipComponent } from './components/chip/chip.component';
 import { FsChipsComponent } from './components/chips/chips.component';
@@ -16,27 +17,29 @@ import { FsChipSubcontentDirective } from './directives/chip-subcontent.directiv
 import { FsChipSuffixDirective } from './directives/chip-suffix.directive';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        DragDropModule,
-        MatIconModule,
-        MatTooltipModule,
-        FsLabelModule,
-        FsChipsComponent,
-        FsChipComponent,
-        FsChipSuffixComponent,
-        FsChipPrefixComponent,
-        FsChipPrefixDirective,
-        FsChipSuffixDirective,
-        FsChipSubcontentDirective,
-    ],
-    exports: [
-        FsChipsComponent,
-        FsChipComponent,
-        FsChipSuffixDirective,
-        FsChipPrefixDirective,
-        FsChipSubcontentDirective,
-    ],
+  imports: [
+    CommonModule,
+    DragDropModule,
+    MatIconModule,
+    MatTooltipModule,
+    FsLabelModule,
+    FsChipsComponent,
+    FsChipComponent,
+    FsChipSuffixComponent,
+    FsChipPrefixComponent,
+    FsChipPrefixDirective,
+    FsChipSuffixDirective,
+    FsChipSubcontentDirective,
+    FsChipSelectComponent,
+  ],
+  exports: [
+    FsChipsComponent,
+    FsChipComponent,
+    FsChipSuffixDirective,
+    FsChipPrefixDirective,
+    FsChipSubcontentDirective,
+    FsChipSelectComponent,
+  ],
 })
 export class FsChipModule {
   public static forRoot(): ModuleWithProviders<FsChipModule> {
