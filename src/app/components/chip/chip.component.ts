@@ -102,6 +102,12 @@ export class FsChipComponent implements OnDestroy, OnChanges {
       return;
     }
 
+    // The `click` output collides with the native click event name, so a click
+    // on the chip would otherwise fire a bound `(click)` handler twice (once via
+    // this emit, once via native bubbling). Stop the native event here so the
+    // `click` output is the single source of truth.
+    event.stopPropagation();
+
     if (this.selectable) {
       this.selected = !this.selected;
       this.selectedToggled.emit({ value: this.value, selected: this.selected });
