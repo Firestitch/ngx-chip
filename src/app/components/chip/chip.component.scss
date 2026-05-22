@@ -3,6 +3,10 @@
   min-width: 0;
 }
 
+:host(.disabled) {
+  pointer-events: none;
+}
+
 .fs-chip {
   user-select: none;
   transition: box-shadow 280ms cubic-bezier(.4,0,.2,1);
@@ -66,6 +70,13 @@
     &:hover {
       filter: brightness(90%);
     }
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    filter: grayscale(100%);
+    pointer-events: none;
   }
 
   &.sub-content .fs-chip-content{

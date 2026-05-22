@@ -1,5 +1,5 @@
 import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, EventEmitter, Input, OnChanges, OnDestroy, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, EventEmitter, HostBinding, Input, OnChanges, OnDestroy, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, inject } from '@angular/core';
 
 import { MatIcon } from '@angular/material/icon';
 
@@ -73,7 +73,10 @@ export class FsChipComponent implements OnDestroy, OnChanges {
   @Input() public image: string;
   
   @Input() public selected: boolean;
-  
+
+  @HostBinding('class.disabled')
+  @Input() public disabled: boolean;
+
   @Input() public padding: string;
 
   @Input() public contrastColor: string;
@@ -91,11 +94,20 @@ export class FsChipComponent implements OnDestroy, OnChanges {
   private _destroy$ = new Subject();  
   private _cdRef = inject(ChangeDetectorRef);
 
-  public clicked() {
+  public clicked(event: MouseEvent) {
+    if (this.disabled) {
+      event.stopImmediatePropagation();
+      event.stopPropagation();
+
+      return;
+    }
+
     if (this.selectable) {
       this.selected = !this.selected;
       this.selectedToggled.emit({ value: this.value, selected: this.selected });
     }
+
+    this.click.emit(event);
   }
 
   public select() {

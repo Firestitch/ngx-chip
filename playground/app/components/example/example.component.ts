@@ -51,6 +51,7 @@ export class ExampleComponent {
   public size: any = 'medium';
   public outlined = false;
   public outlineDash = false;
+  public disabled = false;
   public selected = false;
   public showPrefix = false;
   public showSuffix = false;

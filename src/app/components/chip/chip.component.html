@@ -1,7 +1,7 @@
 <ng-template>
   <div
       class="fs-chip"
-      (click)="clicked()"
+      (click)="clicked($event)"
       [style.backgroundColor]="backgroundColor ? backgroundColor : (outlined ? undefined : defaultBackgroundColor)"
       [style.padding]="padding"
       [style.borderColor]="borderColor || (outlined && color ? color : null)"
@@ -23,7 +23,8 @@
       [class.outlined]="outlined"
       [class.outline-dash]="outlineDash"
       [class.selected]="selected"
-      [class.clickable]="click.observed"
+      [class.disabled]="disabled"
+      [class.clickable]="click.observed && !disabled"
       [class.sub-content]="!!chipSubcontentTemplateRef">
     @if (image) {
       <img

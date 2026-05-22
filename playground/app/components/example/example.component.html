@@ -80,6 +80,12 @@
     </fs-label>
     <mat-checkbox [(ngModel)]="outlineDash"></mat-checkbox>
   </fs-label-field>
+  <fs-label-field>
+    <fs-label>
+      Disable
+    </fs-label>
+    <mat-checkbox [(ngModel)]="disabled"></mat-checkbox>
+  </fs-label-field>
 </div>
 <div class="fs-row.gap-md.wrap">
   @if (!outlined) {
@@ -172,6 +178,7 @@
         [removable]="removable"
         [outlined]="outlined"
         [outlineDash]="outlineDash"
+        [disabled]="disabled"
         (click)="chipClicked()"
         [icon]="showIcon ? 'settings' : null"
         [size]="size"
