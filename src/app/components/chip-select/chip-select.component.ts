@@ -65,6 +65,7 @@ export class FsChipSelectComponent implements OnDestroy, AfterContentInit {
   @Input() public color: string;
   @Input() public shape: 'round' | 'square' = 'round';
   @Input() public outlined: boolean;
+  @Input() public disabled: boolean = false;
   @Input() public outlineDash: boolean;
 
   @Output() public select = new EventEmitter<any>();
