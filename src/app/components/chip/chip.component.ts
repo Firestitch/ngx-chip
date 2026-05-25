@@ -102,11 +102,16 @@ export class FsChipComponent implements OnDestroy, OnChanges {
       return;
     }
 
-    // The `click` output collides with the native click event name, so a click
-    // on the chip would otherwise fire a bound `(click)` handler twice (once via
-    // this emit, once via native bubbling). Stop the native event here so the
-    // `click` output is the single source of truth.
-    event.stopPropagation();
+    // The `click` output collides with the native click event name, so when a
+    // consumer binds `(click)` on the chip it would otherwise fire twice (once via
+    // this emit, once via native bubbling). Stop the native event so the `click`
+    // output is the single source of truth — but only when it's actually observed.
+    // When nothing listens to `(click)` (e.g. fs-autocomplete-chips, which relies
+    // on the click bubbling to its own wrapping handler), the native event must be
+    // left to propagate.
+    if (this.click.observed) {
+      event.stopPropagation();
+    }
 
     if (this.selectable) {
       this.selected = !this.selected;
