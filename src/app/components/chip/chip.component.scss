@@ -139,6 +139,10 @@
     display: flex;
     align-items: center;
 
+    a {
+      display: flex;
+    }
+
     + fs-chip-suffix {
       margin-left: 2px;
     }
