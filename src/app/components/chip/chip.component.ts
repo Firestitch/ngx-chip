@@ -32,11 +32,16 @@ export class FsChipComponent implements OnDestroy, OnChanges {
   @ViewChild(TemplateRef, { static: true }) 
   public templateRef: TemplateRef<void>;
 
-  @ContentChildren(FsChipSuffixDirective) 
-  public chipSuffixes: QueryList<FsChipSuffixDirective>;
+  // Initialized so the template can read `.length` and iterate before the first
+  // content query refresh. The chip renders its own `<ng-template>`, and change
+  // detection can reach that view before the declaring view has assigned these
+  // queries — Angular skips `refreshContentQueries` when it traverses a view in
+  // targeted mode. Angular replaces both instances on the first refresh.
+  @ContentChildren(FsChipSuffixDirective)
+  public chipSuffixes: QueryList<FsChipSuffixDirective> = new QueryList();
 
   @ContentChildren(FsChipPrefixDirective)
-  public chipPrefixes: QueryList<FsChipPrefixDirective>;
+  public chipPrefixes: QueryList<FsChipPrefixDirective> = new QueryList();
 
   @ContentChild(FsChipSubcontentDirective, { read: TemplateRef })
   public chipSubcontentTemplateRef: TemplateRef<void>;
@@ -140,8 +145,14 @@ export class FsChipComponent implements OnDestroy, OnChanges {
       this.contrastColor = this.defaultColor;
 
       if(this.backgroundColor && this.backgroundColor !== 'transparent') {
-        this.contrastColor = this._isContrastYIQBlack(this.backgroundColor) ?
-          this.defaultColor : '#fff';
+        const rgb = this._parseColor(this.backgroundColor);
+
+        if (rgb) {
+          // Light backgrounds get a very dark shade of their own hue so the text
+          // reads as part of the chip's colour rather than a flat grey; dark
+          // backgrounds fall back to white for legibility.
+          this.contrastColor = this._isLight(rgb) ? this._darken(rgb) : '#fff';
+        }
       }
     }
   }
@@ -179,17 +190,79 @@ export class FsChipComponent implements OnDestroy, OnChanges {
     this.removed.next(event);
   }
 
-  private _isContrastYIQBlack(hexcolor) {
-    if (!hexcolor) {
-      return true;
-    }
-
-    hexcolor = hexcolor.replace('#', '');
-    const r = parseInt(hexcolor.substr(0, 2), 16);
-    const g = parseInt(hexcolor.substr(2, 2), 16);
-    const b = parseInt(hexcolor.substr(4, 2), 16);
+  private _isLight([r, g, b]: number[]): boolean {
     const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
 
     return yiq >= 200;
+  }
+
+  /**
+   * A very dark version of the given colour: same hue and saturation, lightness
+   * pinned low. Greys stay grey (close to the default text colour).
+   */
+  private _darken([r, g, b]: number[]): string {
+    const { h, s } = this._rgbToHsl(r, g, b);
+
+    return `hsl(${h}, ${s}%, 22%)`;
+  }
+
+  /**
+   * Parses #rgb, #rrggbb, rgb() and rgba() into [r, g, b]. Returns null for
+   * anything else (named colours, gradients, css variables).
+   */
+  private _parseColor(color: string): number[] | null {
+    const value = String(color).trim();
+
+    const hex = value.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+    if (hex) {
+      let digits = hex[1];
+      if (digits.length === 3) {
+        digits = digits.split('').map((d) => d + d).join('');
+      }
+
+      return [0, 2, 4].map((i) => parseInt(digits.substr(i, 2), 16));
+    }
+
+    const rgb = value.match(/^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
+    if (rgb) {
+      return [rgb[1], rgb[2], rgb[3]].map(Number);
+    }
+
+    return null;
+  }
+
+  private _rgbToHsl(r: number, g: number, b: number): { h: number; s: number; l: number } {
+    r /= 255;
+    g /= 255;
+    b /= 255;
+
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const l = (max + min) / 2;
+    const d = max - min;
+
+    if (d === 0) {
+      return { h: 0, s: 0, l: Math.round(l * 100) };
+    }
+
+    const s = d / (1 - Math.abs(2 * l - 1));
+    let h: number;
+    switch (max) {
+      case r:
+        h = ((g - b) / d) % 6;
+        break;
+      case g:
+        h = (b - r) / d + 2;
+        break;
+      default:
+        h = (r - g) / d + 4;
+    }
+
+    h = Math.round(h * 60);
+    if (h < 0) {
+      h += 360;
+    }
+
+    return { h, s: Math.round(s * 100), l: Math.round(l * 100) };
   }
 }

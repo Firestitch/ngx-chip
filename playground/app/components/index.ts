@@ -1,4 +1,5 @@
 export * from './example';
+export * from './example-colors';
 export * from './example-single-selection';
 export * from './example-sortable';
 export * from './example-sortable-selected';

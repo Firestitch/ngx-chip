@@ -1,0 +1,61 @@
+<div class="section">
+  <fs-label>
+    Background only (text colour derived from background)
+  </fs-label>
+  <fs-chips>
+    @for (chip of backgroundOnly; track chip) {
+      <fs-chip
+          [backgroundColor]="chip.backgroundColor"
+          icon="label"
+          (removed)="removed(chip)">
+        {{ chip.name }} {{ chip.backgroundColor }}
+      </fs-chip>
+    }
+  </fs-chips>
+</div>
+
+<div class="section">
+  <fs-label>
+    Background only, dark (text falls back to white)
+  </fs-label>
+  <fs-chips>
+    @for (chip of darkBackgroundOnly; track chip) {
+      <fs-chip
+          [backgroundColor]="chip.backgroundColor"
+          icon="label"
+          (removed)="removed(chip)">
+        {{ chip.name }} {{ chip.backgroundColor }}
+      </fs-chip>
+    }
+  </fs-chips>
+</div>
+
+<div class="section">
+  <fs-label>
+    Background + explicit color
+  </fs-label>
+  <fs-chips>
+    @for (chip of backgroundAndColor; track chip) {
+      <fs-chip
+          [backgroundColor]="chip.backgroundColor"
+          [color]="chip.color"
+          icon="label"
+          (removed)="removed(chip)">
+        {{ chip.name }} {{ chip.backgroundColor }} / {{ chip.color }}
+      </fs-chip>
+    }
+  </fs-chips>
+</div>
+
+<div class="section">
+  <fs-label>
+    Background only, sizes
+  </fs-label>
+  <fs-chips>
+    <fs-chip backgroundColor="#e3f2fd" size="large">Large</fs-chip>
+    <fs-chip backgroundColor="#c8e6c9" size="medium">Medium</fs-chip>
+    <fs-chip backgroundColor="#ffe0b2" size="small">Small</fs-chip>
+    <fs-chip backgroundColor="#fce4ec" size="tiny">Tiny</fs-chip>
+    <fs-chip backgroundColor="#e1bee7" size="micro">Micro</fs-chip>
+  </fs-chips>
+</div>
