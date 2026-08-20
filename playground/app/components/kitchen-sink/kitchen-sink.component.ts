@@ -9,6 +9,7 @@ import { MatInput } from '@angular/material/input';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 
+import { FsColorPickerModule } from '@firestitch/colorpicker';
 import { FsMessage } from '@firestitch/message';
 
 import { FsChipComponent } from '../../../../src/app/components/chip/chip.component';
@@ -25,11 +26,8 @@ interface KitchenSinkConfig {
   // Decoration
   outlined: boolean;
   outlineDash: boolean;
-  overrideBackground: boolean;
   backgroundColor: string;
-  overrideColor: boolean;
   color: string;
-  overrideBorderColor: boolean;
   borderColor: string;
   padding: string;
 
@@ -66,12 +64,9 @@ const defaultConfig: KitchenSinkConfig = {
 
   outlined: false,
   outlineDash: false,
-  overrideBackground: false,
-  backgroundColor: '#569cd6',
-  overrideColor: false,
-  color: '#ffffff',
-  overrideBorderColor: false,
-  borderColor: '#569cd6',
+  backgroundColor: '',
+  color: '',
+  borderColor: '',
   padding: '',
 
   image: true,
@@ -113,6 +108,8 @@ const defaultConfig: KitchenSinkConfig = {
     MatTab,
     MatTabGroup,
 
+    FsColorPickerModule,
+
     FsChipComponent,
     FsChipPrefixDirective,
     FsChipSuffixDirective,
@@ -135,16 +132,17 @@ export class KitchenSinkComponent {
     return this.config.image ? '/assets/headshot2.jpg' : '';
   }
 
+  // Empty is how fs-chip is told a colour was not supplied
   public get backgroundColor(): string {
-    return this.config.overrideBackground ? this.config.backgroundColor : null;
+    return this.config.backgroundColor || null;
   }
 
   public get color(): string {
-    return this.config.overrideColor ? this.config.color : null;
+    return this.config.color || null;
   }
 
   public get borderColor(): string {
-    return this.config.overrideBorderColor ? this.config.borderColor : null;
+    return this.config.borderColor || null;
   }
 
   public reset(): void {

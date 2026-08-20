@@ -89,48 +89,34 @@
             <small>Dashed rather than solid</small>
           </mat-slide-toggle>
 
-          <mat-slide-toggle [(ngModel)]="config.overrideBackground">
-            <code>backgroundColor</code>
-            <small>Otherwise the chip's own default</small>
-          </mat-slide-toggle>
-          @if (config.overrideBackground) {
-            <label class="color-control">
-              <input
-                type="color"
-                [(ngModel)]="config.backgroundColor">
-              <span>{{ config.backgroundColor }}</span>
-            </label>
-            <div class="control-hint">
-              Left alone, <code>color</code> is derived from this: light fills get a very
-              dark shade of their own hue, dark fills get white.
-            </div>
-          }
+          <mat-form-field appearance="outline">
+            <mat-label>Background Color</mat-label>
+            <input
+              matInput
+              fsColorPicker
+              [(ngModel)]="config.backgroundColor">
+          </mat-form-field>
 
-          <mat-slide-toggle [(ngModel)]="config.overrideColor">
-            <code>color</code>
-            <small>Override the derived text color</small>
-          </mat-slide-toggle>
-          @if (config.overrideColor) {
-            <label class="color-control">
-              <input
-                type="color"
-                [(ngModel)]="config.color">
-              <span>{{ config.color }}</span>
-            </label>
-          }
+          <mat-form-field appearance="outline">
+            <mat-label>Text Color</mat-label>
+            <input
+              matInput
+              fsColorPicker
+              [(ngModel)]="config.color">
+          </mat-form-field>
 
-          <mat-slide-toggle [(ngModel)]="config.overrideBorderColor">
-            <code>borderColor</code>
-            <small>Only visible while outlined</small>
-          </mat-slide-toggle>
-          @if (config.overrideBorderColor) {
-            <label class="color-control">
-              <input
-                type="color"
-                [(ngModel)]="config.borderColor">
-              <span>{{ config.borderColor }}</span>
-            </label>
-          }
+          <mat-form-field appearance="outline">
+            <mat-label>Border Color</mat-label>
+            <input
+              matInput
+              fsColorPicker
+              [(ngModel)]="config.borderColor">
+          </mat-form-field>
+          <div class="control-hint">
+            Left empty, each falls back to the chip: no fill while outlined, and a text
+            colour derived from the background &mdash; light fills get a very dark shade
+            of their own hue, dark fills get white.
+          </div>
         </div>
       </mat-expansion-panel>
 

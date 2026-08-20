@@ -243,25 +243,6 @@
   }
 }
 
-.color-control {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: -6px;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 11px;
-  color: rgb(0 0 0 / 55%);
-
-  input[type='color'] {
-    width: 34px;
-    height: 26px;
-    padding: 0;
-    border: 1px solid #d0d0d0;
-    border-radius: 4px;
-    background: none;
-    cursor: pointer;
-  }
-}
 
 :host ::ng-deep {
   .inspector {
@@ -279,11 +260,11 @@
       color: rgb(0 0 0 / 60%);
     }
 
-    // Slide toggles carry the input name plus a one-line description
+    // Slide toggles carry the input name plus a one-line description. The name is
+    // left as inline content so a label naming two inputs keeps them on one line;
+    // only the description is broken onto its own. A flex column here would put
+    // every child on a row of its own, separators included.
     .mat-mdc-slide-toggle label {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
       line-height: 1.35;
 
       code {
@@ -292,6 +273,8 @@
       }
 
       small {
+        display: block;
+        margin-top: 1px;
         font-size: 11px;
         color: rgb(0 0 0 / 45%);
       }
