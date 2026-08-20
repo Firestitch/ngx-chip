@@ -1,5 +1,5 @@
 import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, EventEmitter, HostBinding, Input, OnChanges, OnDestroy, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, inject } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, EventEmitter, HostBinding, Input, OnDestroy, Output, QueryList, TemplateRef, ViewChild, inject } from '@angular/core';
 
 import { MatIcon } from '@angular/material/icon';
 
@@ -29,7 +29,7 @@ import { FsChipSuffixComponent } from '../chip-suffix/chip-suffix.component';
   ],
 })
 export class FsChipComponent
-implements AfterContentInit, OnDestroy, OnChanges {
+implements AfterContentInit, OnDestroy {
 
   @ViewChild(TemplateRef, { static: true }) 
   public templateRef: TemplateRef<void>;
@@ -78,6 +78,14 @@ implements AfterContentInit, OnDestroy, OnChanges {
 
   @Input() public outlined: boolean;
 
+  /**
+   * Lets the content run onto as many lines as it needs instead of being cut to
+   * one. A chip whose width is decided by what surrounds it -- a list row, an
+   * autocomplete option -- has no business hiding half of a value; a chip in a
+   * fixed-width field does. Covers the subcontent line as well as the content.
+   */
+  @Input() public wrap: boolean;
+
   @Input() public outlineDash: boolean;
 
   @Input() public icon: string;
@@ -91,6 +99,11 @@ implements AfterContentInit, OnDestroy, OnChanges {
 
   @Input() public padding: string;
 
+  /**
+   * Overrides the colour worked out from the background. Rarely needed -- the
+   * chip derives its own -- and it no longer gets overwritten when the
+   * background changes, so a value passed here stands.
+   */
   @Input() public contrastColor: string;
 
   @Input() public size: 'small' | 'tiny' | 'micro' | 'large' | 'medium' = 'medium';
@@ -100,11 +113,16 @@ implements AfterContentInit, OnDestroy, OnChanges {
   @Output() public click = new EventEmitter();
 
   public hasChips: boolean;
-  public defaultColor = '#474747';
   public defaultBackgroundColor = '#e7e7e7';
 
   private _destroy$ = new Subject();
   private _cdRef = inject(ChangeDetectorRef);
+
+  // Memo for the colour derived from the background, keyed by the background it
+  // was derived from. chipColor is read from five bindings and re-read on every
+  // change-detection pass, and deriving it means parsing a hex string.
+  private _derivedColor: string = null;
+  private _derivedColorFor: string;
 
   // Only here for its `changes` stream, which a single ContentChild does not have.
   // Comparing chipSubcontentTemplateRef by reference on every check would be unsafe:
@@ -189,21 +207,19 @@ implements AfterContentInit, OnDestroy, OnChanges {
     return this._destroy$.asObservable();
   }
 
-  public ngOnChanges(changes: SimpleChanges) {
-    if (changes.backgroundColor) {
-      this.contrastColor = this.defaultColor;
-
-      if(this.backgroundColor && this.backgroundColor !== 'transparent') {
-        const rgb = this._parseColor(this.backgroundColor);
-
-        if (rgb) {
-          // Light backgrounds get a very dark shade of their own hue so the text
-          // reads as part of the chip's colour rather than a flat grey; dark
-          // backgrounds fall back to white for legibility.
-          this.contrastColor = this._isLight(rgb) ? this._darken(rgb) : '#fff';
-        }
-      }
-    }
+  /**
+   * The single source of the chip's foreground, read by the content, the icon,
+   * the prefixes and the suffixes alike. An explicit `color` wins, then an
+   * explicit `contrastColor`; failing both, the fill dictates what reads on it.
+   *
+   * Null rather than a default when the chip has no fill -- shape="none" with no
+   * background, or an outlined chip left unfilled. There is nothing to contrast
+   * against there, so any colour the chip picked would be arbitrary; leaving it
+   * unset writes no style.color and the application's own text colour shows
+   * through, which is what plain inline text should look like.
+   */
+  public get chipColor(): string {
+    return this.color || this.contrastColor || this._backgroundContrast();
   }
 
   public actionClick(action, event: MouseEvent) {
@@ -237,6 +253,34 @@ implements AfterContentInit, OnDestroy, OnChanges {
     event.stopImmediatePropagation();
     event.stopPropagation();
     this.removed.next(event);
+  }
+
+  /**
+   * Derives the foreground from the fill the chip actually paints rather than
+   * from the `backgroundColor` input: `outlined` and shape="none" both suppress
+   * the default fill, and contrasting a fill that never appears yields a colour
+   * unrelated to anything on screen. Returns null when nothing is painted.
+   */
+  private _backgroundContrast(): string {
+    const background = this.chipBackgroundColor ?? null;
+
+    if (background !== this._derivedColorFor) {
+      this._derivedColorFor = background;
+      this._derivedColor = null;
+
+      if (background && background !== 'transparent') {
+        const rgb = this._parseColor(background);
+
+        if (rgb) {
+          // Light backgrounds get a very dark shade of their own hue so the text
+          // reads as part of the chip's colour rather than a flat grey; dark
+          // backgrounds fall back to white for legibility.
+          this._derivedColor = this._isLight(rgb) ? this._darken(rgb) : '#fff';
+        }
+      }
+    }
+
+    return this._derivedColor;
   }
 
   private _isLight([r, g, b]: number[]): boolean {

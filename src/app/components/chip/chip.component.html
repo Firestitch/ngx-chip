@@ -6,7 +6,7 @@
       [style.padding]="padding"
       [style.borderColor]="borderColor || (outlined && color ? color : null)"
       [style.width]="width"
-      [style.color]="color || contrastColor || defaultColor"
+      [style.color]="chipColor"
       [class.suffixable]="chipSuffixes.length !== 0 || (removed.observed && removable)"
       [class.prefixable]="chipPrefixes.length !== 0"
       [class.shape-round]="shape === 'round'"
@@ -23,6 +23,7 @@
       [class.imaged]="!!image"
       [class.outlined]="outlined"
       [class.outline-dash]="outlineDash"
+      [class.wrap]="wrap"
       [class.selected]="selected"
       [class.disabled]="disabled"
       [class.clickable]="click.observed && !disabled"
@@ -39,7 +40,7 @@
           <fs-chip-prefix
               [ngClass]="{ 'clickable': chipPrefix.click.observed }"
               [icon]="chipPrefix.icon"
-              [color]="chipPrefix.color || color || contrastColor || defaultColor"
+              [color]="chipPrefix.color || chipColor"
               (click)="chipPrefixClick(chipPrefix, $event, value)">
             <ng-container *ngTemplateOutlet="chipPrefix.templateRef"></ng-container>
           </fs-chip-prefix>
@@ -63,7 +64,7 @@
     </div>
     @if (selected) {
       <div class="selected-check">
-        <mat-icon [style.color]="color || contrastColor || defaultColor">
+        <mat-icon [style.color]="chipColor">
           check
         </mat-icon>
       </div>
@@ -76,7 +77,7 @@
               [icon]="chipSuffix.icon"
               [link]="chipSuffix.link"
               [linkTarget]="chipSuffix.linkTarget"
-              [color]="chipSuffix.color || color || contrastColor || defaultColor"
+              [color]="chipSuffix.color || chipColor"
               [tooltip]="chipSuffix.tooltip"
               (click)="chipSuffixClick(chipSuffix, $event, value)">
             <ng-container *ngTemplateOutlet="chipSuffix.templateRef"></ng-container>
@@ -86,7 +87,7 @@
           <fs-chip-suffix
             [ngClass]="{ 'clickable': true }"
             [icon]="'cancel'"
-            [color]="color || contrastColor || defaultColor"
+            [color]="chipColor"
             (click)="remove($event)">
           </fs-chip-suffix>
         }

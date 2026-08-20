@@ -130,6 +130,23 @@
     
   }
 
+  // Opt-in via [wrap], for a chip whose width is dictated by what surrounds it.
+  // Everything here undoes the clipping above; white-space and overflow-wrap are
+  // inherited, so the subcontent line follows the content without naming it.
+  &.wrap .fs-chip-content {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+
+    // A flex item floors at min-width:auto, i.e. min-content, and min-content for
+    // an email or a URL is the whole unbroken token -- wider than the chip, so the
+    // line would overhang instead of wrapping. `anywhere` rather than `break-word`
+    // because only `anywhere` also drops min-content to a single character, which
+    // is what lets the floor below take effect at all.
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
   .selected-check {
     margin: 0 3px 0 3px;
     display: flex;
