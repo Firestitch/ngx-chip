@@ -2,7 +2,7 @@
   <div
       class="fs-chip"
       (click)="clicked($event)"
-      [style.backgroundColor]="backgroundColor ? backgroundColor : (outlined ? undefined : defaultBackgroundColor)"
+      [style.backgroundColor]="chipBackgroundColor"
       [style.padding]="padding"
       [style.borderColor]="borderColor || (outlined && color ? color : null)"
       [style.width]="width"
@@ -11,6 +11,7 @@
       [class.prefixable]="chipPrefixes.length !== 0"
       [class.shape-round]="shape === 'round'"
       [class.shape-square]="shape === 'square'"
+      [class.shape-none]="shape === 'none'"
       [class.size-small]="size === 'small'"
       [class.size-tiny]="size === 'tiny'"
       [class.size-micro]="size === 'micro'"

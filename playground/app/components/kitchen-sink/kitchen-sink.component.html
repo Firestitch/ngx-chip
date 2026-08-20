@@ -1,0 +1,444 @@
+<div class="kitchen-sink">
+
+  <!-- ------------------------------------------------------------------ -->
+  <!-- Inspector                                                           -->
+  <!-- ------------------------------------------------------------------ -->
+  <div class="inspector">
+    <mat-accordion
+        multi
+        displayMode="flat">
+
+      <!-- Shape and size -->
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Shape &amp; Size</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="controls">
+          <div class="toggle-set">
+            <label>shape</label>
+            <mat-button-toggle-group [(ngModel)]="config.shape">
+              <mat-button-toggle value="round">round</mat-button-toggle>
+              <mat-button-toggle value="square">square</mat-button-toggle>
+              <mat-button-toggle value="none">none</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+          @if (config.shape === 'none') {
+            <div class="control-hint">
+              <code>none</code> drops the padding, radius and default background so the
+              content reads as plain text. Everything else &mdash; removing, prefixes,
+              suffixes, the image and the subcontent line &mdash; keeps working.
+            </div>
+          }
+
+          <div class="toggle-set">
+            <label>size</label>
+            <mat-button-toggle-group [(ngModel)]="config.size">
+              <mat-button-toggle value="micro">micro</mat-button-toggle>
+              <mat-button-toggle value="tiny">tiny</mat-button-toggle>
+              <mat-button-toggle value="small">small</mat-button-toggle>
+              <mat-button-toggle value="medium">medium</mat-button-toggle>
+              <mat-button-toggle value="large">large</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+
+          <div class="control-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Width</mat-label>
+              <input
+                matInput
+                placeholder="auto"
+                [(ngModel)]="config.width">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Max Width</mat-label>
+              <input
+                matInput
+                placeholder="none"
+                [(ngModel)]="config.maxWidth">
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Padding</mat-label>
+            <input
+              matInput
+              placeholder="e.g. 0 12px"
+              [(ngModel)]="config.padding">
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+
+      <!-- Decoration -->
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Decoration</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="controls">
+          <mat-slide-toggle [(ngModel)]="config.outlined">
+            <code>outlined</code>
+            <small>Border, and no default fill</small>
+          </mat-slide-toggle>
+
+          <mat-slide-toggle
+              [(ngModel)]="config.outlineDash"
+              [disabled]="!config.outlined">
+            <code>outlineDash</code>
+            <small>Dashed rather than solid</small>
+          </mat-slide-toggle>
+
+          <mat-slide-toggle [(ngModel)]="config.overrideBackground">
+            <code>backgroundColor</code>
+            <small>Otherwise the chip's own default</small>
+          </mat-slide-toggle>
+          @if (config.overrideBackground) {
+            <label class="color-control">
+              <input
+                type="color"
+                [(ngModel)]="config.backgroundColor">
+              <span>{{ config.backgroundColor }}</span>
+            </label>
+            <div class="control-hint">
+              Left alone, <code>color</code> is derived from this: light fills get a very
+              dark shade of their own hue, dark fills get white.
+            </div>
+          }
+
+          <mat-slide-toggle [(ngModel)]="config.overrideColor">
+            <code>color</code>
+            <small>Override the derived text color</small>
+          </mat-slide-toggle>
+          @if (config.overrideColor) {
+            <label class="color-control">
+              <input
+                type="color"
+                [(ngModel)]="config.color">
+              <span>{{ config.color }}</span>
+            </label>
+          }
+
+          <mat-slide-toggle [(ngModel)]="config.overrideBorderColor">
+            <code>borderColor</code>
+            <small>Only visible while outlined</small>
+          </mat-slide-toggle>
+          @if (config.overrideBorderColor) {
+            <label class="color-control">
+              <input
+                type="color"
+                [(ngModel)]="config.borderColor">
+              <span>{{ config.borderColor }}</span>
+            </label>
+          }
+        </div>
+      </mat-expansion-panel>
+
+      <!-- Content -->
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Content</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="controls">
+          <mat-form-field appearance="outline">
+            <mat-label>Text</mat-label>
+            <input
+              matInput
+              [(ngModel)]="config.text">
+          </mat-form-field>
+
+          <mat-slide-toggle [(ngModel)]="config.image">
+            <code>image</code>
+            <small>Leading avatar</small>
+          </mat-slide-toggle>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Icon</mat-label>
+            <input
+              matInput
+              placeholder="e.g. star"
+              [(ngModel)]="config.icon">
+          </mat-form-field>
+
+          <mat-slide-toggle [(ngModel)]="config.subcontent">
+            <code>fsChipSubcontent</code>
+            <small>Second line, making the chip multi-line</small>
+          </mat-slide-toggle>
+
+          <mat-slide-toggle [(ngModel)]="config.prefix">
+            <code>fsChipPrefix</code>
+            <small>Clickable slot before the content</small>
+          </mat-slide-toggle>
+
+          <mat-slide-toggle [(ngModel)]="config.suffix">
+            <code>fsChipSuffix</code>
+            <small>Clickable slot after the content</small>
+          </mat-slide-toggle>
+
+          <mat-slide-toggle [(ngModel)]="config.suffixLink">
+            <code>fsChipSuffix</code> <code>link</code>
+            <small>A suffix that is a link instead</small>
+          </mat-slide-toggle>
+        </div>
+      </mat-expansion-panel>
+
+      <!-- Behaviour -->
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Behaviour</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="controls">
+          <mat-slide-toggle [(ngModel)]="config.removable">
+            <code>removable</code>
+            <small>Show the remove icon</small>
+          </mat-slide-toggle>
+          <div class="control-hint">
+            The icon only renders when <code>(removed)</code> is bound as well, so
+            <code>removable</code> alone is not enough.
+          </div>
+
+          <mat-slide-toggle [(ngModel)]="config.selectable">
+            <code>selectable</code>
+            <small>Clicking toggles selection</small>
+          </mat-slide-toggle>
+
+          <mat-slide-toggle [(ngModel)]="config.selected">
+            <code>selected</code>
+            <small>Show the check mark</small>
+          </mat-slide-toggle>
+
+          <mat-slide-toggle [(ngModel)]="config.clickable">
+            <code>clickable</code>
+            <small>Pointer cursor, hover, and click events</small>
+          </mat-slide-toggle>
+          <div class="control-hint">
+            There is no <code>clickable</code> input. fs-chip reads
+            <code>click.observed</code>, so this is really whether <code>(click)</code>
+            is bound at all.
+          </div>
+
+          <mat-slide-toggle [(ngModel)]="config.disabled">
+            <code>disabled</code>
+            <small>Dim it and swallow pointer events</small>
+          </mat-slide-toggle>
+        </div>
+      </mat-expansion-panel>
+
+    </mat-accordion>
+  </div>
+
+  <!-- ------------------------------------------------------------------ -->
+  <!-- Stage                                                               -->
+  <!-- ------------------------------------------------------------------ -->
+  <div class="stage">
+    <div class="stage-surface">
+      <div class="stage-chip">
+      @if (removed) {
+        <div class="removed">
+          The chip was removed.
+          <a
+              class="link"
+              (click)="restore()">
+            Bring it back
+          </a>
+        </div>
+      } @else if (config.clickable) {
+        <!--
+          Spelled out twice because Angular cannot bind an output conditionally,
+          and here the binding is the thing being demonstrated: fs-chip derives
+          its .clickable class from click.observed, so the pointer cursor and the
+          hover come from (click) existing at all. The two chips are otherwise
+          identical.
+        -->
+        <fs-chip
+            [shape]="config.shape"
+            [size]="config.size"
+            [outlined]="config.outlined"
+            [outlineDash]="config.outlineDash"
+            [backgroundColor]="backgroundColor"
+            [color]="color"
+            [borderColor]="borderColor"
+            [padding]="config.padding"
+            [image]="image"
+            [icon]="config.icon"
+            [removable]="config.removable"
+            [selectable]="config.selectable"
+            [selected]="config.selected"
+            [disabled]="config.disabled"
+            [maxWidth]="config.maxWidth"
+            [width]="config.width"
+            [value]="config.text"
+            (removed)="chipRemoved()"
+            (selectedToggled)="selectedToggled($event)"
+            (click)="chipClicked()">
+          {{ config.text }}
+
+          @if (config.prefix) {
+            <ng-template
+              fsChipPrefix
+              icon="star"
+              (click)="prefixClicked($event)">
+            </ng-template>
+          }
+
+          @if (config.suffix) {
+            <ng-template
+              fsChipSuffix
+              icon="tune"
+              tooltip="Configure"
+              (click)="suffixClicked($event)">
+            </ng-template>
+          }
+
+          @if (config.suffixLink) {
+            <ng-template
+              fsChipSuffix
+              icon="open_in_new"
+              tooltip="Open"
+              link="https://example.com"
+              linkTarget="_blank">
+            </ng-template>
+          }
+
+          @if (config.subcontent) {
+            <ng-template fsChipSubcontent>
+              Engineering
+            </ng-template>
+          }
+        </fs-chip>
+      } @else {
+        <fs-chip
+            [shape]="config.shape"
+            [size]="config.size"
+            [outlined]="config.outlined"
+            [outlineDash]="config.outlineDash"
+            [backgroundColor]="backgroundColor"
+            [color]="color"
+            [borderColor]="borderColor"
+            [padding]="config.padding"
+            [image]="image"
+            [icon]="config.icon"
+            [removable]="config.removable"
+            [selectable]="config.selectable"
+            [selected]="config.selected"
+            [disabled]="config.disabled"
+            [maxWidth]="config.maxWidth"
+            [width]="config.width"
+            [value]="config.text"
+            (removed)="chipRemoved()"
+            (selectedToggled)="selectedToggled($event)">
+          {{ config.text }}
+
+          @if (config.prefix) {
+            <ng-template
+              fsChipPrefix
+              icon="star"
+              (click)="prefixClicked($event)">
+            </ng-template>
+          }
+
+          @if (config.suffix) {
+            <ng-template
+              fsChipSuffix
+              icon="tune"
+              tooltip="Configure"
+              (click)="suffixClicked($event)">
+            </ng-template>
+          }
+
+          @if (config.suffixLink) {
+            <ng-template
+              fsChipSuffix
+              icon="open_in_new"
+              tooltip="Open"
+              link="https://example.com"
+              linkTarget="_blank">
+            </ng-template>
+          }
+
+          @if (config.subcontent) {
+            <ng-template fsChipSubcontent>
+              Engineering
+            </ng-template>
+          }
+        </fs-chip>
+      }
+      </div>
+      <button
+          mat-stroked-button
+          type="button"
+          (click)="reset()">
+        Reset all
+      </button>
+    </div>
+
+    <div class="compare-heading">Compare</div>
+
+    <!-- The same settings rendered at each shape, side by side -->
+    <div class="compare">
+      @for (shape of shapes; track shape) {
+        <div class="compare-cell">
+          <span class="compare-label">{{ shape }}</span>
+          <fs-chip
+              [shape]="shape"
+              [size]="config.size"
+              [outlined]="config.outlined"
+              [outlineDash]="config.outlineDash"
+              [backgroundColor]="backgroundColor"
+              [color]="color"
+              [borderColor]="borderColor"
+              [image]="image"
+              [icon]="config.icon"
+              [removable]="false">
+            {{ config.text }}
+            @if (config.subcontent) {
+              <ng-template fsChipSubcontent>
+                Engineering
+              </ng-template>
+            }
+          </fs-chip>
+        </div>
+      }
+    </div>
+
+    @if (config.clickable) {
+    <div class="output">
+      <div class="output-header">
+        Click Events
+        @if (events.length) {
+          <span class="badge">{{ events.length }}</span>
+        }
+        <span class="actions-spacer"></span>
+        <a
+            class="link"
+            (click)="clearEvents()">
+          Clear
+        </a>
+      </div>
+      <div class="tab-body">
+        <div class="tab-note">
+Newest first. The other outputs show on the chip itself &mdash; removing takes
+          it away, selecting checks it, and the prefix and suffix clicks raise a message.
+        </div>
+        @if (!events.length) {
+          <div class="empty">
+            Click the chip to record an event.
+          </div>
+        } @else {
+          <div class="events">
+            @for (event of events; track $index) {
+              <div class="event">
+                <span class="event-time">{{ event.time }}</span>
+                <span class="event-name">{{ event.name }}</span>
+                <span class="event-payload">{{ event.payload }}</span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+    }
+  </div>
+</div>

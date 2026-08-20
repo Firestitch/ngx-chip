@@ -5,4 +5,5 @@ export * from './example-sortable';
 export * from './example-sortable-selected';
 export * from './example-with-array';
 export * from './example-with-custom-compare';
+export * from './kitchen-sink';
 export * from './examples';

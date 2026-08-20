@@ -1,9 +1,10 @@
 import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, EventEmitter, HostBinding, Input, OnChanges, OnDestroy, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, inject } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, EventEmitter, HostBinding, Input, OnChanges, OnDestroy, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, inject } from '@angular/core';
 
 import { MatIcon } from '@angular/material/icon';
 
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, merge } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { FsChipPrefixDirective } from '../../directives/chip-prefix.directive';
 import { FsChipSubcontentDirective } from '../../directives/chip-subcontent.directive';
@@ -27,7 +28,8 @@ import { FsChipSuffixComponent } from '../chip-suffix/chip-suffix.component';
     NgClass,
   ],
 })
-export class FsChipComponent implements OnDestroy, OnChanges {
+export class FsChipComponent
+implements AfterContentInit, OnDestroy, OnChanges {
 
   @ViewChild(TemplateRef, { static: true }) 
   public templateRef: TemplateRef<void>;
@@ -67,7 +69,12 @@ export class FsChipComponent implements OnDestroy, OnChanges {
 
   @Input() public color;
 
-  @Input() public shape: 'round' | 'square' = 'round';
+  /**
+   * "none" keeps every chip behaviour — removing, prefixes, suffixes, image,
+   * subcontent — but drops the chip's own decoration, so the content reads as
+   * plain inline text. `outlined` stays independent of this.
+   */
+  @Input() public shape: 'round' | 'square' | 'none' = 'round';
 
   @Input() public outlined: boolean;
 
@@ -96,8 +103,50 @@ export class FsChipComponent implements OnDestroy, OnChanges {
   public defaultColor = '#474747';
   public defaultBackgroundColor = '#e7e7e7';
 
-  private _destroy$ = new Subject();  
+  private _destroy$ = new Subject();
   private _cdRef = inject(ChangeDetectorRef);
+
+  // Only here for its `changes` stream, which a single ContentChild does not have.
+  // Comparing chipSubcontentTemplateRef by reference on every check would be unsafe:
+  // a content query can read as unset on a targeted-mode traversal (see the note on
+  // chipSuffixes), so the comparison would flip and mark the view on every pass.
+  @ContentChildren(FsChipSubcontentDirective)
+  private _chipSubcontents: QueryList<FsChipSubcontentDirective> = new QueryList();
+
+  /**
+   * A content query result changing does not mark an OnPush view dirty by itself,
+   * so a prefix or suffix added or removed after the first render would not be
+   * painted until something else happened to check this view. This only ever calls
+   * markForCheck, so nothing that renders today renders differently — it adds
+   * repaints that were previously missed.
+   */
+  public ngAfterContentInit(): void {
+    merge(
+      this.chipSuffixes.changes,
+      this.chipPrefixes.changes,
+      this._chipSubcontents.changes,
+    )
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        this._cdRef.markForCheck();
+      });
+  }
+
+  /**
+   * An explicit backgroundColor always wins. Otherwise both `outlined` and
+   * shape="none" mean the chip carries no fill of its own.
+   */
+  public get chipBackgroundColor(): string {
+    if (this.backgroundColor) {
+      return this.backgroundColor;
+    }
+
+    return this.outlined || this.shape === 'none' ?
+      undefined :
+      this.defaultBackgroundColor;
+  }
 
   public clicked(event: MouseEvent) {
     if (this.disabled) {

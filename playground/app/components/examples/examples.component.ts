@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { environment } from '@env';
 import { FsExampleModule } from '@firestitch/example';
 import { ExampleComponent } from '../example/example.component';
+import { KitchenSinkComponent } from '../kitchen-sink/kitchen-sink.component';
 import { ExampleColorsComponent } from '../example-colors/example-colors.component';
 import { ExampleChipSelectComponent } from '../example-chip-select/example-chip-select.component';
 import { ExampleSortableComponent } from '../example-sortable/example-sortable.component';
@@ -18,6 +19,7 @@ import { ExampleSingleSelectionComponent } from '../example-single-selection/exa
     standalone: true,
     imports: [
         FsExampleModule,
+        KitchenSinkComponent,
         ExampleComponent,
         ExampleColorsComponent,
         ExampleChipSelectComponent,

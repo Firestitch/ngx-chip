@@ -337,3 +337,33 @@
     }
   }
 }
+
+
+// shape="none" drops the chip's own decoration so the content reads as plain
+// inline text, while every chip behaviour (removing, prefixes, suffixes, image,
+// subcontent) keeps working.
+//
+// Deliberately declared after the .fs-chip block rather than nested inside it:
+// the size modifiers set padding at the same specificity (.fs-chip.size-medium
+// vs .fs-chip.shape-none), so this has to come last to win. Keep it at the
+// bottom of the file.
+.fs-chip.shape-none {
+  padding: 0;
+  border-radius: 0;
+
+  // Wins over .fs-chip.outlined, which is the same specificity and declared
+  // earlier. There is no chip edge to draw, so an outline never applies here.
+  border: none;
+
+  // The image sits flush with the text with no chip edge to inset it from
+  &.imaged {
+    overflow: visible;
+    padding-left: 0;
+  }
+
+  // .fs-chip:not(.shape-square) adds a trailing margin to sit inside the chip
+  // edge. There is no edge here.
+  fs-chip-suffix:last-child {
+    margin-right: 0;
+  }
+}
