@@ -50,7 +50,21 @@
   }
 
   &.outlined {
-    border: 1px solid #f0f0f0;
+    // THE OUTLINE STYLE CARRIES ITS OWN COLOUR. A caller says [outlined]="true"
+    // and gets a border that is correct on a white page AND on a dark one —
+    // passing [borderColor] is for a deliberately custom colour, never for
+    // making the default legible.
+    //
+    // Three layers, most specific first: a per-chip override, the shared
+    // @firestitch/style contract, then a hardcoded pair so this renders
+    // correctly even when @firestitch/style is not installed. The pair matches
+    // the contract's --fs-hairline default; keep the two in step.
+    //
+    // light-dark() picks off the `color-scheme` the HOST APP declares, so this
+    // works unchanged under Material 2 and Material 3 with no class, no input
+    // and no media query. Never add prefers-color-scheme here: that reports the
+    // device, not the app's resolved setting.
+    border: 1px solid var(--fs-chip-outline-color, var(--fs-hairline, light-dark(#f0f0f0, rgba(255, 255, 255, 0.22))));
     box-sizing: border-box;
 
     &.outline-dash {
@@ -58,8 +72,12 @@
     }
 
     &.clickable {
+      // #efefef IS KEPT EXACTLY as the light value. This pass adds a dark
+      // counterpart and must not restyle light mode — an opaque near-white and
+      // a 4% black wash are not the same colour, and this hover ships in 221
+      // files of the admin app.
       &:hover {
-        background-color: #efefef;
+        background-color: light-dark(#efefef, rgba(255, 255, 255, 0.08));
       }
     }
   }
@@ -67,8 +85,18 @@
   &.clickable {
     cursor: pointer;
 
+    // STAYS A filter, AND HAS TO. The chip paints its fill as an INLINE style
+    // ([style.backgroundColor] in chip.component.html), and an inline style
+    // beats any stylesheet rule that is not !important — so a
+    // `background-color` hover here would simply never apply to a filled chip.
+    // A filter is not in that fight: it post-processes whatever colour won.
+    //
+    // brightness() alone was the bug: it DARKENS, which reads as "pressed" on a
+    // white page and as "receding" on a dark ground, where a hovered chip has
+    // to come UP. light-dark() picks the direction per scheme — darken on
+    // light, lighten on dark — so the gesture reads the same way in both.
     &:hover {
-      filter: brightness(90%);
+      filter: light-dark(brightness(90%), brightness(125%));
     }
   }
 
