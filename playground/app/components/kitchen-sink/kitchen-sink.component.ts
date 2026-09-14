@@ -11,6 +11,7 @@ import { MatTab, MatTabGroup } from '@angular/material/tabs';
 
 import { FsColorPickerModule } from '@firestitch/colorpicker';
 import { FsMessage } from '@firestitch/message';
+import { FsColorScheme, FsColorSchemeType } from '@firestitch/style';
 
 import { FsChipComponent } from '../../../../src/app/components/chip/chip.component';
 import { FsChipPrefixDirective } from '../../../../src/app/directives/chip-prefix.directive';
@@ -118,12 +119,27 @@ const defaultConfig: KitchenSinkConfig = {
 })
 export class KitchenSinkComponent {
 
+  // Declared before the public signals below, which read off it: property
+  // initializers run in declaration order, so the reverse would be undefined.
+  private _colorSchemeService = inject(FsColorScheme);
+
   public config: KitchenSinkConfig = { ...defaultConfig };
   public events: LoggedEvent[] = [];
   public removed = false;
 
   /** Typed rather than inline in the template, which strictTemplates widens to string. */
   public shapes: ('round' | 'square' | 'none')[] = ['round', 'square', 'none'];
+
+  /**
+   * The scheme is deliberately NOT part of `config`: Reset restores every chip
+   * input to its default, and having the page go light underneath you while you
+   * are inspecting the dark treatment would be its own small bug.
+   *
+   * Read straight off the service so the panel reflects the scheme even when
+   * something else sets it -- these are the service's own signals, not copies.
+   */
+  public readonly colorScheme = this._colorSchemeService.colorScheme;
+  public readonly resolvedColorScheme = this._colorSchemeService.resolved;
 
   private _cdRef = inject(ChangeDetectorRef);
   private _message = inject(FsMessage);
@@ -143,6 +159,10 @@ export class KitchenSinkComponent {
 
   public get borderColor(): string {
     return this.config.borderColor || null;
+  }
+
+  public setColorScheme(colorScheme: FsColorSchemeType): void {
+    this._colorSchemeService.set(colorScheme);
   }
 
   public reset(): void {

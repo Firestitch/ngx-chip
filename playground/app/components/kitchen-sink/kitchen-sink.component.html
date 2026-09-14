@@ -8,6 +8,38 @@
         multi
         displayMode="flat">
 
+      <!-- Colour scheme -->
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Colour Scheme</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="controls">
+          <div class="toggle-set">
+            <label>color-scheme</label>
+            <mat-button-toggle-group
+                [ngModel]="colorScheme()"
+                (ngModelChange)="setColorScheme($event)">
+              <mat-button-toggle value="light">light</mat-button-toggle>
+              <mat-button-toggle value="dark">dark</mat-button-toggle>
+              <mat-button-toggle value="system">system</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+
+          <div class="control-hint">
+            Sets <code>color-scheme</code> on the document, which is what every
+            <code>light-dark()</code> in the chip picks from &mdash; so the outline,
+            the hover and the text all follow with no class and no input.
+            @if (colorScheme() === 'system') {
+              <br>
+              <code>system</code> writes <code>light dark</code>, handing the choice to
+              the browser: it is currently showing <code>{{ resolvedColorScheme() }}</code>.
+              Change the operating system setting and the chip follows live.
+            }
+          </div>
+        </div>
+      </mat-expansion-panel>
+
       <!-- Shape and size -->
       <mat-expansion-panel expanded>
         <mat-expansion-panel-header>

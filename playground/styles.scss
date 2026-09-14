@@ -15,3 +15,216 @@
 //    `@include fs-style.core(mat.define-legacy-typography-config());`
 @include fs-style.core();
 @include mat.core();
+
+
+// =============================================================================
+// THE PLAYGROUND, IN BOTH APPEARANCES
+// =============================================================================
+// DELIBERATELY LAST. @firestitch/component-tools' playground.scss (imported at
+// the top) builds a hardcoded `mat.m2-define-light-theme` and applies it with
+// `mat.all-component-themes`. That one theme is what paints the toolbars, tabs,
+// form fields, the colour picker and the page itself -- which is why the chrome
+// stayed white while the chip went dark.
+//
+// component-tools is published with no local checkout, so it cannot be edited
+// here. It does not need to be: these rules are declared AFTER the @import, so
+// they win on cascade order alone -- no !important, no deeper selectors.
+//
+// Everything below reads the @firestitch/style contract and resolves through
+// light-dark(), so the whole page follows the same `color-scheme` the chip does.
+// One switch, set by FsColorScheme, moves all of it.
+
+body {
+  background: var(--fs-color-surface, light-dark(#FFFFFF, #232428));
+  color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+}
+
+// The page heading ("Chip"), the per-example headings, and the muted h3.
+.examples-h1,
+.examples-h2 {
+  color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+}
+
+.examples-h3 {
+  color: var(--fs-color-text-muted, light-dark(rgba(0, 0, 0, 0.54), #97A5A6));
+}
+
+// Each example's card and its title bar. The toolbar is the surface that FLOATS
+// above the page, so it takes the raised surface -- on a dark ground that has to
+// be lighter than the page, not darker.
+fs-example {
+  .example-container {
+    background: var(--fs-color-surface, light-dark(#FFFFFF, #232428));
+    color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  }
+
+  mat-toolbar {
+    background: var(--fs-color-surface-raised, light-dark(#FFFFFF, #292A2F));
+    color: var(--fs-color-text-muted, light-dark(rgba(0, 0, 0, 0.54), #97A5A6));
+  }
+
+  .example-code {
+    border-bottom-color: var(--fs-hairline, light-dark(#f0f0f0, rgba(255, 255, 255, 0.22)));
+  }
+}
+
+// The examples sidebar links.
+.examples-list a {
+  color: var(--fs-color-text-muted, light-dark(rgba(0, 0, 0, 0.54), #97A5A6));
+}
+
+// Material surfaces the light theme hardcodes. Cards, dialogs, menus and the
+// select/autocomplete overlays all read these, so naming them once covers every
+// popup in the playground rather than each component in turn.
+:root {
+  --mdc-elevated-card-container-color: var(--fs-color-surface-raised, light-dark(#FFFFFF, #292A2F));
+  --mat-menu-container-color: var(--fs-color-surface-raised, light-dark(#FFFFFF, #292A2F));
+  --mat-select-panel-background-color: var(--fs-color-surface-raised, light-dark(#FFFFFF, #292A2F));
+  --mat-autocomplete-background-color: var(--fs-color-surface-raised, light-dark(#FFFFFF, #292A2F));
+  --mdc-dialog-container-color: var(--fs-color-surface-raised, light-dark(#FFFFFF, #292A2F));
+  --mat-toolbar-container-background-color: var(--fs-color-surface-raised, light-dark(#FFFFFF, #292A2F));
+  --mat-expansion-container-background-color: var(--fs-color-surface, light-dark(#FFFFFF, #232428));
+
+  // Text the light theme pins to near-black.
+  --mat-app-on-background: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mdc-list-list-item-label-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mat-option-label-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mat-expansion-header-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mat-expansion-container-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+
+  // Form fields: label, input ink and the filled field's own ground.
+  --mdc-filled-text-field-input-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mdc-outlined-text-field-input-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mdc-filled-text-field-label-text-color: var(--fs-color-text-muted, light-dark(rgba(0, 0, 0, 0.54), #97A5A6));
+  --mdc-outlined-text-field-label-text-color: var(--fs-color-text-muted, light-dark(rgba(0, 0, 0, 0.54), #97A5A6));
+  --mdc-filled-text-field-container-color: var(--fs-color-hover, light-dark(rgba(0, 0, 0, 0.04), rgba(255, 255, 255, 0.08)));
+
+  // Tabs, above the code panel.
+  --mat-tab-header-inactive-label-text-color: var(--fs-color-text-muted, light-dark(rgba(0, 0, 0, 0.54), #97A5A6));
+  --mat-tab-header-active-label-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+
+  // Slide toggles and checkboxes carry their own label colour.
+  --mdc-form-field-label-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+
+  // MATERIAL EMITS TWO PARALLEL FAMILIES for several of these -- an --mdc-* one
+  // and an --mat-* one -- and a component may read either. Overriding only the
+  // --mdc- name is why some controls followed the scheme and others stayed
+  // white; both names have to be stated.
+  --mat-form-field-filled-container-color: var(--fs-color-hover, light-dark(rgba(0, 0, 0, 0.04), rgba(255, 255, 255, 0.08)));
+  --mat-form-field-filled-disabled-container-color: var(--fs-color-hover, light-dark(rgba(0, 0, 0, 0.04), rgba(255, 255, 255, 0.08)));
+
+  // The light/dark/system control itself, which had no override at all.
+  --mat-standard-button-toggle-background-color: var(--fs-color-surface, light-dark(#FFFFFF, #232428));
+  --mat-standard-button-toggle-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mat-standard-button-toggle-selected-state-background-color: var(--fs-color-selected, light-dark(rgba(0, 0, 0, 0.08), rgba(255, 255, 255, 0.12)));
+  --mat-standard-button-toggle-selected-state-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mat-standard-button-toggle-divider-color: var(--fs-hairline, light-dark(#e0e0e0, rgba(255, 255, 255, 0.22)));
+  --mat-standard-button-toggle-state-layer-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+
+  // The app ground and tables.
+  --mat-app-background-color: var(--fs-color-surface, light-dark(#fafafa, #232428));
+  --mat-table-background-color: var(--fs-color-surface, light-dark(#FFFFFF, #232428));
+
+  // Expansion panel internals: the header ink, its description and the chevron.
+  --mat-expansion-header-description-color: var(--fs-color-text-muted, light-dark(rgba(0, 0, 0, 0.54), #97A5A6));
+  --mat-expansion-header-indicator-color: var(--fs-color-text-muted, light-dark(rgba(0, 0, 0, 0.54), #97A5A6));
+  --mat-expansion-actions-divider-color: var(--fs-hairline, light-dark(rgba(0, 0, 0, 0.12), rgba(255, 255, 255, 0.22)));
+
+  // Dividers and the outlined field's resting border.
+  --mat-divider-color: var(--fs-hairline, light-dark(rgba(0, 0, 0, 0.12), rgba(255, 255, 255, 0.22)));
+
+  // ---------------------------------------------------------------------------
+  // CHECKBOX / RADIO / SLIDE TOGGLE
+  // ---------------------------------------------------------------------------
+  // The empty box was a flat rgba(0,0,0,.54) -- black on a dark ground, which is
+  // the black square. The label is a SEPARATE token family (--mat-checkbox-*,
+  // not --mdc-form-field-*), which is why setting the form-field label colour
+  // left "Tag 1".."Tag 4" dark on dark.
+  --mdc-checkbox-unselected-icon-color: var(--fs-color-text-muted, light-dark(rgba(0, 0, 0, 0.54), #97A5A6));
+  --mdc-checkbox-unselected-hover-icon-color: var(--fs-color-text, light-dark(#212121, #E8EDEC));
+  --mdc-checkbox-unselected-focus-icon-color: var(--fs-color-text, light-dark(#212121, #E8EDEC));
+  --mdc-checkbox-unselected-pressed-icon-color: var(--fs-color-text, light-dark(#212121, #E8EDEC));
+  --mdc-checkbox-disabled-unselected-icon-color: var(--fs-color-text-faint, light-dark(rgba(0, 0, 0, 0.38), #6A7779));
+  --mat-checkbox-label-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mat-checkbox-disabled-label-color: var(--fs-color-text-faint, light-dark(rgba(0, 0, 0, 0.38), #6A7779));
+
+  --mdc-radio-unselected-icon-color: var(--fs-color-text-muted, light-dark(rgba(0, 0, 0, 0.54), #97A5A6));
+  --mdc-radio-unselected-hover-icon-color: var(--fs-color-text, light-dark(#212121, #E8EDEC));
+  --mat-radio-label-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mat-radio-disabled-label-color: var(--fs-color-text-faint, light-dark(rgba(0, 0, 0, 0.38), #6A7779));
+
+  --mat-slide-toggle-label-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+
+  // ---------------------------------------------------------------------------
+  // BUTTONS
+  // ---------------------------------------------------------------------------
+  // "Reset all" and the View Code icon read #f44336 -- Material's WARN red, not
+  // anything to do with the scheme: component-tools' theme passes one palette as
+  // both primary and accent, so these fall through to warn. Named here so they
+  // read as ordinary controls in both appearances.
+  --mdc-outlined-button-label-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mdc-outlined-button-outline-color: var(--fs-hairline-strong, light-dark(rgba(0, 0, 0, 0.38), rgba(255, 255, 255, 0.38)));
+  --mat-outlined-button-state-layer-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mat-outlined-button-ripple-color: var(--fs-color-hover, light-dark(rgba(0, 0, 0, 0.04), rgba(255, 255, 255, 0.08)));
+
+  --mdc-text-button-label-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mat-text-button-state-layer-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mat-text-button-ripple-color: var(--fs-color-hover, light-dark(rgba(0, 0, 0, 0.04), rgba(255, 255, 255, 0.08)));
+
+  --mdc-icon-button-icon-color: var(--fs-color-text-muted, light-dark(rgba(0, 0, 0, 0.54), #97A5A6));
+  --mat-icon-button-state-layer-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mat-icon-button-ripple-color: var(--fs-color-hover, light-dark(rgba(0, 0, 0, 0.04), rgba(255, 255, 255, 0.08)));
+
+  // ---------------------------------------------------------------------------
+  // GENERIC INK
+  // ---------------------------------------------------------------------------
+  // Catch-alls the light theme pins to near-black, covering the components that
+  // are not named individually above.
+  --mat-app-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mat-menu-item-label-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mat-menu-item-icon-color: var(--fs-color-text-muted, light-dark(rgba(0, 0, 0, 0.54), #97A5A6));
+  --mat-card-subtitle-text-color: var(--fs-color-text-muted, light-dark(rgba(0, 0, 0, 0.54), #97A5A6));
+  --mat-dialog-supporting-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mat-bottom-sheet-container-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mat-full-pseudo-checkbox-unselected-icon-color: var(--fs-color-text-muted, light-dark(rgba(0, 0, 0, 0.54), #97A5A6));
+  --mat-form-field-disabled-input-text-placeholder-color: var(--fs-color-text-faint, light-dark(rgba(0, 0, 0, 0.38), #6A7779));
+  --mdc-filled-text-field-input-text-placeholder-color: var(--fs-color-text-muted, light-dark(rgba(0, 0, 0, 0.54), #97A5A6));
+  --mat-select-enabled-trigger-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mat-select-placeholder-text-color: var(--fs-color-text-muted, light-dark(rgba(0, 0, 0, 0.54), #97A5A6));
+  --mat-select-enabled-arrow-color: var(--fs-color-text-muted, light-dark(rgba(0, 0, 0, 0.54), #97A5A6));
+  --mat-tab-header-inactive-ripple-color: var(--fs-color-hover, light-dark(rgba(0, 0, 0, 0.04), rgba(255, 255, 255, 0.08)));
+  --mat-paginator-container-text-color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  --mat-paginator-enabled-icon-color: var(--fs-color-text-muted, light-dark(rgba(0, 0, 0, 0.54), #97A5A6));
+  --mat-optgroup-label-text-color: var(--fs-color-text-muted, light-dark(rgba(0, 0, 0, 0.54), #97A5A6));
+  --mat-tooltip-container-color: var(--fs-color-surface-raised, light-dark(#616161, #292A2F));
+  --mat-tooltip-supporting-text-color: var(--fs-color-text, light-dark(#FFFFFF, #E8EDEC));
+}
+
+// The page ground. Declared as its own rule rather than relying on the Material
+// app-background token alone, so the area outside any card follows the scheme.
+body {
+  background-color: var(--fs-color-surface, light-dark(#FFFFFF, #232428));
+  color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+}
+
+// The syntax theme ships light (background #FAFAFA) from @firestitch/example.
+// Only the ground and the base ink are restated; the token colours are hues that
+// read on both, so they are left alone.
+.hljs {
+  background: var(--fs-color-hover, light-dark(rgba(0, 0, 0, 0.04), rgba(255, 255, 255, 0.08))) !important;
+  color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC)) !important;
+}
+
+// Harness chrome from playground.scss that names its own greys.
+fieldset {
+  border-color: var(--fs-hairline, light-dark(#f0f0f0, rgba(255, 255, 255, 0.22)));
+}
+
+table.table {
+  border-color: var(--fs-hairline, light-dark(#f0f0f0, rgba(255, 255, 255, 0.22)));
+
+  th {
+    background: var(--fs-color-hover, light-dark(rgba(0, 0, 0, 0.04), rgba(255, 255, 255, 0.08)));
+    color: var(--fs-color-text, light-dark(rgba(0, 0, 0, 0.87), #E8EDEC));
+  }
+}
