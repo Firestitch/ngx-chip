@@ -100,29 +100,41 @@
   &.clickable {
     cursor: pointer;
 
-    // STAYS A filter, AND HAS TO. The chip paints its fill as an INLINE style
-    // ([style.backgroundColor] in chip.component.html), and an inline style
-    // beats any stylesheet rule that is not !important — so a
-    // `background-color` hover here would simply never apply to a filled chip.
-    // A filter is not in that fight: it post-processes whatever colour won.
+    // A TRANSLUCENT OVERLAY, WHICH NEEDS TO KNOW NOTHING ABOUT THE SCHEME.
     //
-    // brightness() alone was the bug: it DARKENS, which reads as "pressed" on a
-    // white page and as "receding" on a dark ground, where a hovered chip has
-    // to come UP. So the DIRECTION has to flip with the scheme, and unlike every
-    // other value in this file it cannot be expressed as a colour token — a
-    // filter is a function, not a colour, so there is nothing for var() to
-    // carry.
+    // The chip paints its fill as an INLINE style ([style.backgroundColor] in
+    // chip.component.html) and an inline style beats any stylesheet rule that is
+    // not !important, so a `background-color` hover on the element itself never
+    // applies to a filled chip. That is why this was a filter. But a filter has
+    // to pick a DIRECTION — brightness(90%) darkens, which reads as "pressed" on
+    // a white page and as "receding" on a dark ground, where a hovered chip has
+    // to come UP — and a direction is exactly the thing a package cannot know.
     //
-    // A CUSTOM PROPERTY HOLDING THE PERCENTAGE — Ray 2026-09-16. This was
-    // `light-dark(brightness(90%), brightness(125%))`, which resolves off the
-    // `color-scheme` property; an app that never declared one got whichever half
-    // the browser defaulted to, which is how a hover ended up brightening on a
-    // white page. Naming the amount instead keeps one declaration here and lets
-    // the scheme set it: @firestitch/style's dark block raises
-    // --fs-chip-hover-brightness to 125%, and an unconfigured host keeps the 90%
-    // that is correct on the white page it actually has.
-    &:hover {
-      filter: brightness(var(--fs-chip-hover-brightness, 90%));
+    // Every attempt to let it know has failed: light-dark() resolves off a
+    // `color-scheme` an app may never declare, and a --fs-chip-hover-brightness
+    // token only flips if the app opts into a class this package invented. Both
+    // push the package's problem into the application layer.
+    //
+    // A ::after overlay has no such problem. It sits ON the chip, so the inline
+    // fill never competes with it, and a translucent black wash reads as
+    // "pressed" over a light fill and as "lifted" over a dark one because it
+    // takes its result from whatever is underneath. One declaration, correct in
+    // both schemes, with nothing for an app to configure and no scheme to
+    // detect. --fs-chip-hover-overlay is there for an app that wants a different
+    // wash, not for making the default work.
+    //
+    // Requires the chip to be a containing block, which .fs-chip already is
+    // (position is set on .image and .fs-chip-content descendants); the
+    // `position: relative` below makes that explicit rather than incidental.
+    position: relative;
+
+    &:hover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: var(--fs-chip-hover-overlay, rgba(0, 0, 0, 0.12));
+      pointer-events: none;
     }
   }
 
