@@ -86,11 +86,11 @@
 
       &.select-button-unselected {
         mat-icon {
-          // The empty checkbox. #ddd is KEPT EXACTLY as the light value — this
-          // pass adds a dark counterpart, it does not restyle light mode — and
-          // #ddd on a dark ground is near-white, so the dark side steps down to
-          // a muted grey instead.
-          color: light-dark(#ddd, #6A7779);
+          // The empty checkbox. #ddd on a dark ground is near-white, so this
+          // reads --fs-color-text-faint, the token that already means "present
+          // but quiet" and steps down to a muted grey in dark. #ddd is KEPT
+          // EXACTLY as the light fallback, so light mode is unchanged.
+          color: var(--fs-color-text-faint, #ddd);
         }
       }
     }

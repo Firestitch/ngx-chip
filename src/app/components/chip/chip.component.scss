@@ -56,15 +56,19 @@
     // making the default legible.
     //
     // Three layers, most specific first: a per-chip override, the shared
-    // @firestitch/style contract, then a hardcoded pair so this renders
-    // correctly even when @firestitch/style is not installed. The pair matches
-    // the contract's --fs-hairline default; keep the two in step.
+    // @firestitch/style contract, then a plain literal so this renders
+    // correctly even when @firestitch/style is not installed. The literal
+    // matches the contract's --fs-hairline default; keep the two in step.
     //
-    // light-dark() picks off the `color-scheme` the HOST APP declares, so this
-    // works unchanged under Material 2 and Material 3 with no class, no input
-    // and no media query. Never add prefers-color-scheme here: that reports the
-    // device, not the app's resolved setting.
-    border: 1px solid var(--fs-chip-outline-color, var(--fs-hairline, light-dark(#f0f0f0, rgba(255, 255, 255, 0.22))));
+    // THE FALLBACK IS A LITERAL, NOT light-dark() -- Ray 2026-09-16. It was
+    // `light-dark(#f0f0f0, rgba(255,255,255,.22))`, and esbuild does not merely
+    // downlevel that on a host whose browserslist includes a pre-123 engine:
+    // seeing `var(--name, light-dark(A, B))` it folds the WHOLE expression to
+    // the literal A and discards the var() reference entirely, so the chip stops
+    // reading --fs-hairline at all. A fallback covers the case where the style
+    // package never loaded, which is a single-value situation by definition --
+    // and an unconfigured host has a white page, so it is the light one.
+    border: 1px solid var(--fs-chip-outline-color, var(--fs-hairline, #f0f0f0));
     box-sizing: border-box;
 
     &.outline-dash {
@@ -72,12 +76,23 @@
     }
 
     &.clickable {
-      // #efefef IS KEPT EXACTLY as the light value. This pass adds a dark
-      // counterpart and must not restyle light mode — an opaque near-white and
-      // a 4% black wash are not the same colour, and this hover ships in 221
-      // files of the admin app.
+      // #efefef IS KEPT EXACTLY as the light value — an opaque near-white and a
+      // 4% black wash are not the same colour, and this hover ships in 221 files
+      // of the admin app.
+      //
+      // READ THROUGH A TOKEN, NOT light-dark() — Ray 2026-09-16. This was
+      // `light-dark(#efefef, rgba(255,255,255,.08))` written straight into the
+      // declaration, which is the bug that made an outlined chip hover DARK on
+      // a white page: light-dark() resolves off the `color-scheme` property,
+      // and an app that never declared one falls to the browser default, where
+      // the two halves do not reliably pick the way this rule assumed.
+      //
+      // --fs-chip-hover-background lets a host retint the hover without
+      // fighting this selector; the literal is the light half, for the
+      // unconfigured host that has a white page. An app that marks itself dark
+      // gets the dark wash from the token contract in @firestitch/style.
       &:hover {
-        background-color: light-dark(#efefef, rgba(255, 255, 255, 0.08));
+        background-color: var(--fs-chip-hover-background, var(--fs-color-hover, #efefef));
       }
     }
   }
@@ -93,10 +108,21 @@
     //
     // brightness() alone was the bug: it DARKENS, which reads as "pressed" on a
     // white page and as "receding" on a dark ground, where a hovered chip has
-    // to come UP. light-dark() picks the direction per scheme — darken on
-    // light, lighten on dark — so the gesture reads the same way in both.
+    // to come UP. So the DIRECTION has to flip with the scheme, and unlike every
+    // other value in this file it cannot be expressed as a colour token — a
+    // filter is a function, not a colour, so there is nothing for var() to
+    // carry.
+    //
+    // A CUSTOM PROPERTY HOLDING THE PERCENTAGE — Ray 2026-09-16. This was
+    // `light-dark(brightness(90%), brightness(125%))`, which resolves off the
+    // `color-scheme` property; an app that never declared one got whichever half
+    // the browser defaulted to, which is how a hover ended up brightening on a
+    // white page. Naming the amount instead keeps one declaration here and lets
+    // the scheme set it: @firestitch/style's dark block raises
+    // --fs-chip-hover-brightness to 125%, and an unconfigured host keeps the 90%
+    // that is correct on the white page it actually has.
     &:hover {
-      filter: light-dark(brightness(90%), brightness(125%));
+      filter: brightness(var(--fs-chip-hover-brightness, 90%));
     }
   }
 
